@@ -10,9 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +47,7 @@ public class GameSetupPreloader {
             }
         }
 
+        System.out.println(listOfMapPath.isEmpty());
         for (String jsonFilePath : listOfMapPath) {
             extractMapNames(jsonFilePath);
         }
@@ -61,6 +60,10 @@ public class GameSetupPreloader {
     
     public List<Map> getMapObjects() {
         return listOfMapObjects;
+    }
+    
+    public boolean isMapEmpty() {
+        return this.listOfMapPath.isEmpty();
     }
 
     private void extractMapNames(String file_location) {

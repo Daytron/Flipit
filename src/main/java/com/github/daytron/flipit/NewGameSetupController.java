@@ -6,7 +6,6 @@
 package com.github.daytron.flipit;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -44,7 +43,7 @@ public class NewGameSetupController implements Initializable {
     }
 
     /**
-     * Initializes the controller class.
+     * Initialises the controller class.
      *
      * @param url
      * @param rb

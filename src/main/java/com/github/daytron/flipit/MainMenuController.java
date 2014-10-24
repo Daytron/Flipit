@@ -36,7 +36,13 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void clickNewGameButton(ActionEvent event) {
-         app.viewNewGameSetup();
+        // If there is no map json file found show a dialog instead
+        if (this.app.getGamePreloader().isMapEmpty()) {
+            app.showNoMapFoundDialog();
+        } else   {
+            app.viewNewGameSetup();
+        }
+         
     }
 
     @FXML
