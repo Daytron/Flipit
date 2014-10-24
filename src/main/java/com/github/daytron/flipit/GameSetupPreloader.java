@@ -47,7 +47,6 @@ public class GameSetupPreloader {
             }
         }
 
-        System.out.println(listOfMapPath.isEmpty());
         for (String jsonFilePath : listOfMapPath) {
             extractMapNames(jsonFilePath);
         }
