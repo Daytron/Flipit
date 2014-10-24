@@ -11,18 +11,18 @@
 <?import javafx.scene.text.*?>
 <?scenebuilder-stylesheet StyleMainMenu.css?>
 
-<GridPane alignment="center" hgap="10" prefHeight="282.0" prefWidth="436.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+<GridPane alignment="center" hgap="10" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.MainMenuController">
     <padding>
         <Insets bottom="10" left="25" right="25" top="25" />
     </padding>
     
     <children>
        
-        <Button fx:id="newgame" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="New Game" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Button fx:id="newGameButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickNewGameButton" text="New Game" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       
-        <Button fx:id="rules" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Rules" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Button fx:id="rulesButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Rules" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       
-        <Button fx:id="exit" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Exit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Button fx:id="exitButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickExitButton" text="Exit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Flip-It" textAlignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowSpan="2" />
       
       
@@ -34,14 +34,13 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
    </rowConstraints>
    
-   <stylesheets>
-       <URL value="@StyleMainMenu.css" />
-   </stylesheets>
+   
 
 </GridPane>

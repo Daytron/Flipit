@@ -1,0 +1,25 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 23-Oct-2014, 21:29:23
+    Author     : ryan
+*/
+
+#title {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-font-family: Helvetica;
+}
+
+#imagepreview {
+    -fx-padding: 10;
+-fx-background-color: firebrick;
+}
+
+#maplist {
+     -fx-border-width: 2px;
+    -fx-border-color:black;
+}

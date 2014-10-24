@@ -1,34 +1,31 @@
 package com.github.daytron.flipit;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
+
     private Stage stage;
     private final String MAIN_MENU_FXML = "MainMenu.fxml";
+    private final String NEW_GAME_SETUP_FXML = "NewGameSetup.fxml";
     private final String GAME_MAIN_FXML = "";
-    
-    
-    public MainApp(){
-    }
-    
-    public MainApp getInstance() {
-        return this;
-    }
 
     @Override
     public void start(Stage primary_stage) throws Exception {
         stage = primary_stage;
         gotoMainMenu();
         primary_stage.show();
-        
+
     }
 
     /**
@@ -42,46 +39,67 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
-    public void clickNewGame() {
-        
+
+    public void viewNewGameSetup() {
+        gotoNewGameSetup();
     }
     
+    public void viewMainMenu() {
+        gotoMainMenu();
+    }
+
+    public void viewMainGame() {
+        gotoGameMain();
+    }
+    
+
     private void gotoMainMenu() {
         try {
-            replaceScene(MAIN_MENU_FXML);
+            MainMenuController menuCtrl = 
+                    (MainMenuController) replaceScene(MAIN_MENU_FXML);
+            menuCtrl.setApp(this);
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void gotoGameMain() {
+
+    private void gotoNewGameSetup() {
         try {
-            replaceScene(GAME_MAIN_FXML);
+            NewGameSetupController menuCtrl = 
+                    (NewGameSetupController) replaceScene(NEW_GAME_SETUP_FXML);
+            menuCtrl.setApp(this);
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private Parent replaceScene(String fxml) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/" + fxml));
+
+    private void gotoGameMain() {
+
+    }
+
+    private Initializable replaceScene(String fxml) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        InputStream in = MainApp.class.getResourceAsStream("/fxml/" + fxml);
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+        loader.setLocation(MainApp.class.getResource("/fxml/" + fxml));
+
+        Parent pane;
         
-        Scene scene = stage.getScene();
-       
-        
-        if (scene == null) {
-            scene = new Scene(root);
-            
+            try {
+                pane = loader.load(in);
+            } finally {
+                in.close();
+            }
+            Scene scene = new Scene(pane);
             stage.setScene(scene);
-        } else {
-            stage.getScene().setRoot(root);
-        }
         
-         scene.getStylesheets().add("/styles/StyleMainMenu.css");
+
         
+        
+
         stage.sizeToScene();
-        
-        return root;
+
+        return (Initializable) loader.getController();
     }
 
 }

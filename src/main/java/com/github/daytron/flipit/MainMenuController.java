@@ -1,0 +1,46 @@
+package com.github.daytron.flipit;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+public class MainMenuController implements Initializable {
+    private MainApp app;
+    
+    
+    @FXML
+    private Label title;
+    @FXML
+    private Button newGameButton;
+    @FXML
+    private Button rulesButton;
+    @FXML
+    private Button exitButton;
+    
+    public void setApp(MainApp application) {
+        this.app = application;
+    }
+    
+    
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+        
+    }    
+
+    @FXML
+    private void clickNewGameButton(ActionEvent event) {
+         app.viewNewGameSetup();
+    }
+
+    @FXML
+    private void clickExitButton(ActionEvent event) {
+        System.exit(0);
+    }
+}

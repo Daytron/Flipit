@@ -43,12 +43,11 @@ public class MainAppTest {
      * Test of getInstance method, of class MainApp.
      */
     @Test
+    @Ignore
     public void testGetInstance() {
         System.out.println("getInstance");
         MainApp instance = new MainApp();
         MainApp expResult = null;
-        MainApp result = instance.getInstance();
-        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -57,6 +56,7 @@ public class MainAppTest {
      * Test of start method, of class MainApp.
      */
     @Test
+    @Ignore
     public void testStart() throws Exception {
         System.out.println("start");
         Stage primary_stage = null;
@@ -80,13 +80,27 @@ public class MainAppTest {
     }
 
     /**
-     * Test of clickNewGame method, of class MainApp.
+     * Test of viewNewGameSetup method, of class MainApp.
      */
     @Test
-    public void testClickNewGame() {
+    @Ignore
+    public void testViewNewGameSetup() {
         System.out.println("clickNewGame");
         MainApp instance = new MainApp();
-        instance.clickNewGame();
+        instance.viewNewGameSetup();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of viewMainGame method, of class MainApp.
+     */
+    @Test
+    @Ignore
+    public void testViewMainGame() {
+        System.out.println("clickStartGame");
+        MainApp instance = new MainApp();
+        instance.viewMainGame();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
