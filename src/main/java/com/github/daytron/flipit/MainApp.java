@@ -19,13 +19,21 @@ public class MainApp extends Application {
     private final String MAIN_MENU_FXML = "MainMenu.fxml";
     private final String NEW_GAME_SETUP_FXML = "NewGameSetup.fxml";
     private final String GAME_MAIN_FXML = "";
+    private GameSetupPreloader preLoader;
 
     @Override
     public void start(Stage primary_stage) throws Exception {
+        preLoader = new GameSetupPreloader();
+        preLoader.init();
+        
         stage = primary_stage;
         gotoMainMenu();
         primary_stage.show();
 
+    }
+    
+    public GameSetupPreloader getGamePreloader() {
+        return this.preLoader;
     }
 
     /**
@@ -58,6 +66,7 @@ public class MainApp extends Application {
             MainMenuController menuCtrl = 
                     (MainMenuController) replaceScene(MAIN_MENU_FXML);
             menuCtrl.setApp(this);
+            
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,6 +77,8 @@ public class MainApp extends Application {
             NewGameSetupController menuCtrl = 
                     (NewGameSetupController) replaceScene(NEW_GAME_SETUP_FXML);
             menuCtrl.setApp(this);
+            menuCtrl.loadMapNames();
+            
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
