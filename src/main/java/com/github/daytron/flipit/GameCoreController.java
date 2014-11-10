@@ -12,8 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
 
 /**
  * FXML Controller class
@@ -38,7 +36,7 @@ public class GameCoreController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         GraphicsContext graphics = canvas.getGraphicsContext2D();
-        MapManager mapManager = new MapManager(canvas);
+        MapManager mapManager = new MapManager(canvas, 5, 5);
         mapManager.generateMap(graphics);
     }    
 
