@@ -19,7 +19,7 @@ public class MainApp extends Application {
     private Stage stage;
     private final String MAIN_MENU_FXML = "MainMenu.fxml";
     private final String NEW_GAME_SETUP_FXML = "NewGameSetup.fxml";
-    private final String GAME_MAIN_FXML = "";
+    private final String GAME_MAIN_FXML = "GameCore.fxml";
     private GameSetupPreloader preLoader;
 
     @Override
@@ -74,10 +74,10 @@ public class MainApp extends Application {
 
     private void gotoNewGameSetup() {
         try {
-            NewGameSetupController menuCtrl
+            NewGameSetupController newGameCtrl
                     = (NewGameSetupController) replaceScene(NEW_GAME_SETUP_FXML);
-            menuCtrl.setApp(this);
-            menuCtrl.loadMapNames();
+            newGameCtrl.setApp(this);
+            newGameCtrl.loadMapNames();
 
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,7 +85,13 @@ public class MainApp extends Application {
     }
 
     private void gotoGameMain() {
-
+        try {
+            GameCoreController mainGameCtrl
+                    = (GameCoreController) replaceScene(GAME_MAIN_FXML);
+            mainGameCtrl.setApp(this);
+        } catch (Exception e) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     private Initializable replaceScene(String fxml) throws IOException {
