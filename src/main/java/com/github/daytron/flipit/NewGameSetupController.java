@@ -76,13 +76,18 @@ public class NewGameSetupController implements Initializable {
         });
     }
 
+
     @FXML
-    private void startNewGame(ActionEvent event) {
+    private void clickCancelSetup(ActionEvent event) {
+        this.app.viewMainMenu();
     }
 
     @FXML
-    private void cancelSetup(ActionEvent event) {
-        this.app.viewMainMenu();
+    private void clickStart(ActionEvent event) {
+        this.app.viewMainGame();
     }
+
+    
+    
 
 }

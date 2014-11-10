@@ -4,12 +4,14 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 23-Oct-2014, 12:01:57
+    Created on : 26-Oct-2014, 17:16:44
     Author     : ryan
 */
-#title {
-    -fx-font-weight: bold; 
-    -fx-font-size: 20px;
-    -fx-font-family: Helvetica;
+
+#header {
+    -fx-background-color: #a5baee;
 }
 
+#footer {
+    -fx-background-color: #a5baee;
+}
