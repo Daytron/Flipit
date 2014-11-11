@@ -35,19 +35,20 @@ public class GameCoreController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+    }
+    
+    public void run() {
         GraphicsContext graphics = canvas.getGraphicsContext2D();
-        MapManager mapManager = new MapManager(canvas, 5, 5);
+        MapManager mapManager = new MapManager(canvas, this.app.getGamePreloader().getMapSelected(), this.app.getGamePreloader().getPlayerSelected());
+        
         mapManager.generateMap(graphics);
-    }    
+    }
 
     @FXML
     private void onClick(MouseEvent event) {
         System.out.println(event.getX());
     }
     
-    private void createGrid(GraphicsContext gc) {
-       
-        
-    }
     
 }

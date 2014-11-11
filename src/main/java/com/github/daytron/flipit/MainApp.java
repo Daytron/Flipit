@@ -24,10 +24,10 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primary_stage) throws Exception {
-        preLoader = new GameSetupPreloader();
-        preLoader.init();
+        this.preLoader = new GameSetupPreloader();
+        this.preLoader.init();
 
-        stage = primary_stage;
+        this.stage = primary_stage;
         gotoMainMenu();
         primary_stage.show();
 
@@ -89,6 +89,7 @@ public class MainApp extends Application {
             GameCoreController mainGameCtrl
                     = (GameCoreController) replaceScene(GAME_MAIN_FXML);
             mainGameCtrl.setApp(this);
+            mainGameCtrl.run();
         } catch (Exception e) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, e);
         }

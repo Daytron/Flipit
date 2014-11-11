@@ -21,14 +21,22 @@ import java.util.logging.Logger;
  */
 public class GameSetupPreloader {
 
+    // pre game variables
     private final List<String> listOfMapPath;
     private final List<String> listOfMapNames;
     private final List<Map> listOfMapObjects;
+    private final List<String> listOfMapPreviewImage;
+    
+    // new game variables
+    private Map mapSelected;
+    private int playerSelected;
+    private String mapPreviewImageSelected;
 
     public GameSetupPreloader() {
         this.listOfMapNames = new ArrayList<>();
         this.listOfMapPath = new ArrayList<>();
         this.listOfMapObjects = new ArrayList<>();
+        this.listOfMapPreviewImage = new ArrayList<>();
     }
 
     
@@ -44,6 +52,10 @@ public class GameSetupPreloader {
                 if (aFile.isFile() && "json".equals(ext)) {
                     listOfMapPath.add(aFile.getPath());
                 }
+                
+                if (aFile.isFile() && "png".equals(ext)) {
+                    listOfMapPreviewImage.add(aFile.getPath());
+                }
             }
         }
 
@@ -52,6 +64,34 @@ public class GameSetupPreloader {
         }
         
     }
+
+    public void setMapSelected(String mapSelected) {
+        for (Map map: this.listOfMapObjects) {
+            if (map.getName().contains(mapSelected)) {
+                this.mapSelected = map;
+                
+                this.mapPreviewImageSelected = "file:src/main/resources/maps/" + map.getMapID() + ".png";
+            }
+        }
+    
+    }
+
+    public String getMapPreviewImageSelected() {
+        return mapPreviewImageSelected;
+    }
+    
+    
+
+    public Map getMapSelected() {
+        return this.mapSelected;
+    }
+
+    // TEMP ONLY - MODIFY LATER
+    public int getPlayerSelected() {
+        return 1;
+    }
+    
+    
     
     public List<String> getMapNames() {
         return listOfMapNames;
@@ -60,6 +100,12 @@ public class GameSetupPreloader {
     public List<Map> getMapObjects() {
         return listOfMapObjects;
     }
+
+    public List<String> getListOfMapPreviewImage() {
+        return listOfMapPreviewImage;
+    }
+    
+    
     
     public boolean isMapEmpty() {
         return this.listOfMapPath.isEmpty();

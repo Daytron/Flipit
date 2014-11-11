@@ -51,14 +51,14 @@ public class NewGameSetupController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        this.imagePreview.setImage(new Image("http://isc.stuorg.iastate.edu/wp-content/uploads/sample.jpg"));
+        //this.imagePreview.setImage(new Image("http://isc.stuorg.iastate.edu/wp-content/uploads/sample.jpg"));
 
     }
 
     public void loadMapNames() {
         // Extract map names from preloader event
         List<String> listMapNames = this.app.getGamePreloader().getMapNames();
-
+        
         // Convert the list to a new readable list, ObservableList for listview
         ObservableList<String> listOfMapNames
                 = FXCollections.observableArrayList(listMapNames);
@@ -72,8 +72,16 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 // Your action here
                 System.out.println("Selected item: " + newValue);
+                
+                
+                // Get the map selected by default
+                app.getGamePreloader().setMapSelected(mapList.getSelectionModel().getSelectedItem());
+                
+                imagePreview.setImage(new Image(app.getGamePreloader().getMapPreviewImageSelected()));
             }
         });
+        
+        
     }
 
 
@@ -84,8 +92,11 @@ public class NewGameSetupController implements Initializable {
 
     @FXML
     private void clickStart(ActionEvent event) {
+        // Load the main game frame
         this.app.viewMainGame();
     }
+
+    
 
     
     
