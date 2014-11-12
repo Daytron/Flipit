@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.daytron.flipit;
+package com.github.daytron.flipit.engine;
 
+import com.github.daytron.flipit.GlobalSettingsManager;
+
+import com.github.daytron.flipit.Map;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.Canvas;

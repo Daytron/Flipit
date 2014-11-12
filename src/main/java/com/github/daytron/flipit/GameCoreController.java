@@ -5,6 +5,8 @@
  */
 package com.github.daytron.flipit;
 
+import com.github.daytron.flipit.engine.MapManager;
+import com.github.daytron.flipit.engine.GameManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -20,6 +22,8 @@ import javafx.scene.input.MouseEvent;
  */
 public class GameCoreController implements Initializable {
     private MainApp app;
+    private GameManager gameManager;
+    private MapManager mapManager;
     
     @FXML
     private Canvas canvas;
@@ -39,16 +43,15 @@ public class GameCoreController implements Initializable {
     }
     
     public void run() {
-        GraphicsContext graphics = canvas.getGraphicsContext2D();
-        MapManager mapManager = new MapManager(canvas, this.app.getGamePreloader().getMapSelected(), this.app.getGamePreloader().getPlayer1Selected(), this.app.getGamePreloader().getPlayer2Selected(), this.app.getGamePreloader().getPlayer1ColorSelected(), this.app.getGamePreloader().getPlayer2ColorSelected());
+        // Create new instance of game
+        this.gameManager = new GameManager(canvas, this.app.getGamePreloader().getMapSelected(), this.app.getGamePreloader().getPlayer1Selected(), this.app.getGamePreloader().getPlayer2Selected(), this.app.getGamePreloader().getPlayer1ColorSelected(), this.app.getGamePreloader().getPlayer2ColorSelected());
         
-        mapManager.generateMap(graphics);
+        this.gameManager.generateMap();
     }
 
     @FXML
     private void onClick(MouseEvent event) {
-        System.out.println("x: " + event.getX());
-        System.out.println("y: " + event.getY());
+        this.gameManager.getClick(event.getX(), event.getY());
     }
     
     

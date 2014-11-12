@@ -9,7 +9,7 @@ package com.github.daytron.flipit;
  *
  * @author ryan
  */
-final class GlobalSettingsManager {
+public class GlobalSettingsManager {
     public static final String PLAYER_COLOR_BLUE = "#0073CF";
     public static final String PLAYER_COLOR_BLUE_LIGHT_EDGE = "#4FB1FF";
     public static final String PLAYER_COLOR_BLUE_SHADOW_EDGE = "#004881";
