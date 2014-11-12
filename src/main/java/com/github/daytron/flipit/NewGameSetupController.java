@@ -125,6 +125,7 @@ public class NewGameSetupController implements Initializable {
             }
         });
 
+        // ============== COLOR AREA ================= //
         ObservableList<String> playerColorOptions = FXCollections.observableArrayList(GlobalSettingsManager.PLAYER_COLOR_BLUE, GlobalSettingsManager.PLAYER_COLOR_RED);
 
         this.colorP1ComboBox.setItems(playerColorOptions);
@@ -150,7 +151,33 @@ public class NewGameSetupController implements Initializable {
         this.colorP2ComboBox.setButtonCell(factory.call(null));
         this.colorP2ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_RED);
         
+        // Player 1 color combobox listener
+        this.colorP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                colorP1ComboBox.setValue(newValue);
+                if (newValue.contains(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
+                    colorP2ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_RED);
+                } else {
+                    colorP2ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_BLUE);
+                }
+            }
+        });
         
+        // Player 2 color combobox listener
+        this.colorP2ComboBox.valueProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                colorP2ComboBox.setValue(newValue);
+                
+                if (newValue.contains(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
+                    colorP1ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_RED);
+                } else {
+                    colorP1ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_BLUE);
+                }
+            }
+        });
 
     }
 
