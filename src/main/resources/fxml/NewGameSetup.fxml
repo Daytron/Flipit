@@ -30,7 +30,7 @@
             </Label>
          </children>
       </GridPane>
-      <SplitPane dividerPositions="0.37940630797773656" prefHeight="439.0" prefWidth="1024.0">
+      <SplitPane dividerPositions="0.3522504892367906" prefHeight="439.0" prefWidth="1024.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -46,12 +46,12 @@
       </SplitPane>
       <GridPane prefHeight="214.0" prefWidth="1024.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="104.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="10.0" prefWidth="147.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="94.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="372.0" minWidth="10.0" prefWidth="315.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="10.0" prefWidth="160.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="199.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -64,6 +64,30 @@
          <children>
             <Button fx:id="startButton" maxWidth="120.0" mnemonicParsing="false" onAction="#clickStart" text="Start" GridPane.columnIndex="5" GridPane.rowIndex="4" />
             <Button fx:id="cancelButton" maxWidth="120.0" mnemonicParsing="false" onAction="#clickCancelSetup" text="Cancel" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <Label id="startPositionP1Label" fx:id="startPositionP1Label" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="104.0" text="Player 1" textAlignment="RIGHT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="20.0" />
+               </GridPane.margin>
+            </Label>
+            <Label id="colorP1Label" fx:id="colorP1Label" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="160.0" text="Color:" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="20.0" />
+               </GridPane.margin>
+            </Label>
+            <ComboBox fx:id="startPositionP1ComboBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="115.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="colorP1ComboBox" prefHeight="25.0" prefWidth="92.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label id="startPositionP2Label" fx:id="startPositionP2Label" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="100.0" text="Player 2" textAlignment="RIGHT" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets right="20.0" />
+               </GridPane.margin>
+            </Label>
+            <ComboBox fx:id="startPositionP2ComboBox" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="90.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label id="colorP2Label" fx:id="colorP2Label" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="160.0" text="Color:" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets right="20.0" />
+               </GridPane.margin>
+            </Label>
+            <ComboBox fx:id="colorP2ComboBox" prefHeight="25.0" prefWidth="92.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </children>

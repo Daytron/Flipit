@@ -31,6 +31,10 @@ public class GameSetupPreloader {
     private Map mapSelected;
     private int playerSelected;
     private String mapPreviewImageSelected;
+    private String player1Selected;
+    private String player2Selected;
+    private String player1ColorSelected;
+    private String player2ColorSelected;
 
     public GameSetupPreloader() {
         this.listOfMapNames = new ArrayList<>();
@@ -64,6 +68,40 @@ public class GameSetupPreloader {
         }
         
     }
+
+    public void setPlayer1Selected(String player1Selected) {
+        this.player1Selected = player1Selected;
+    }
+
+    public void setPlayer2Selected(String player2Selected) {
+        this.player2Selected = player2Selected;
+    }
+
+    public String getPlayer1Selected() {
+        return player1Selected;
+    }
+
+    public String getPlayer2Selected() {
+        return player2Selected;
+    }
+
+    public void setPlayer1ColorSelected(String player1ColorSelected) {
+        this.player1ColorSelected = player1ColorSelected;
+    }
+
+    public String getPlayer1ColorSelected() {
+        return player1ColorSelected;
+    }
+
+    public void setPlayer2ColorSelected(String player2ColorSelected) {
+        this.player2ColorSelected = player2ColorSelected;
+    }
+
+    public String getPlayer2ColorSelected() {
+        return player2ColorSelected;
+    }
+    
+    
 
     public void setMapSelected(String mapSelected) {
         for (Map map: this.listOfMapObjects) {

@@ -78,6 +78,7 @@ public class MainApp extends Application {
                     = (NewGameSetupController) replaceScene(NEW_GAME_SETUP_FXML);
             newGameCtrl.setApp(this);
             newGameCtrl.loadMapNames();
+            newGameCtrl.loadDefaultValuesToPreloader();
 
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);

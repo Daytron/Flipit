@@ -40,14 +40,15 @@ public class GameCoreController implements Initializable {
     
     public void run() {
         GraphicsContext graphics = canvas.getGraphicsContext2D();
-        MapManager mapManager = new MapManager(canvas, this.app.getGamePreloader().getMapSelected(), this.app.getGamePreloader().getPlayerSelected());
+        MapManager mapManager = new MapManager(canvas, this.app.getGamePreloader().getMapSelected(), this.app.getGamePreloader().getPlayer1Selected(), this.app.getGamePreloader().getPlayer2Selected(), this.app.getGamePreloader().getPlayer1ColorSelected(), this.app.getGamePreloader().getPlayer2ColorSelected());
         
         mapManager.generateMap(graphics);
     }
 
     @FXML
     private void onClick(MouseEvent event) {
-        System.out.println(event.getX());
+        System.out.println("x: " + event.getX());
+        System.out.println("y: " + event.getY());
     }
     
     

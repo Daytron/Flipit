@@ -26,33 +26,18 @@ public class MapManager {
     private double gridYSpace;
     
     private final Map selectedMap;
-    private final int selectedPlayer;
 
-    private int TILE_EDGE_EFFECT_THICKNESS;
+    private final int TILE_EDGE_EFFECT_THICKNESS;
+    private final String selectedPlayer1;
+    private final String selectedPlayer2;
     
-    // Human player color blue tile
-    private final static String TILE_HUMAN_START_LIGHT_EDGE_COLOR = "#4FB1FF";
-    private final static String TILE_HUMAN_START_MAIN_COLOR = "#0073CF";
-    private final static String TILE_HUMAN_START_SHADOW_EDGE_COLOR = "#004881";
+    private final String selectedPlayer1Color;
+    private final String selectedPlayer2Color;
     
-    // AI player color red tile
-    private final static String TILE_AI1_START_LIGHT_EDGE_COLOR = "#FF4F4F";
-    private final static String TILE_AI1_START_MAIN_COLOR = "#CF0000";
-    private final static String TILE_AI1_START_SHADOW_EDGE_COLOR = "#810000";
+
     
-    private final static String TILE_P2_START_POS = "";
-    private final static String TILE_P3_START_POS = "";
-    private final static String TILE_P4_START_POS = "";
 
-    private final static String TILE_NEUTRAL_LIGHT_EDGE_COLOR = "#FFFFFF";
-    private final static String TILE_NEUTRAL_MAIN_COLOR = "#C6C6C6";
-    private final static String TILE_NEUTRAL_SHADOW_EDGE_COLOR = "#000000";
-
-    private final static String TILE_BOULDER_LIGHT_EDGE_COLOR = "#FFFFFF";
-    private final static String TILE_BOULDER_MAIN_COLOR = "#4F4F4F";
-    private final static String TILE_BOULDER_SHADOW_EDGE_COLOR = "#000000";
-
-    public MapManager(Canvas canvas, Map map, int playerSelected) {
+    public MapManager(Canvas canvas, Map map, String player1, String player2, String player1Color, String player2Color) {
         this.canvas = canvas;
         this.rowCell = new ArrayList<>();
         this.columnCell = new ArrayList<>();
@@ -67,7 +52,10 @@ public class MapManager {
         }
 
         this.selectedMap = map;
-        this.selectedPlayer = playerSelected;
+        this.selectedPlayer1 = player1;
+        this.selectedPlayer2 = player2;
+        this.selectedPlayer1Color = player1Color;
+        this.selectedPlayer2Color = player2Color;
     }
 
     // type 1: light edges color
@@ -86,20 +74,20 @@ public class MapManager {
         if (this.selectedMap.getListOfPlayer1StartPosition()[0] == column + 1 &&
                 this.selectedMap.getListOfPlayer1StartPosition()[1] == row + 1) {
             
-            if (this.selectedPlayer == 1) {
-                tile_type = "player_human";
+            if (this.selectedPlayer1Color.equals(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
+                tile_type = "player_blue";
             } else {
-                tile_type = "player_ai";
+                tile_type = "player_red";
             }
         }
         
         if (this.selectedMap.getListOfPlayer2StartPosition()[0] == column + 1 &&
                 this.selectedMap.getListOfPlayer2StartPosition()[1] == row + 1) {
             
-            if (this.selectedPlayer == 1) {
-                tile_type = "player_ai";
+            if (this.selectedPlayer2Color.equals(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
+                tile_type = "player_blue";
             } else {
-                tile_type = "player_human";
+                tile_type = "player_red";
             }
         }
         
@@ -108,52 +96,52 @@ public class MapManager {
             case "boulder":
                 switch (type) {
                     case 1:
-                        tile_color = TILE_BOULDER_LIGHT_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.TILE_BOULDER_LIGHT_EDGE_COLOR;
                         break;
                     case 2:
-                        tile_color = TILE_BOULDER_MAIN_COLOR;
+                        tile_color = GlobalSettingsManager.TILE_BOULDER_MAIN_COLOR;
                         break;
                     case 3:
-                        tile_color = TILE_BOULDER_SHADOW_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.TILE_BOULDER_SHADOW_EDGE_COLOR;
                         break;
                 }   break;
                 
-            case "player_human":
+            case "player_blue":
                 switch (type) {
                     case 1:
-                        tile_color = TILE_HUMAN_START_LIGHT_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.PLAYER_COLOR_BLUE_LIGHT_EDGE;
                         break;
                     case 2:
-                        tile_color = TILE_HUMAN_START_MAIN_COLOR;
+                        tile_color = GlobalSettingsManager.PLAYER_COLOR_BLUE;
                         break;
                     case 3:
-                        tile_color = TILE_HUMAN_START_SHADOW_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.PLAYER_COLOR_BLUE_SHADOW_EDGE;
                     break;
             }   break;    
                 
-            case "player_ai":
+            case "player_red":
                 switch (type) {
                     case 1:
-                        tile_color = TILE_AI1_START_LIGHT_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.PLAYER_COLOR_RED_LIGHT_EDGE;
                         break;
                     case 2:
-                        tile_color = TILE_AI1_START_MAIN_COLOR;
+                        tile_color = GlobalSettingsManager.PLAYER_COLOR_RED;
                         break;
                     case 3:
-                        tile_color = TILE_AI1_START_SHADOW_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.PLAYER_COLOR_RED_SHADOW_EDGE;
                     break;
             }   break;
             
             case "neutral":
                 switch (type) {
                     case 1:
-                        tile_color = TILE_NEUTRAL_LIGHT_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.TILE_NEUTRAL_LIGHT_EDGE_COLOR;
                         break;
                     case 2:
-                        tile_color = TILE_NEUTRAL_MAIN_COLOR;
+                        tile_color = GlobalSettingsManager.TILE_NEUTRAL_MAIN_COLOR;
                         break;
                     case 3:
-                        tile_color = TILE_NEUTRAL_SHADOW_EDGE_COLOR;
+                        tile_color = GlobalSettingsManager.TILE_NEUTRAL_SHADOW_EDGE_COLOR;
                     break;
             }   break;
         }
