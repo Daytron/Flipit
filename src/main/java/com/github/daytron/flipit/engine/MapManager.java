@@ -27,18 +27,15 @@ public class MapManager {
     private final List<Double> columnCell;
     private double gridXSpace;
     private double gridYSpace;
-    
+
     private final Map selectedMap;
 
     private final int TILE_EDGE_EFFECT_THICKNESS;
     private final String selectedPlayer1;
     private final String selectedPlayer2;
-    
+
     private final String selectedPlayer1Color;
     private final String selectedPlayer2Color;
-    
-
-    
 
     public MapManager(Canvas canvas, Map map, String player1, String player2, String player1Color, String player2Color) {
         this.canvas = canvas;
@@ -67,34 +64,33 @@ public class MapManager {
     private String extractPositionColor(int column, int row, int type) {
         String tile_color = "";
         String tile_type = "neutral";
-        
-        for (Integer[] pos: this.selectedMap.getListOfBoulders()) {
+
+        for (Integer[] pos : this.selectedMap.getListOfBoulders()) {
             if (pos[0] == column + 1 && pos[1] == row + 1) {
                 tile_type = "boulder";
             }
         }
-        
-        if (this.selectedMap.getListOfPlayer1StartPosition()[0] == column + 1 &&
-                this.selectedMap.getListOfPlayer1StartPosition()[1] == row + 1) {
-            
+
+        if (this.selectedMap.getListOfPlayer1StartPosition()[0] == column + 1
+                && this.selectedMap.getListOfPlayer1StartPosition()[1] == row + 1) {
+
             if (this.selectedPlayer1Color.equals(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
                 tile_type = "player_blue";
             } else {
                 tile_type = "player_red";
             }
         }
-        
-        if (this.selectedMap.getListOfPlayer2StartPosition()[0] == column + 1 &&
-                this.selectedMap.getListOfPlayer2StartPosition()[1] == row + 1) {
-            
+
+        if (this.selectedMap.getListOfPlayer2StartPosition()[0] == column + 1
+                && this.selectedMap.getListOfPlayer2StartPosition()[1] == row + 1) {
+
             if (this.selectedPlayer2Color.equals(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
                 tile_type = "player_blue";
             } else {
                 tile_type = "player_red";
             }
         }
-        
-        
+
         switch (tile_type) {
             case "boulder":
                 switch (type) {
@@ -107,8 +103,9 @@ public class MapManager {
                     case 3:
                         tile_color = GlobalSettingsManager.TILE_BOULDER_SHADOW_EDGE_COLOR;
                         break;
-                }   break;
-                
+                }
+                break;
+
             case "player_blue":
                 switch (type) {
                     case 1:
@@ -119,9 +116,10 @@ public class MapManager {
                         break;
                     case 3:
                         tile_color = GlobalSettingsManager.PLAYER_COLOR_BLUE_SHADOW_EDGE;
-                    break;
-            }   break;    
-                
+                        break;
+                }
+                break;
+
             case "player_red":
                 switch (type) {
                     case 1:
@@ -132,9 +130,10 @@ public class MapManager {
                         break;
                     case 3:
                         tile_color = GlobalSettingsManager.PLAYER_COLOR_RED_SHADOW_EDGE;
-                    break;
-            }   break;
-            
+                        break;
+                }
+                break;
+
             case "neutral":
                 switch (type) {
                     case 1:
@@ -145,8 +144,9 @@ public class MapManager {
                         break;
                     case 3:
                         tile_color = GlobalSettingsManager.TILE_NEUTRAL_SHADOW_EDGE_COLOR;
-                    break;
-            }   break;
+                        break;
+                }
+                break;
         }
 
         return tile_color;
@@ -185,28 +185,50 @@ public class MapManager {
         for (int count_row = 0; count_row < this.numberOfRows; count_row++) {
             for (int count_column = 0; count_column < this.numberOfColumns; count_column++) {
 
-                // coloring (for nuetral tiles) the light top and left edges respectively
-                gc.setFill(Color.web(this.extractPositionColor(count_column, count_row, 1)));
-                gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), this.gridXSpace, TILE_EDGE_EFFECT_THICKNESS);
-                gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace);
+                this.paintTile(this.extractPositionColor(count_column, count_row, 1),
+                        this.extractPositionColor(count_column, count_row, 2),
+                        this.extractPositionColor(count_column, count_row, 3),
+                        gc, count_column, count_row);
 
-                // coloring main tile body
-                gc.setFill(Color.web(this.extractPositionColor(count_column, count_row, 2)));
-                gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
-
-                // coloring tile's shadow for bottom and right edges respectively
-                gc.setFill(Color.web(this.extractPositionColor(count_column, count_row, 3)));
-                gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS);
-                gc.fillRect(this.columnCell.get(count_column) + this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
             }
         }
 
-        
     }
 
-    private void initNeutralTiles(int count_row, int count_column) {
+    /**
+     * Method for painting the tile
+     * @param light_edge_color A string hex color code
+     * @param main_color A string hex color code
+     * @param shadow_edge_color A string hex color code
+     * @param gc GraphicsContext object for drawing
+     * @param count_column int value of the column (x) position of the tile
+     * @param count_row int value of the row (y) position of the tile
+     */
+    public void paintTile(String light_edge_color, String main_color, String shadow_edge_color, GraphicsContext gc,
+            int count_column, int count_row) {
+        // coloring the light top and left edges respectively
+        gc.setFill(Color.web(light_edge_color));
+        gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), this.gridXSpace, TILE_EDGE_EFFECT_THICKNESS);
+        gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace);
 
+        // coloring main tile body
+        gc.setFill(Color.web(main_color));
+        gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
+
+        // coloring tile's shadow for bottom and right edges respectively
+        gc.setFill(Color.web(shadow_edge_color));
+        gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS);
+        gc.fillRect(this.columnCell.get(count_column) + this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
     }
+
+    public int[] getPlayer1StartPos() {
+        return this.selectedMap.getListOfPlayer1StartPosition();
+    }
+
+    public int[] getPlayer2StartPos() {
+        return this.selectedMap.getListOfPlayer2StartPosition();
+    }
+
 
     public List<Double> getColumnCell() {
         return this.columnCell;

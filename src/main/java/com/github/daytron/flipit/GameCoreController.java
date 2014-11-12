@@ -47,6 +47,7 @@ public class GameCoreController implements Initializable {
         this.gameManager = new GameManager(canvas, this.app.getGamePreloader().getMapSelected(), this.app.getGamePreloader().getPlayer1Selected(), this.app.getGamePreloader().getPlayer2Selected(), this.app.getGamePreloader().getPlayer1ColorSelected(), this.app.getGamePreloader().getPlayer2ColorSelected());
         
         this.gameManager.generateMap();
+        this.gameManager.play();
     }
 
     @FXML
