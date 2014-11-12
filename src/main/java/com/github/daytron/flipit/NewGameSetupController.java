@@ -88,8 +88,8 @@ public class NewGameSetupController implements Initializable {
         this.startPositionP2ComboBox.setItems(playerOptions);
 
         // Apply default values
-        this.startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN);
-        this.startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_COMPUTER);
+        this.startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+        this.startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
 
         // Add player 1 combobox listener
         this.startPositionP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
@@ -98,12 +98,12 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 app.getGamePreloader().setPlayer1Selected(newValue);
 
-                if (newValue.contains(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN)) {
-                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_COMPUTER);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_COMPUTER);
+                if (newValue.contains(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
                 } else {
-                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN);
+                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
                 }
             }
         });
@@ -115,12 +115,12 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 app.getGamePreloader().setPlayer2Selected(newValue);
 
-                if (newValue.contains(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN)) {
-                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_COMPUTER);
-                    app.getGamePreloader().setPlayer1Selected(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_COMPUTER);
+                if (newValue.contains(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer1Selected(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
                 } else {
-                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN);
+                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
                 }
             }
         });
@@ -183,8 +183,8 @@ public class NewGameSetupController implements Initializable {
 
     public void loadDefaultValuesToPreloader() {
         // Set default player start position values to gamePreloader
-        this.app.getGamePreloader().setPlayer1Selected(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_HUMAN);
-        this.app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_START_POSITION_OPTION_COMPUTER);
+        this.app.getGamePreloader().setPlayer1Selected(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+        this.app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
 
         // Set default player color values to gamepreloader
         this.app.getGamePreloader().setPlayer1ColorSelected(

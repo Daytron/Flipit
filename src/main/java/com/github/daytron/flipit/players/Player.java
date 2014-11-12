@@ -5,6 +5,7 @@
  */
 package com.github.daytron.flipit.players;
 
+import com.github.daytron.flipit.GlobalSettingsManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,25 +14,52 @@ import java.util.List;
  * @author ryan
  */
 public class Player {
-    private String playerType;
+
+    private final String playerType;
     private int score;
     private boolean turn;
-    
-    private List<Integer[]> occupiedTiles;
 
-    public Player(boolean turn, String playerType) {
+    private final List<Integer[]> occupiedTiles;
+
+    private final String light_edge_color;
+    private final String main_color;
+    private final String shadow_edge_color;
+
+    private final String playerSide;
+
+    /**
+     *
+     * @param turn boolean [true] if human is first, otherwise [false]
+     * @param playerType Options could be [Human] or [Computer]
+     * @param playerSide Options could be [player1] or [player2]
+     */
+    public Player(boolean turn, String playerType, String playerSide, String main_color) {
         this.score = 0;
         this.turn = turn;
         this.playerType = playerType;
+        this.playerSide = playerSide;
+
+        if (main_color.equals(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
+            this.light_edge_color = GlobalSettingsManager.PLAYER_COLOR_BLUE_LIGHT_EDGE;
+            this.shadow_edge_color = GlobalSettingsManager.PLAYER_COLOR_BLUE_SHADOW_EDGE;
+        } else {
+            this.light_edge_color = GlobalSettingsManager.PLAYER_COLOR_RED_LIGHT_EDGE;
+            this.shadow_edge_color = GlobalSettingsManager.PLAYER_COLOR_RED_SHADOW_EDGE;
+        }
+
+        this.main_color = main_color;
         this.occupiedTiles = new ArrayList<>();
     }
-    
-    public void addOccupiedTile(int x, int y) {
-        this.occupiedTiles.add(new Integer[]{x,y});
-    }
-    
 
-    public void setIsTurn(boolean isTurn) {
+    public void addOccupiedTile(int x, int y) {
+        this.occupiedTiles.add(new Integer[]{x, y});
+    }
+
+    public List<Integer[]> getOccupiedTiles() {
+        return occupiedTiles;
+    }
+
+    public void setTurn(boolean isTurn) {
         this.turn = isTurn;
     }
 
@@ -39,10 +67,32 @@ public class Player {
         return score;
     }
 
+    public void addScore(int score) {
+        this.score += score;
+    }
+
     public boolean isTurn() {
         return turn;
     }
-    
-    
-    
+
+    public String getMain_color() {
+        return main_color;
+    }
+
+    public String getLight_edge_color() {
+        return light_edge_color;
+    }
+
+    public String getShadow_edge_color() {
+        return shadow_edge_color;
+    }
+
+    public String getPlayerSide() {
+        return playerSide;
+    }
+
+    public String getPlayerType() {
+        return playerType;
+    }
+
 }

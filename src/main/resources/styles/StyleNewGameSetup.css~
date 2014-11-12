@@ -16,7 +16,7 @@ and open the template in the editor.
 
 #imagepreview {
     -fx-padding: 10;
-    -fx-background-color: firebrick;
+-fx-background-color: firebrick;
 }
 
 #maplist {

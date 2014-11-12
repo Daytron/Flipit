@@ -20,6 +20,8 @@ import javafx.scene.paint.Color;
  */
 public class MapManager {
 
+    private GraphicsContext gc;
+
     private final int numberOfRows;
     private final int numberOfColumns;
     private final Canvas canvas;
@@ -27,7 +29,7 @@ public class MapManager {
     private final List<Double> columnCell;
     private double gridXSpace;
     private double gridYSpace;
-    
+
     double preferredHeight;
     double preferredWidth;
     private double halfPaddingWidth;
@@ -42,7 +44,11 @@ public class MapManager {
     private final String selectedPlayer1Color;
     private final String selectedPlayer2Color;
 
+    private int[] current_tile_pos;
+
     public MapManager(Canvas canvas, Map map, String player1, String player2, String player1Color, String player2Color) {
+        this.gc = canvas.getGraphicsContext2D();
+
         this.canvas = canvas;
         this.rowCell = new ArrayList<>();
         this.columnCell = new ArrayList<>();
@@ -157,7 +163,7 @@ public class MapManager {
         return tile_color;
     }
 
-    public void generateMap(GraphicsContext gc) {
+    public void generateMap() {
         double x = this.canvas.getWidth();
         double y = this.canvas.getHeight();
 
@@ -193,7 +199,7 @@ public class MapManager {
                 this.paintTile(this.extractPositionColor(count_column, count_row, 1),
                         this.extractPositionColor(count_column, count_row, 2),
                         this.extractPositionColor(count_column, count_row, 3),
-                        gc, count_column, count_row);
+                        count_column, count_row);
 
             }
         }
@@ -202,28 +208,31 @@ public class MapManager {
 
     /**
      * Method for painting the tile
+     *
      * @param light_edge_color A string hex color code
      * @param main_color A string hex color code
      * @param shadow_edge_color A string hex color code
      * @param gc GraphicsContext object for drawing
      * @param count_column int value of the column (x) position of the tile
-     * @param count_row int value of the row (y) position of the tile
+     * (with 0 as index)
+     * @param count_row int value of the row (y) position of the tile (with 0 as
+     * index)
      */
-    public void paintTile(String light_edge_color, String main_color, String shadow_edge_color, GraphicsContext gc,
+    public void paintTile(String light_edge_color, String main_color, String shadow_edge_color,
             int count_column, int count_row) {
         // coloring the light top and left edges respectively
-        gc.setFill(Color.web(light_edge_color));
-        gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), this.gridXSpace, TILE_EDGE_EFFECT_THICKNESS);
-        gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace);
+        this.gc.setFill(Color.web(light_edge_color));
+        this.gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), this.gridXSpace, TILE_EDGE_EFFECT_THICKNESS);
+        this.gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace);
 
         // coloring main tile body
-        gc.setFill(Color.web(main_color));
-        gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
+        this.gc.setFill(Color.web(main_color));
+        this.gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
 
         // coloring tile's shadow for bottom and right edges respectively
-        gc.setFill(Color.web(shadow_edge_color));
-        gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS);
-        gc.fillRect(this.columnCell.get(count_column) + this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
+        this.gc.setFill(Color.web(shadow_edge_color));
+        this.gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS);
+        this.gc.fillRect(this.columnCell.get(count_column) + this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
     }
 
     public int[] getPlayer1StartPos() {
@@ -234,24 +243,32 @@ public class MapManager {
         return this.selectedMap.getListOfPlayer2StartPosition();
     }
 
+    // TODO
+    public void highlightPossibleHumanMovesUponAvailableTurn(String player) {
+        if (player.equals(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+
+        }
+    }
+
     /**
-     * Method for finding the tile position based on mouseClick. This method 
+     * Method for finding the tile position based on mouseClick. This method
      * simply made use of binary search algorithm.
+     *
      * @param x_pos Mouseclick x position
      * @param y_pos Mouseclick y position
      * @return The position in relation to grid location [x column, y row]
      */
     public int[] getTilePosition(double x_pos, double y_pos) {
         int tile_x, tile_y;
-        
+
         // For locating column position
         int highX = this.columnCell.size() - 1;
         int lowX = 0;
-        int midX = 0 ;
-        
+        int midX = 0;
+
         while (lowX <= highX) {
             midX = lowX + (highX - lowX) / 2;
-            
+
             if (x_pos < this.columnCell.get(midX)) {
                 highX = midX;
             } else if (x_pos > this.columnCell.get(midX)) {
@@ -259,22 +276,22 @@ public class MapManager {
             } else {
                 break;
             }
-            
+
             if (lowX + 1 == highX) {
                 break;
             }
         }
-        
+
         // For locating row position
         tile_x = lowX + 1;
-        
+
         int highY = this.rowCell.size() - 1;
         int lowY = 0;
         int midY = 0;
-        
+
         while (lowY <= highY) {
             midY = lowY + (highY - lowY) / 2;
-            
+
             if (y_pos < this.rowCell.get(midY)) {
                 highY = midY;
             } else if (y_pos > this.rowCell.get(midY)) {
@@ -282,42 +299,88 @@ public class MapManager {
             } else {
                 break;
             }
-            
+
             if (lowY + 1 == highY) {
                 break;
             }
         }
         tile_y = lowY + 1;
-        
+
         /*
-        System.out.println("tile: [" + tile_x + "," + tile_y + "]" );
+         System.out.println("tile: [" + tile_x + "," + tile_y + "]" );
         
         
-        System.out.println("X clicked: " + x_pos);
+         System.out.println("X clicked: " + x_pos);
         
-        System.out.println("low: " + lowX);
-        System.out.println(this.columnCell.get(lowX));
+         System.out.println("low: " + lowX);
+         System.out.println(this.columnCell.get(lowX));
         
-        System.out.println("high: " + highX);
-        System.out.println(this.columnCell.get(highX));
+         System.out.println("high: " + highX);
+         System.out.println(this.columnCell.get(highX));
         
-        System.out.println("mid: " + midX);
-        */
-        
-        return new int[]{tile_x,tile_y};
+         System.out.println("mid: " + midX);
+         */
+        return new int[]{tile_x, tile_y};
     }
-    
+
     /**
      * Checks whether the mouselick lands inside the playing grid map
+     *
      * @param x_pos mouse x position
      * @param y_pos mouse y position
      * @return a boolean value true if it's inside, otherwise it returns false
      */
-    public boolean isInsideTheGrid(double x_pos, double y_pos){
-        return (x_pos >= this.halfPaddingWidth && x_pos <= (this.canvas.getWidth() - this.halfPaddingWidth)) && 
-                (y_pos >= this.halfPaddingHeight && y_pos <= (this.canvas.getWidth() - this.halfPaddingHeight));
+    public boolean isInsideTheGrid(double x_pos, double y_pos) {
+        return (x_pos >= this.halfPaddingWidth && x_pos <= (this.canvas.getWidth() - this.halfPaddingWidth))
+                && (y_pos >= this.halfPaddingHeight && y_pos <= (this.canvas.getWidth() - this.halfPaddingHeight));
     }
-    
+
+    public void setCurrentTile(double x, double y) {
+        this.current_tile_pos = this.getTilePosition(x, y);
+    }
+
+    public int[] getCurrentTile() {
+        return this.current_tile_pos;
+    }
+
+    /**
+     * Method for analysing the tile property Legend: 1 - neutral tile 2 -
+     * boulder tile 3 - human occupied tile 4 - enemy occupied tile
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean isBoulderTile() {
+
+        for (Integer[] boulderPos : this.selectedMap.getListOfBoulders()) {
+            if (this.current_tile_pos[0] == boulderPos[0] && this.current_tile_pos[1] == boulderPos[1]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isSelfOccupiedTile(List<Integer[]> aPlayerOccupiedTiles) {
+        return this.isGenericOccupiedTile(aPlayerOccupiedTiles);
+    }
+
+    public boolean isEnemyOccupiedTile(List<Integer[]> aPlayerOccupiedTiles) {
+        return this.isGenericOccupiedTile(aPlayerOccupiedTiles);
+    }
+
+    // Generic template for two methods
+    private boolean isGenericOccupiedTile(List<Integer[]> aPlayerOccupiedTiles) {
+        for (Integer[] anOccupiedTile : aPlayerOccupiedTiles) {
+            if (this.current_tile_pos[0] == anOccupiedTile[0] && this.current_tile_pos[1] == anOccupiedTile[1]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public List<Double> getColumnCell() {
         return this.columnCell;
     }

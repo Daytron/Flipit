@@ -26,6 +26,11 @@ public class GlobalSettingsManager {
     public final static String TILE_BOULDER_MAIN_COLOR = "#4F4F4F";
     public final static String TILE_BOULDER_SHADOW_EDGE_COLOR = "#000000"; 
     
-    public static final String PLAYER_START_POSITION_OPTION_HUMAN = "Human";
-    public static final String PLAYER_START_POSITION_OPTION_COMPUTER = "Computer";
+    public static final String PLAYER_OPTION_HUMAN = "Human";
+    public static final String PLAYER_OPTION_COMPUTER = "Computer";
+    
+    
+    // SCORING
+    public static final int SCORE_ONE_TILE_OCCUPY = 1;
+    
 }
