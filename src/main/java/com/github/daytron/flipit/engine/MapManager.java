@@ -27,6 +27,11 @@ public class MapManager {
     private final List<Double> columnCell;
     private double gridXSpace;
     private double gridYSpace;
+    
+    double preferredHeight;
+    double preferredWidth;
+    private double halfPaddingWidth;
+    private double halfPaddingHeight;
 
     private final Map selectedMap;
 
@@ -156,27 +161,27 @@ public class MapManager {
         double x = this.canvas.getWidth();
         double y = this.canvas.getHeight();
 
-        double preferredHeight = ((int) y / this.numberOfRows) * (double) this.numberOfRows;
-        double preferredWidth = ((int) x / this.numberOfColumns) * (double) this.numberOfColumns;
+        this.preferredHeight = ((int) y / this.numberOfRows) * (double) this.numberOfRows;
+        this.preferredWidth = ((int) x / this.numberOfColumns) * (double) this.numberOfColumns;
 
         // Padding space for width and height
-        double halfPaddingWidth = (x - preferredWidth) / 2;
-        double halfPaddingHeight = (y - preferredHeight) / 2;
+        this.halfPaddingWidth = (x - preferredWidth) / 2;
+        this.halfPaddingHeight = (y - preferredHeight) / 2;
 
         // space between each cell
-        this.gridXSpace = preferredWidth / this.numberOfColumns;
-        this.gridYSpace = preferredHeight / this.numberOfRows;
+        this.gridXSpace = this.preferredWidth / this.numberOfColumns;
+        this.gridYSpace = this.preferredHeight / this.numberOfRows;
 
         gc.setLineWidth(2);
 
         // generate rows
-        for (double yi = halfPaddingHeight; yi <= (y - halfPaddingHeight); yi = yi + this.gridYSpace) {
+        for (double yi = this.halfPaddingHeight; yi <= (y - this.halfPaddingHeight); yi = yi + this.gridYSpace) {
             //gc.strokeLine(halfPaddingWidth, yi, x - halfPaddingWidth, yi);
             this.rowCell.add(yi);
         }
 
         // generate columns
-        for (double xi = halfPaddingWidth; xi <= (x - halfPaddingWidth); xi = xi + this.gridXSpace) {
+        for (double xi = this.halfPaddingWidth; xi <= (x - this.halfPaddingWidth); xi = xi + this.gridXSpace) {
             //gc.strokeLine(xi, halfPaddingHeight, xi, y - halfPaddingHeight);
             this.columnCell.add(xi);
         }
@@ -229,7 +234,90 @@ public class MapManager {
         return this.selectedMap.getListOfPlayer2StartPosition();
     }
 
-
+    /**
+     * Method for finding the tile position based on mouseClick. This method 
+     * simply made use of binary search algorithm.
+     * @param x_pos Mouseclick x position
+     * @param y_pos Mouseclick y position
+     * @return The position in relation to grid location [x column, y row]
+     */
+    public int[] getTilePosition(double x_pos, double y_pos) {
+        int tile_x, tile_y;
+        
+        // For locating column position
+        int highX = this.columnCell.size() - 1;
+        int lowX = 0;
+        int midX = 0 ;
+        
+        while (lowX <= highX) {
+            midX = lowX + (highX - lowX) / 2;
+            
+            if (x_pos < this.columnCell.get(midX)) {
+                highX = midX;
+            } else if (x_pos > this.columnCell.get(midX)) {
+                lowX = midX;
+            } else {
+                break;
+            }
+            
+            if (lowX + 1 == highX) {
+                break;
+            }
+        }
+        
+        // For locating row position
+        tile_x = lowX + 1;
+        
+        int highY = this.rowCell.size() - 1;
+        int lowY = 0;
+        int midY = 0;
+        
+        while (lowY <= highY) {
+            midY = lowY + (highY - lowY) / 2;
+            
+            if (y_pos < this.rowCell.get(midY)) {
+                highY = midY;
+            } else if (y_pos > this.rowCell.get(midY)) {
+                lowY = midY;
+            } else {
+                break;
+            }
+            
+            if (lowY + 1 == highY) {
+                break;
+            }
+        }
+        tile_y = lowY + 1;
+        
+        /*
+        System.out.println("tile: [" + tile_x + "," + tile_y + "]" );
+        
+        
+        System.out.println("X clicked: " + x_pos);
+        
+        System.out.println("low: " + lowX);
+        System.out.println(this.columnCell.get(lowX));
+        
+        System.out.println("high: " + highX);
+        System.out.println(this.columnCell.get(highX));
+        
+        System.out.println("mid: " + midX);
+        */
+        
+        return new int[]{tile_x,tile_y};
+    }
+    
+    /**
+     * Checks whether the mouselick lands inside the playing grid map
+     * @param x_pos mouse x position
+     * @param y_pos mouse y position
+     * @return a boolean value true if it's inside, otherwise it returns false
+     */
+    public boolean isInsideTheGrid(double x_pos, double y_pos){
+        return (x_pos >= this.halfPaddingWidth && x_pos <= (this.canvas.getWidth() - this.halfPaddingWidth)) && 
+                (y_pos >= this.halfPaddingHeight && y_pos <= (this.canvas.getWidth() - this.halfPaddingHeight));
+    }
+    
     public List<Double> getColumnCell() {
         return this.columnCell;
     }

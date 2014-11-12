@@ -64,6 +64,18 @@ public class GameManager {
     
     
     public void getClick(double x, double y) {
+        this.mapManager.getTilePosition(x, y);
+        
+        /*
+        System.out.println("Columns: ");
+        for (Double posX : this.mapManager.getColumnCell()) {
+            System.out.println(posX);
+        }
+        
+        System.out.println("Rows: ");
+        for (Double posY : this.mapManager.getRowCell()) {
+            System.out.println(posY);
+        } */
         if (this.playerManager.isHumanTurn()) {
             
         }
