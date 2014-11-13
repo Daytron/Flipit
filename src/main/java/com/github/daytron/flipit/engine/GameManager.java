@@ -85,20 +85,20 @@ public class GameManager {
 
         } else {
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER))) {
-                this.aiChosenPlayTile = this.comAI.play(this.mapManager.getPossibleMovePos(), 
+                this.aiChosenPlayTile = this.comAI.play(this.mapManager.getPossibleMovePos(),
                         this.mapManager.getPossibleAttackPos()).clone();
-                
+
                 // Extra measure if there is no selected move from AI
                 if (this.aiChosenPlayTile.length == 0 || this.aiChosenPlayTile == null) {
                     this.endGame();
                 }
-                
+
                 // Apply move
-                this.analyzeTile(GlobalSettingsManager.PLAYER_OPTION_COMPUTER, 
-                        this.aiChosenPlayTile[0], 
+                this.analyzeTile(GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
+                        this.aiChosenPlayTile[0],
                         this.aiChosenPlayTile[1]);
             }
-            
+
         }
     }
 
@@ -138,14 +138,12 @@ public class GameManager {
                 if (this.mapManager.isTilePartOf(new Integer[]{x, y}, this.playerManager.getOccupiedTiles(this.getOpposingPlayer(player)))) {
                     // if yes then calculate attack move
                     if (this.isValidAttackMove(player, x, y)) {
-                        // Get the reference to the occupied tile to attack
-                        Integer[] attackingTilePos = this.getAttackingTilePos().clone();
 
                         // calculate how many possible tiles to attack
                         List<Integer[]> tilesToFlip = this.mapManager.getHowManyEnemyTilesToFlip(this.playerManager.getOccupiedTiles(player), this.playerManager.getEnemyTiles(player));
 
                         // Call an attack move
-                        this.flipTile(attackingTilePos, tilesToFlip, player);
+                        this.flipTile(tilesToFlip, player);
                     }
                 } else {
                     // if no, more likely a neutral tile and calculate if the move is valid
@@ -166,12 +164,8 @@ public class GameManager {
         }
     }
 
-    private Integer[] getAttackingTilePos() {
-        return this.mapManager.getOccupiedTileToAttack();
-    }
-
     // TODO
-    private void flipTile(Integer[] attackingTilePos, List<Integer[]> tilesToFlip, String player) {
+    private void flipTile(List<Integer[]> tilesToFlip, String player) {
 
         for (Integer[] enemyTile : tilesToFlip) {
             // 1. Paint tiles as your newly occupied tiles
@@ -195,16 +189,8 @@ public class GameManager {
         // 5. Update score accordingly
         this.updateScore(player, tilesToFlip.size());
 
-        // 6. Check if this is a winning move
-        // - e.g. no more more moves available or
-        // enemy main base is hit
-        if (!this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player),
-                this.playerManager.getEnemyTiles(player))) {
-            this.endGame();
-        } else {
-            // 7. end turn or end game depending of the outcome of 6
-            this.endTurn(player);
-        }
+        // 6. End Turn
+        this.endTurn(player);
 
     }
 
@@ -230,13 +216,9 @@ public class GameManager {
         // To stop repainting the said tile when painted back to neutral color
         this.mapManager.removeNewlyOccupiedTileFromHighlightList(new Integer[]{x, y});
 
-        // 5. Check if there still possible move. If not, end the game
-        if (!this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player),
-                this.playerManager.getEnemyTiles(player))) {
-            this.endGame();
-        } else {
-            this.endTurn(player);
-        }
+        // 5. End turn
+        this.endTurn(player);
+
     }
 
     private boolean isValidOccupyMove(String player, int x, int y) {
@@ -248,38 +230,47 @@ public class GameManager {
     }
 
     private void endTurn(String player) {
+        // Remove highlight
         if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
             // remove tile highlights for human player
-            this.mapManager.removeHighlight(GlobalSettingsManager.PLAYER_OPTION_HUMAN, this.playerManager.getPlayerLightEdgeColor(this.playerManager.getEnemyOf(GlobalSettingsManager.PLAYER_OPTION_HUMAN)), this.playerManager.getPlayerMainColor(this.playerManager.getEnemyOf(GlobalSettingsManager.PLAYER_OPTION_HUMAN)), this.playerManager.getPlayerShadowEdgeColor(this.playerManager.getEnemyOf(GlobalSettingsManager.PLAYER_OPTION_HUMAN)));
+            this.mapManager.removeHighlight(
+                    this.playerManager.getPlayerLightEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
+                    this.playerManager.getPlayerMainColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
+                    this.playerManager.getPlayerShadowEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER));
 
         }
 
-        // change turn
-        this.playerManager.nextTurn(player);
-
+        // Check if there is still possible move, if there isn't then end game
+        // Otherwise change turn
+        if (!this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player),
+                this.playerManager.getEnemyTiles(player))) {
+            this.endGame();
+        } else {
+            // change turn
+            this.playerManager.nextTurn(player);
+        }
 
         // For AI
         if (!this.playerManager.isHumanTurn()) {
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER))) {
                 this.aiChosenPlayTile = this.comAI.play(this.mapManager.getPossibleMovePos(), this.mapManager.getPossibleAttackPos());
-                
+
                 // Extra measure if there is no selected move from AI
                 if (this.aiChosenPlayTile.length == 0 || this.aiChosenPlayTile == null) {
                     this.endGame();
                 }
-                
+
                 // Appply move
-                this.analyzeTile(GlobalSettingsManager.PLAYER_OPTION_COMPUTER, 
-                        this.aiChosenPlayTile[0], 
+                this.analyzeTile(GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
+                        this.aiChosenPlayTile[0],
                         this.aiChosenPlayTile[1]);
             } else {
                 this.endGame();
             }
 
-            
         } else {
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN))) {
-                
+
                 this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
             } else {
                 this.endGame();
@@ -291,13 +282,19 @@ public class GameManager {
     // TODO
     public void endGame() {
         this.isGameRunning = false;
-        
+
+        // remove tile highlights for human player
+        this.mapManager.removeHighlight(
+                this.playerManager.getPlayerLightEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
+                this.playerManager.getPlayerMainColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
+                this.playerManager.getPlayerShadowEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER));
+
         int human_score = this.playerManager.getScore(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
         int computer_score = this.playerManager.getScore(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
-        
+
         System.out.println("Your score: " + human_score);
         System.out.println("Computer score: " + computer_score);
-        
+
         if (human_score > computer_score) {
             System.out.println("You win!");
         } else if (human_score < computer_score) {
