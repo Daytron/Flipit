@@ -319,6 +319,16 @@ public class MapManager {
         
     }
 
+    public List<Integer[]> getPossibleAttackPos() {
+        return possibleAttackPos;
+    }
+
+    public List<Integer[]> getPossibleMovePos() {
+        return possibleMovePos;
+    }
+    
+    
+
     public boolean isTherePossibleMove(List<Integer[]> occupiedPlayerTiles,
             List<Integer[]> enemyPlayerTiles) {
         boolean isThereAMove = false;

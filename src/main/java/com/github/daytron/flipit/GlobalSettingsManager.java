@@ -46,4 +46,9 @@ public class GlobalSettingsManager {
     // SCORING
     public static final int SCORE_ONE_TILE_OCCUPY = 1;
     
+    
+    // AI
+    public static final int COMPUTER_EASY = 1;
+    public static final int COMPUTER_NORMAL = 2;
+    public static final int COMPUTER_HARD = 3;
 }
