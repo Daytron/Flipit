@@ -65,13 +65,19 @@ public class GameManager {
                     this.mapManager.getPlayer2StartPos()[1],
                     GlobalSettingsManager.PLAYER_OPTION_HUMAN);
         }
+        
 
         // On first turn only if it goes for human player, it begins highlighting 
         // possible moves.
         // This is only called once, if and only if human is the first turn, 
         // this is regularly called/monitored in endTurn() method
         if (this.playerManager.isHumanTurn()) {
-            this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+            String player = GlobalSettingsManager.PLAYER_OPTION_HUMAN;
+            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player), 
+                    this.playerManager.getEnemyTiles(player))) {
+                this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(player);
+            }
+            
         }
     }
 
@@ -92,22 +98,25 @@ public class GameManager {
     // Flexible for both computer and human players
     public void computeMove(double x, double y, String player) {
         if (this.mapManager.isInsideTheGrid(x, y)) {
-            // get the current tile position
-            this.mapManager.setCurrentTile(x, y);
-
+            
+            // Convert raw mouse click position into grid positions [column x row]
+            int[] grid_pos = this.mapManager.getTilePosition(x, y);
+            
             // calls anaylze tile
-            this.analyzeTile(player);
+            this.analyzeTile(player, grid_pos[0], grid_pos[1]);
         }
     }
 
-    private void analyzeTile(String player) {
+    private void analyzeTile(String player, int x, int y) {
         // if not boulder tile continue analyzing
-        if (!this.mapManager.isBoulderTile()) {
+        if (!this.mapManager.isBoulderTile(x, y)) {
             // if not self-occupied tile continue analyzing
-            if (!this.mapManager.isSelfOccupiedTile(this.playerManager.getOccupiedTiles(player))) {
-                if (this.mapManager.isEnemyOccupiedTile(this.playerManager.getOccupiedTiles(this.getOpposingPlayer(player)))) {
+            if (!this.mapManager.isTilePartOf(new Integer[] {x, y}, this.playerManager.getOccupiedTiles(player))) {
+                
+                // Check if tile is part of enemy territory
+                if (this.mapManager.isTilePartOf(new Integer[]{x,y},this.playerManager.getOccupiedTiles(this.getOpposingPlayer(player)))) {
                     // if yes then calculate attack move
-                    if (this.isValidAttackMove(player)) {
+                    if (this.isValidAttackMove(player, x, y)) {
                         // Get the reference to the occupied tile to attack
                         Integer[] attackingTilePos = this.getAttackingTilePos().clone();
 
@@ -119,9 +128,9 @@ public class GameManager {
                     }
                 } else {
                     // if no, more likely a neutral tile and calculate if the move is valid
-                    if (this.isValidOccupyMove(player)) {
+                    if (this.isValidOccupyMove(player, x, y)) {
                         // Call an occupy move
-                        this.occupyTile(player);
+                        this.occupyTile(player, x, y);
                     }
                 }
             }
@@ -156,43 +165,55 @@ public class GameManager {
 
             // 3. Remove tiles from enemy's list
             this.playerManager.removeTileFromPlayerList(enemyTile[0], enemyTile[1], this.playerManager.getEnemyOf(player));
+            
+            // 4. Remove newly occupied tile from higlight list 
+            // To stop repainting the said tile when painted back to neutral color
+            this.mapManager.removeNewlyFlippedTileFromHighlightList(enemyTile.clone());
         }
 
-        // 4. Update score accordingly
+        // 5. Update score accordingly
         this.updateScore(player, tilesToFlip.size());
 
-        // 5. Check if this is a winning move
+        // 6. Check if this is a winning move
         // - e.g. no more more moves available or
         // enemy main base is hit
-        // 6. end turn or end game depending of the outcome of 5
-    }
-
-    private boolean isValidAttackMove(String player) {
-        return this.mapManager.isValidAttackMove(this.playerManager.getOccupiedTiles(player));
-    }
-
-    private void occupyTile(String player) {
-
-        // 1. paint a tile
-        this.mapManager.paintTile(this.playerManager.getPlayerLightEdgeColor(player),
-                this.playerManager.getPlayerMainColor(player),
-                this.playerManager.getPlayerShadowEdgeColor(player),
-                this.mapManager.getCurrentTile()[0] - 1,
-                this.mapManager.getCurrentTile()[1] - 1);
-
-        // 2. add tile to player occupied list
-        this.playerManager.addTileToPlayerList(this.mapManager.getCurrentTile()[0],
-                this.mapManager.getCurrentTile()[1], player);
-
-        // 3. add score by 1
-        this.updateScore(player, GlobalSettingsManager.SCORE_ONE_TILE_OCCUPY);
-
-        // 4. end turn
+        if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player), 
+                this.playerManager.getEnemyTiles(player))) {
+            this.endGame();
+        }
+        
+        // 7. end turn or end game depending of the outcome of 6
         this.endTurn(player);
     }
 
-    private boolean isValidOccupyMove(String player) {
-        return this.mapManager.isValidOccupyMove(this.playerManager.getOccupiedTiles(player));
+    private boolean isValidAttackMove(String player, int x, int y) {
+        return this.mapManager.isValidAttackMove(x, y, this.playerManager.getOccupiedTiles(player));
+    }
+
+    private void occupyTile(String player, int x , int y) {
+        
+        // 1. paint a tile
+        this.mapManager.paintTile(this.playerManager.getPlayerLightEdgeColor(player),
+                this.playerManager.getPlayerMainColor(player),
+                this.playerManager.getPlayerShadowEdgeColor(player), 
+                x - 1, y - 1);
+
+        // 2. add tile to player occupied list
+        this.playerManager.addTileToPlayerList(x, y, player);
+
+        // 3. add score by 1
+        this.updateScore(player, GlobalSettingsManager.SCORE_ONE_TILE_OCCUPY);
+        
+        // 4. Remove newly occupied tile from higlight list 
+        // To stop repainting the said tile when painted back to neutral color
+        this.mapManager.removeNewlyOccupiedTileFromHighlightList(new Integer[] {x, y});
+        
+        // 5. end turn
+        this.endTurn(player);
+    }
+
+    private boolean isValidOccupyMove(String player, int x, int y) {
+        return this.mapManager.isValidOccupyMove(this.playerManager.getOccupiedTiles(player), x, y);
     }
 
     private void updateScore(String player, int score) {
@@ -202,12 +223,26 @@ public class GameManager {
     private void endTurn(String player) {
         // 
         this.playerManager.nextTurn(player);
-        this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(player);
+        
+        // Change player after end turn
+        player = this.getOpposingPlayer(player);
+        
+        // Prepare for possible move highlights
+        if (this.playerManager.isHumanTurn()) {
+            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player), 
+                    this.playerManager.getEnemyTiles(player))) {
+                this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(player);
+            }
+            
+        } else  {
+            this.mapManager.removeHighlight(player);
+        }
+        
     }
 
     // TODO
-    public void checkEndGame() {
-
+    public void endGame() {
+        this.isGameRunning = false;
     }
 
 }
