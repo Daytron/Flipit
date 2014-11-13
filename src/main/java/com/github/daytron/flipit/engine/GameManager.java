@@ -235,7 +235,7 @@ public class GameManager {
             }
             
         } else  {
-            this.mapManager.removeHighlight(player);
+            this.mapManager.removeHighlight(player, this.playerManager.getPlayerLightEdgeColor(this.playerManager.getEnemyOf(player)), this.playerManager.getPlayerMainColor(this.playerManager.getEnemyOf(player)), this.playerManager.getPlayerShadowEdgeColor(this.playerManager.getEnemyOf(player)));
         }
         
     }

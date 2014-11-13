@@ -22,6 +22,10 @@ public class GlobalSettingsManager {
     public static final String TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR = "#ABFFD8";
     public static final String TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR = "#8BD6B3";
     
+    public static final String TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE_COLOR = "#FFEDED";
+    public static final String TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN_COLOR = "#FFABAB";
+    public static final String TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE_COLOR = "#D68B8B";
+    
     public final static String TILE_NEUTRAL_LIGHT_EDGE_COLOR = "#FFFFFF";
     public final static String TILE_NEUTRAL_MAIN_COLOR = "#C6C6C6";
     public final static String TILE_NEUTRAL_SHADOW_EDGE_COLOR = "#000000";

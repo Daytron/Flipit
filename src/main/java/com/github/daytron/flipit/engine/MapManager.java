@@ -256,15 +256,22 @@ public class MapManager {
         if (player.equals(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
 
             // For possible occupy move
-            for (Integer[] tileToHighlight : this.possibleMovePos) {
+            for (Integer[] tileMoveToHighlight : this.possibleMovePos) {
                 this.paintTile(GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE_COLOR,
                         GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR,
                         GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR,
-                        tileToHighlight[0] - 1,
-                        tileToHighlight[1] - 1);
+                        tileMoveToHighlight[0] - 1,
+                        tileMoveToHighlight[1] - 1);
             }
 
                 // For possible attack move
+            for (Integer[] tileAttackToHighlight : this.possibleAttackPos) {
+                this.paintTile(GlobalSettingsManager.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE_COLOR, 
+                        GlobalSettingsManager.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN_COLOR, 
+                        GlobalSettingsManager.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE_COLOR, 
+                        tileAttackToHighlight[0] - 1, 
+                        tileAttackToHighlight[1] - 1);
+            }
         }
     }
     
@@ -288,16 +295,28 @@ public class MapManager {
         }
     }
     
-    public void removeHighlight(String player) {
+    public void removeHighlight(String player, String enemy_light_color, 
+            String enemy_main_color, String enemy_shadow_color) {
         if (player.equals(GlobalSettingsManager.PLAYER_OPTION_COMPUTER)) {
-            for (Integer[] tileToHighlight : this.possibleMovePos) {
+            
+            // For possible move highlights
+            for (Integer[] tileMoveToHighlight : this.possibleMovePos) {
                 this.paintTile(GlobalSettingsManager.TILE_NEUTRAL_LIGHT_EDGE_COLOR,
                         GlobalSettingsManager.TILE_NEUTRAL_MAIN_COLOR,
                         GlobalSettingsManager.TILE_NEUTRAL_SHADOW_EDGE_COLOR,
-                        tileToHighlight[0] - 1,
-                        tileToHighlight[1] - 1);
+                        tileMoveToHighlight[0] - 1,
+                        tileMoveToHighlight[1] - 1);
+            }
+            
+            // For possible attack highlights
+            for (Integer[] tileAttackToHighlight : this.possibleAttackPos) {
+                this.paintTile(enemy_light_color, enemy_main_color,
+                        enemy_shadow_color,
+                        tileAttackToHighlight[0] - 1,
+                        tileAttackToHighlight[1] - 1);
             }
         }
+        
     }
 
     public boolean isTherePossibleMove(List<Integer[]> occupiedPlayerTiles,
