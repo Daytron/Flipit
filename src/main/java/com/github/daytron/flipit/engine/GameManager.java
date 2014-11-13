@@ -281,6 +281,8 @@ public class GameManager {
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN))) {
                 
                 this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+            } else {
+                this.endGame();
             }
         }
 
