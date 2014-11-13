@@ -54,6 +54,17 @@ public class Player {
     public void addOccupiedTile(int x, int y) {
         this.occupiedTiles.add(new Integer[]{x, y});
     }
+    
+    public boolean removeOccupiedTile(int x, int y) {
+        for (Integer[] tile : this.occupiedTiles) {
+            if (tile[0] == x && tile[1] == y) {
+                this.occupiedTiles.remove(tile);
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     public List<Integer[]> getOccupiedTiles() {
         return occupiedTiles;

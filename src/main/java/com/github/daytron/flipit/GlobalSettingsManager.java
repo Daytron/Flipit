@@ -18,6 +18,10 @@ public class GlobalSettingsManager {
     public static final String PLAYER_COLOR_RED_LIGHT_EDGE = "#FF4F4F";
     public static final String PLAYER_COLOR_RED_SHADOW_EDGE = "#810000";
     
+    public static final String TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE_COLOR = "#EDFFF7";
+    public static final String TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR = "#ABFFD8";
+    public static final String TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR = "#8BD6B3";
+    
     public final static String TILE_NEUTRAL_LIGHT_EDGE_COLOR = "#FFFFFF";
     public final static String TILE_NEUTRAL_MAIN_COLOR = "#C6C6C6";
     public final static String TILE_NEUTRAL_SHADOW_EDGE_COLOR = "#000000";
@@ -29,6 +33,11 @@ public class GlobalSettingsManager {
     public static final String PLAYER_OPTION_HUMAN = "Human";
     public static final String PLAYER_OPTION_COMPUTER = "Computer";
     
+    // Attacking Tile direction
+    public static final int DIRECTION_TOP_LEFT = 1;
+    public static final int DIRECTION_TOP_RIGHT = 2;
+    public static final int DIRECTION_LOWER_LEFT = 3;
+    public static final int DIRECTION_LOWER_RIGHT = 4;
     
     // SCORING
     public static final int SCORE_ONE_TILE_OCCUPY = 1;

@@ -8,6 +8,7 @@ package com.github.daytron.flipit.engine;
 import com.github.daytron.flipit.GlobalSettingsManager;
 import com.github.daytron.flipit.Map;
 import com.github.daytron.flipit.players.PlayerManager;
+import java.util.List;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -50,17 +51,17 @@ public class GameManager {
 
         // Add start tile for each player to their lists.
         if (this.player1.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
-            this.playerManager.addTileToList(this.mapManager.getPlayer1StartPos()[0],
+            this.playerManager.addTileToPlayerList(this.mapManager.getPlayer1StartPos()[0],
                     this.mapManager.getPlayer1StartPos()[1],
                     GlobalSettingsManager.PLAYER_OPTION_HUMAN);
-            this.playerManager.addTileToList(this.mapManager.getPlayer2StartPos()[0],
+            this.playerManager.addTileToPlayerList(this.mapManager.getPlayer2StartPos()[0],
                     this.mapManager.getPlayer2StartPos()[1],
                     GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
         } else {
-            this.playerManager.addTileToList(this.mapManager.getPlayer1StartPos()[0],
+            this.playerManager.addTileToPlayerList(this.mapManager.getPlayer1StartPos()[0],
                     this.mapManager.getPlayer1StartPos()[1],
                     GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
-            this.playerManager.addTileToList(this.mapManager.getPlayer2StartPos()[0],
+            this.playerManager.addTileToPlayerList(this.mapManager.getPlayer2StartPos()[0],
                     this.mapManager.getPlayer2StartPos()[1],
                     GlobalSettingsManager.PLAYER_OPTION_HUMAN);
         }
@@ -106,13 +107,21 @@ public class GameManager {
             if (!this.mapManager.isSelfOccupiedTile(this.playerManager.getOccupiedTiles(player))) {
                 if (this.mapManager.isEnemyOccupiedTile(this.playerManager.getOccupiedTiles(this.getOpposingPlayer(player)))) {
                     // if yes then calculate attack move
-                    if (this.isValidAttackMove()) {
-                        this.setAttackMove();
+                    if (this.isValidAttackMove(player)) {
+                        // Get the reference to the occupied tile to attack
+                        Integer[] attackingTilePos = this.getAttackingTilePos().clone();
+
+                        // calculate how many possible tiles to attack
+                        List<Integer[]> tilesToFlip = this.mapManager.getHowManyEnemyTilesToFlip(this.playerManager.getOccupiedTiles(player), this.playerManager.getEnemyTiles(player));
+
+                        // Call an attack move
+                        this.flipTile(attackingTilePos, tilesToFlip, player);
                     }
                 } else {
                     // if no, more likely a neutral tile and calculate if the move is valid
                     if (this.isValidOccupyMove(player)) {
-                        this.setOccupyMove(player);
+                        // Call an occupy move
+                        this.occupyTile(player);
                     }
                 }
             }
@@ -127,17 +136,42 @@ public class GameManager {
         }
     }
 
-    // TODO
-    private void setAttackMove() {
-
+    private Integer[] getAttackingTilePos() {
+        return this.mapManager.getOccupiedTileToAttack();
     }
 
     // TODO
-    private boolean isValidAttackMove() {
-        return true;
+    private void flipTile(Integer[] attackingTilePos, List<Integer[]> tilesToFlip, String player) {
+
+        for (Integer[] enemyTile : tilesToFlip) {
+            // 1. Paint tiles as your newly occupied tiles
+            this.mapManager.paintTile(this.playerManager.getPlayerLightEdgeColor(player),
+                    this.playerManager.getPlayerMainColor(player),
+                    this.playerManager.getPlayerShadowEdgeColor(player),
+                    enemyTile[0] - 1,
+                    enemyTile[1] - 1);
+
+            // 2. Add tiles to your list
+            this.playerManager.addTileToPlayerList(enemyTile[0], enemyTile[1], player);
+
+            // 3. Remove tiles from enemy's list
+            this.playerManager.removeTileFromPlayerList(enemyTile[0], enemyTile[1], this.playerManager.getEnemyOf(player));
+        }
+
+        // 4. Update score accordingly
+        this.updateScore(player, tilesToFlip.size());
+
+        // 5. Check if this is a winning move
+        // - e.g. no more more moves available or
+        // enemy main base is hit
+        // 6. end turn or end game depending of the outcome of 5
     }
 
-    private void setOccupyMove(String player) {
+    private boolean isValidAttackMove(String player) {
+        return this.mapManager.isValidAttackMove(this.playerManager.getOccupiedTiles(player));
+    }
+
+    private void occupyTile(String player) {
 
         // 1. paint a tile
         this.mapManager.paintTile(this.playerManager.getPlayerLightEdgeColor(player),
@@ -147,7 +181,7 @@ public class GameManager {
                 this.mapManager.getCurrentTile()[1] - 1);
 
         // 2. add tile to player occupied list
-        this.playerManager.addTileToList(this.mapManager.getCurrentTile()[0],
+        this.playerManager.addTileToPlayerList(this.mapManager.getCurrentTile()[0],
                 this.mapManager.getCurrentTile()[1], player);
 
         // 3. add score by 1
@@ -155,13 +189,10 @@ public class GameManager {
 
         // 4. end turn
         this.endTurn(player);
-        
-        System.out.println("Score: " + this.playerManager.getScore(player));
     }
 
-    // TODO
     private boolean isValidOccupyMove(String player) {
-        return true;
+        return this.mapManager.isValidOccupyMove(this.playerManager.getOccupiedTiles(player));
     }
 
     private void updateScore(String player, int score) {
@@ -173,9 +204,10 @@ public class GameManager {
         this.playerManager.nextTurn(player);
         this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(player);
     }
-    
+
+    // TODO
     public void checkEndGame() {
-        
+
     }
 
 }

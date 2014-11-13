@@ -57,7 +57,7 @@ public class PlayerManager {
     public int getScore(String player) {
         return this.filterPlayer(player).getScore();
     }
-    
+
     public String getPlayerLightEdgeColor(String player) {
         return this.filterPlayer(player).getLight_edge_color();
     }
@@ -70,24 +70,34 @@ public class PlayerManager {
         return this.filterPlayer(player).getMain_color();
     }
 
-    public void addTileToList(int x, int y, String player) {
+    public void addTileToPlayerList(int x, int y, String player) {
         this.filterPlayer(player).addOccupiedTile(x, y);
+    }
+
+    public void removeTileFromPlayerList(int x, int y, String player) {
+        if (!this.filterPlayer(player).removeOccupiedTile(x, y)) {
+            System.out.println("ERROR BUG: Cannot remove tile " + "[" + x + "," + y + "] for player: " + player);
+        }
     }
 
     public List<Integer[]> getOccupiedTiles(String player) {
         return this.filterPlayer(player).getOccupiedTiles();
     }
 
-    // TODO
-    public boolean verifyTileMove(int x, int y) {
-        return true;
-    }
-
-    public void addTileToPlayer(int x, int y, String player) {
-        if (verifyTileMove(x, y)) {
-            this.filterPlayer(player).addOccupiedTile(x, y);
+    public List<Integer[]> getEnemyTiles(String player) {
+        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+            return this.computerPlayer.getOccupiedTiles();
+        } else {
+            return this.humanPlayer.getOccupiedTiles();
         }
-
+    }
+    
+    public String getEnemyOf(String player) {
+        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+            return GlobalSettingsManager.PLAYER_OPTION_COMPUTER;
+        } else  {
+            return GlobalSettingsManager.PLAYER_OPTION_HUMAN;
+        }
     }
 
     public boolean isHumanTurn() {

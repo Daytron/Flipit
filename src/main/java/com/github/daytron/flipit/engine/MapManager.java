@@ -10,6 +10,7 @@ import com.github.daytron.flipit.GlobalSettingsManager;
 import com.github.daytron.flipit.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -45,6 +46,10 @@ public class MapManager {
     private final String selectedPlayer2Color;
 
     private int[] current_tile_pos;
+
+    // For occupied to attack reference only
+    private Integer[] occupiedTileToAttack;
+    private int attackDirectionFrom;
 
     public MapManager(Canvas canvas, Map map, String player1, String player2, String player1Color, String player2Color) {
         this.gc = canvas.getGraphicsContext2D();
@@ -212,7 +217,6 @@ public class MapManager {
      * @param light_edge_color A string hex color code
      * @param main_color A string hex color code
      * @param shadow_edge_color A string hex color code
-     * @param gc GraphicsContext object for drawing
      * @param count_column int value of the column (x) position of the tile
      * (with 0 as index)
      * @param count_row int value of the row (y) position of the tile (with 0 as
@@ -246,8 +250,325 @@ public class MapManager {
     // TODO
     public void highlightPossibleHumanMovesUponAvailableTurn(String player) {
         if (player.equals(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+            List<Integer[]> possiblePos = this.getPossibleMoves();
 
+            for (Integer[] tileToHighlight : possiblePos) {
+                this.paintTile(GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE_COLOR,
+                        GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR,
+                        GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR,
+                        tileToHighlight[0] - 1,
+                        tileToHighlight[1] - 1);
+            }
         }
+    }
+
+    private List<Integer[]> getPossibleMoves() {
+        List<Integer[]> possibleMoves = new ArrayList<>();
+
+        // TODO
+        return possibleMoves;
+    }
+
+    public boolean isValidAttackMove(List<Integer[]> occupiedTiles) {
+        List<Integer[]> nearbytilesToCheck = new ArrayList<>();
+        List<Integer> direction = new ArrayList<>();
+
+        // NOTE FOR ALL SIDE NEIGHBORS: 
+        // Greater than 1 because origin index is 1 not 0 (uses grid positions)
+        // for the top left tile neighbor
+        if (this.current_tile_pos[0] > 1 && this.current_tile_pos[1] > 1) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0] - 1,
+                this.current_tile_pos[1] - 1});
+            direction.add(GlobalSettingsManager.DIRECTION_TOP_LEFT);
+        }
+
+        // for the top right tile neighbor
+        if (this.current_tile_pos[0] < this.numberOfColumns && this.current_tile_pos[1] > 1) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0] + 1,
+                this.current_tile_pos[1] - 1});
+            direction.add(GlobalSettingsManager.DIRECTION_TOP_RIGHT);
+        }
+
+        // for the lower left tile neighbor
+        if (this.current_tile_pos[0] > 1 && this.current_tile_pos[1] < this.numberOfRows) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0] - 1,
+                this.current_tile_pos[1] + 1});
+            direction.add(GlobalSettingsManager.DIRECTION_LOWER_LEFT);
+        }
+
+        // for the lower right tile neighbor
+        if (this.current_tile_pos[0] < this.numberOfColumns && this.current_tile_pos[1] < this.numberOfRows) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0] + 1,
+                this.current_tile_pos[1] + 1});
+            direction.add(GlobalSettingsManager.DIRECTION_LOWER_RIGHT);
+        }
+
+        for (int i = 0; i < nearbytilesToCheck.size(); i++) {
+            if (this.isTilePartOf(nearbytilesToCheck.get(i), occupiedTiles)) {
+                this.occupiedTileToAttack = nearbytilesToCheck.get(i).clone();
+                this.attackDirectionFrom = direction.get(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isTilePartOf(Integer[] tileToCheck, List<Integer[]> playerTiles) {
+        for (Integer[] posOccupied : playerTiles) {
+            if (Objects.equals(tileToCheck[0], posOccupied[0])
+                    && Objects.equals(tileToCheck[1], posOccupied[1])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Integer[] getOccupiedTileToAttack() {
+        return occupiedTileToAttack;
+    }
+
+    public List<Integer[]> getHowManyEnemyTilesToFlip(List<Integer[]> occupiedTiles, List<Integer[]> enemyTiles) {
+        List<Integer[]> listOfEnemyTilesToFlip = new ArrayList<>();
+        
+        int occupied_count = 1;
+        int enemy_count = 0;
+        int computed_count = 0;
+
+        int[] currentOccupiedTileToCheck = new int[2];
+        currentOccupiedTileToCheck[0] = this.occupiedTileToAttack[0];
+        currentOccupiedTileToCheck[1] = this.occupiedTileToAttack[1];
+
+        int[] currentEnemyTileToCheck = new int[2];
+        currentEnemyTileToCheck[0] = this.occupiedTileToAttack[0];
+        currentEnemyTileToCheck[1] = this.occupiedTileToAttack[1];
+
+        switch (this.attackDirectionFrom) {
+            case GlobalSettingsManager.DIRECTION_TOP_LEFT:
+                // Compute possible tile attack based on "linked diagonally" occupied tiles
+                while (currentOccupiedTileToCheck[0] > 1 && currentOccupiedTileToCheck[1] > 1) {
+                    currentOccupiedTileToCheck[0] -= 1;
+                    currentOccupiedTileToCheck[1] -= 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1]},
+                            occupiedTiles)) {
+                        occupied_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                // Compute enemy tiles linked together diagonally
+                // Initialise position based on direction (opposite of top left : lower right)
+                // Because default pos is from occupied tile not on enemy tile
+                currentEnemyTileToCheck[0] += 1;
+                currentEnemyTileToCheck[1] += 1;
+                
+                listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                enemy_count += 1;
+
+                // Check the link enemy tiles 
+                while (currentEnemyTileToCheck[0] < this.numberOfColumns && currentEnemyTileToCheck[1] < this.numberOfRows) {
+                    if (enemy_count == occupied_count) {
+                        break;
+                    }
+
+                    currentEnemyTileToCheck[0] += 1;
+                    currentEnemyTileToCheck[1] += 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]},
+                            enemyTiles)) {
+                        
+                        listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                        enemy_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                break;
+
+            case GlobalSettingsManager.DIRECTION_TOP_RIGHT:
+                // Compute possible tile attack based on "linked diagonally" occupied tiles
+                while (currentOccupiedTileToCheck[0] < this.numberOfColumns && currentOccupiedTileToCheck[1] > 1) {
+                    currentOccupiedTileToCheck[0] += 1;
+                    currentOccupiedTileToCheck[1] -= 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1]},
+                            occupiedTiles)) {
+                        occupied_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                // Compute enemy tiles linked together diagonally
+                // Initialise position based on direction (opposite of top right : lower left)
+                // Because default pos is from occupied tile not on enemy tile
+                currentEnemyTileToCheck[0] -= 1;
+                currentEnemyTileToCheck[1] += 1;
+                
+                listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                enemy_count += 1;
+
+                while (currentEnemyTileToCheck[0] > 1 && currentEnemyTileToCheck[1] < this.numberOfRows) {
+                    if (enemy_count == occupied_count) {
+                        break;
+                    }
+
+                    currentEnemyTileToCheck[0] -= 1;
+                    currentEnemyTileToCheck[1] += 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]},
+                            enemyTiles)) {
+                        
+                        listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                        enemy_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                break;
+
+            case GlobalSettingsManager.DIRECTION_LOWER_LEFT:
+                // Compute possible tile attack based on "linked diagonally" occupied tiles
+                while (currentOccupiedTileToCheck[0] > 1 && currentOccupiedTileToCheck[1] < this.numberOfRows) {
+                    currentOccupiedTileToCheck[0] -= 1;
+                    currentOccupiedTileToCheck[1] += 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1]},
+                            occupiedTiles)) {
+                        occupied_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                // Compute enemy tiles linked together diagonally
+                // Initialise position based on direction (opposite of lower left : top right)
+                // Because default pos is from occupied tile not on enemy tile
+                currentEnemyTileToCheck[0] += 1;
+                currentEnemyTileToCheck[1] -= 1;
+                
+                listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                enemy_count += 1;
+
+                while (currentEnemyTileToCheck[0] < this.numberOfColumns && currentEnemyTileToCheck[1] > 1) {
+                    if (enemy_count == occupied_count) {
+                        break;
+                    }
+                    
+                    currentEnemyTileToCheck[0] += 1;
+                    currentEnemyTileToCheck[1] -= 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]},
+                            enemyTiles)) {
+                        
+                        listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                        enemy_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                break;
+
+            case GlobalSettingsManager.DIRECTION_LOWER_RIGHT:
+                // Compute possible tile attack based on "linked diagonally" occupied tiles
+                while (currentOccupiedTileToCheck[0] < this.numberOfColumns && currentOccupiedTileToCheck[1] < this.numberOfRows) {
+                    currentOccupiedTileToCheck[0] += 1;
+                    currentOccupiedTileToCheck[1] += 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1]},
+                            occupiedTiles)) {
+                        occupied_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+                
+                // Compute enemy tiles linked together diagonally
+                // Initialise position based on direction (opposite of lower right : top left)
+                // Because default pos is from occupied tile not on enemy tile
+                currentEnemyTileToCheck[0] -= 1;
+                currentEnemyTileToCheck[1] -= 1;
+                
+                listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                enemy_count += 1;
+                
+                while (currentEnemyTileToCheck[0] > 1 && currentEnemyTileToCheck[1] > 1) {
+                    if (enemy_count == occupied_count) {
+                        break;
+                    }
+                    
+                    currentEnemyTileToCheck[0] -= 1;
+                    currentEnemyTileToCheck[1] -= 1;
+
+                    if (this.isTilePartOf(
+                            new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]},
+                            enemyTiles)) {
+                        
+                        listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0],currentEnemyTileToCheck[1]});
+                        enemy_count += 1;
+                    } else {
+                        break;
+                    }
+                }
+                
+                break;
+        }
+
+        return listOfEnemyTilesToFlip;
+    }
+
+    public boolean isValidOccupyMove(List<Integer[]> occupiedTiles) {
+        List<Integer[]> nearbytilesToCheck = new ArrayList<>();
+
+        // NOTE FOR ALL SIDE NEIGHBORS: 
+        // Greater than 1 because origin index is 1 not 0 (uses grid positions)
+        // for left tile neighbor
+        if (this.current_tile_pos[0] > 1) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0] - 1,
+                this.current_tile_pos[1]});
+        }
+
+        // for top tile neighbor
+        if (this.current_tile_pos[1] > 1) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0],
+                this.current_tile_pos[1] - 1});
+        }
+
+        // for right tile neighbor
+        if (this.current_tile_pos[0] < this.numberOfColumns) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0] + 1,
+                this.current_tile_pos[1]});
+        }
+
+        // for bottom tile neighbor
+        if (this.current_tile_pos[1] < this.numberOfRows) {
+            nearbytilesToCheck.add(new Integer[]{this.current_tile_pos[0],
+                this.current_tile_pos[1] + 1});
+        }
+
+        for (Integer[] posNeighbor : nearbytilesToCheck) {
+            for (Integer[] posOccupied : occupiedTiles) {
+                if (Objects.equals(posNeighbor[0], posOccupied[0])
+                        && Objects.equals(posNeighbor[1], posOccupied[1])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
