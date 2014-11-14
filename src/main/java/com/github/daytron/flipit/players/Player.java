@@ -20,6 +20,8 @@ public class Player {
     private boolean turn;
 
     private final List<Integer[]> occupiedTiles;
+    
+    private final int[] mainBase;
 
     private final String light_edge_color;
     private final String main_color;
@@ -32,10 +34,15 @@ public class Player {
      * @param turn boolean [true] if human is first, otherwise [false]
      * @param playerType Options could be [Human] or [Computer]
      * @param playerSide Options could be [player1] or [player2]
+     * @param main_color
+     * @param startPos
      */
-    public Player(boolean turn, String playerType, String playerSide, String main_color) {
+    public Player(boolean turn, String playerType, String playerSide, 
+            String main_color, int[] startPos) {
         this.score = 0;
         this.turn = turn;
+        this.mainBase = startPos.clone();
+        
         this.playerType = playerType;
         this.playerSide = playerSide;
 
@@ -51,6 +58,12 @@ public class Player {
         this.occupiedTiles = new ArrayList<>();
     }
 
+    public int[] getMainBase() {
+        return mainBase;
+    }
+
+    
+    
     public void addOccupiedTile(int x, int y) {
         this.occupiedTiles.add(new Integer[]{x, y});
     }

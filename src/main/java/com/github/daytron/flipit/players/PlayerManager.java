@@ -23,35 +23,55 @@ public class PlayerManager {
         this.isHumanFirst = humanFirst;
     }
 
-    public void createPlayers(String p1Color, String p2Color, String player1, String player2) {
+    public void createPlayers(String p1Color, String p2Color, String player1, 
+            String player2, int[] player1StartPos, int[] player2StartPos) {
         if (player1.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
             this.humanPlayer = new Player(this.isHumanFirst,
                     GlobalSettingsManager.PLAYER_OPTION_HUMAN,
                     player1,
-                    p1Color);
+                    p1Color, player1StartPos);
+            
+            // Add the main base position as the first occupied tile list
+            this.humanPlayer.addOccupiedTile(player1StartPos[0], player1StartPos[1]);
+            
             this.computerPlayer = new Player(!this.isHumanFirst,
                     GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
                     player2,
-                    p2Color);
+                    p2Color, player2StartPos);
+            
+            // Add the main base position as the first occupied tile list
+            this.computerPlayer.addOccupiedTile(player2StartPos[0], player2StartPos[1]);
+            
         } else {
             this.humanPlayer = new Player(this.isHumanFirst,
                     GlobalSettingsManager.PLAYER_OPTION_HUMAN,
                     player2,
-                    p2Color);
+                    p2Color, player2StartPos);
+            
+            // Add the main base position as the first occupied tile list
+            this.humanPlayer.addOccupiedTile(player2StartPos[0], player2StartPos[1]);
+            
             this.computerPlayer = new Player(!this.isHumanFirst,
                     GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
                     player1,
-                    p1Color);
+                    p1Color, player1StartPos);
+            
+            // Add the main base position as the first occupied tile list
+            this.computerPlayer.addOccupiedTile(player1StartPos[0], player1StartPos[1]);
         }
 
     }
 
-    public Player filterPlayer(String player) {
+    private Player filterPlayer(String player) {
         if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
             return this.humanPlayer;
         } else {
             return this.computerPlayer;
         }
+    }
+    
+    public int[] getPlayerMainBasePos(String player) {
+        return this.filterPlayer(player).getMainBase();
     }
 
     public int getScore(String player) {
