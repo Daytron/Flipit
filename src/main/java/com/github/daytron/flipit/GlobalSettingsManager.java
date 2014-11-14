@@ -45,6 +45,7 @@ public class GlobalSettingsManager {
     
     // SCORING
     public static final int SCORE_ONE_TILE_OCCUPY = 1;
+    public static final int SCORE_CHECKMATE = 10;
     
     
     // AI

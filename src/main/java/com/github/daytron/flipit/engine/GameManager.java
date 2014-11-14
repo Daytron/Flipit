@@ -176,8 +176,9 @@ public class GameManager {
              } */
             
             // Ends game if tile flipped is an enemy base
-            if (enemyTile[0] == this.playerManager.getPlayerMainBasePos(player)[0]
-                    && enemyTile[1] == this.playerManager.getPlayerMainBasePos(player)[1]) {
+            if (enemyTile[0] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[0]
+                    && enemyTile[1] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[1]) {
+                this.updateScore(player, GlobalSettingsManager.SCORE_CHECKMATE);
                 this.endGame();
                 return;
             }
