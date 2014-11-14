@@ -10,6 +10,8 @@ import com.github.daytron.flipit.Map;
 import com.github.daytron.flipit.players.PlayerManager;
 import com.github.daytron.flipit.players.ComputerAI;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -77,13 +79,15 @@ public class GameManager {
         // This is only called once, if and only if human is the first turn, 
         // this is regularly called/monitored in endTurn() method
         if (this.playerManager.isHumanTurn()) {
+            // HUMAN PLAYER
             String player = GlobalSettingsManager.PLAYER_OPTION_HUMAN;
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player),
                     this.playerManager.getEnemyTiles(player))) {
-                this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(player);
+                //this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(player);
             }
 
         } else {
+            // COMPUTER PLAYER
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER))) {
                 this.aiChosenPlayTile = this.comAI.play(this.mapManager.getPossibleMovePos(),
                         this.mapManager.getPossibleAttackPos()).clone();
@@ -168,12 +172,14 @@ public class GameManager {
     private void flipTile(List<Integer[]> tilesToFlip, String player) {
 
         for (Integer[] enemyTile : tilesToFlip) {
+
             // 1. Paint tiles as your newly occupied tiles
             this.mapManager.paintTile(this.playerManager.getPlayerLightEdgeColor(player),
                     this.playerManager.getPlayerMainColor(player),
                     this.playerManager.getPlayerShadowEdgeColor(player),
                     enemyTile[0] - 1,
                     enemyTile[1] - 1);
+            
 
             // 2. Add tiles to your list
             this.playerManager.addTileToPlayerList(enemyTile[0], enemyTile[1], player);
@@ -183,10 +189,12 @@ public class GameManager {
 
             // 4. Remove newly occupied tile from higlight list 
             // To stop repainting the said tile when painted back to neutral color
-            this.mapManager.removeNewlyFlippedTileFromHighlightList(enemyTile.clone());
+            if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+                this.mapManager.removeNewlyFlippedTileFromHighlightList(enemyTile.clone());
+            }
         }
 
-        // 5. Update score accordingly
+    // 5. Update score accordingly
         this.updateScore(player, tilesToFlip.size());
 
         // 6. End Turn
@@ -214,8 +222,9 @@ public class GameManager {
 
         // 4. Remove newly occupied tile from higlight list 
         // To stop repainting the said tile when painted back to neutral color
-        this.mapManager.removeNewlyOccupiedTileFromHighlightList(new Integer[]{x, y});
-
+        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+            this.mapManager.removeNewlyOccupiedTileFromHighlightList(new Integer[]{x, y});
+        }
         // 5. End turn
         this.endTurn(player);
 
@@ -231,20 +240,23 @@ public class GameManager {
 
     private void endTurn(String player) {
         // Remove highlight
-        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
-            // remove tile highlights for human player
-            this.mapManager.removeHighlight(
-                    this.playerManager.getPlayerLightEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
-                    this.playerManager.getPlayerMainColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
-                    this.playerManager.getPlayerShadowEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER));
-
-        }
+        /*if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+         // remove tile highlights for human player
+         this.mapManager.removeHighlight(
+         this.playerManager.getPlayerLightEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
+         this.playerManager.getPlayerMainColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
+         this.playerManager.getPlayerShadowEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER));
+            
+            
+                    
+         }*/
 
         // Check if there is still possible move, if there isn't then end game
         // Otherwise change turn
         if (!this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player),
                 this.playerManager.getEnemyTiles(player))) {
             this.endGame();
+            return;
         } else {
             // change turn
             this.playerManager.nextTurn(player);
@@ -252,6 +264,7 @@ public class GameManager {
 
         // For AI
         if (!this.playerManager.isHumanTurn()) {
+
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER))) {
                 this.aiChosenPlayTile = this.comAI.play(this.mapManager.getPossibleMovePos(), this.mapManager.getPossibleAttackPos());
 
@@ -264,14 +277,14 @@ public class GameManager {
                 this.analyzeTile(GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
                         this.aiChosenPlayTile[0],
                         this.aiChosenPlayTile[1]);
+
             } else {
                 this.endGame();
             }
 
         } else {
             if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN))) {
-
-                this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+                //this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
             } else {
                 this.endGame();
             }
@@ -282,12 +295,6 @@ public class GameManager {
     // TODO
     public void endGame() {
         this.isGameRunning = false;
-
-        // remove tile highlights for human player
-        this.mapManager.removeHighlight(
-                this.playerManager.getPlayerLightEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
-                this.playerManager.getPlayerMainColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER),
-                this.playerManager.getPlayerShadowEdgeColor(GlobalSettingsManager.PLAYER_OPTION_COMPUTER));
 
         int human_score = this.playerManager.getScore(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
         int computer_score = this.playerManager.getScore(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);

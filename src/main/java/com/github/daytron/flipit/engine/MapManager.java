@@ -297,9 +297,12 @@ public class MapManager {
 
     public void removeHighlight(String enemy_light_color,
             String enemy_main_color, String enemy_shadow_color) {
-
+        
+        System.out.println("is possible moves empty?: " + this.possibleMovePos.isEmpty());
+        
         // For possible move highlights
         for (Integer[] tileMoveToHighlight : this.possibleMovePos) {
+            System.out.println("tile: [" + tileMoveToHighlight[0] + "," + tileMoveToHighlight[1] + "]" );
             this.paintTile(GlobalSettingsManager.TILE_NEUTRAL_LIGHT_EDGE_COLOR,
                     GlobalSettingsManager.TILE_NEUTRAL_MAIN_COLOR,
                     GlobalSettingsManager.TILE_NEUTRAL_SHADOW_EDGE_COLOR,
