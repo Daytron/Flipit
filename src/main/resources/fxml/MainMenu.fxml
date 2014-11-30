@@ -11,7 +11,7 @@
 <?import javafx.scene.text.*?>
 <?scenebuilder-stylesheet StyleMainMenu.css?>
 
-<GridPane alignment="center" hgap="10" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.MainMenuController">
+<GridPane alignment="center" hgap="10" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.controller.MainMenuController">
     <padding>
         <Insets bottom="10" left="25" right="25" top="25" />
     </padding>

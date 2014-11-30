@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.daytron.flipit.players;
+package com.github.daytron.flipit.player;
 
-import com.github.daytron.flipit.GlobalSettingsManager;
+import com.github.daytron.flipit.utility.GlobalSettings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,15 +39,15 @@ public class ComputerAI {
         this.possibleTileAttacks = new ArrayList<>(possibleAttacks);
 
         switch (this.computerType) {
-            case GlobalSettingsManager.COMPUTER_EASY:
+            case GlobalSettings.COMPUTER_EASY:
                 this.easyPlay();
                 break;
 
-            case GlobalSettingsManager.COMPUTER_NORMAL:
+            case GlobalSettings.COMPUTER_NORMAL:
                 this.normalPlay();
                 break;
 
-            case GlobalSettingsManager.COMPUTER_HARD:
+            case GlobalSettings.COMPUTER_HARD:
                 this.hardPlay();
                 break;
 

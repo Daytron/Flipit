@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.daytron.flipit.players;
+package com.github.daytron.flipit.player;
 
-import com.github.daytron.flipit.GlobalSettingsManager;
+import com.github.daytron.flipit.utility.GlobalSettings;
 import java.util.List;
 
 /**
@@ -25,9 +25,9 @@ public class PlayerManager {
 
     public void createPlayers(String p1Color, String p2Color, String player1, 
             String player2, int[] player1StartPos, int[] player2StartPos) {
-        if (player1.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+        if (player1.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
             this.humanPlayer = new Player(this.isHumanFirst,
-                    GlobalSettingsManager.PLAYER_OPTION_HUMAN,
+                    GlobalSettings.PLAYER_OPTION_HUMAN,
                     player1,
                     p1Color, player1StartPos);
             
@@ -35,7 +35,7 @@ public class PlayerManager {
             this.humanPlayer.addOccupiedTile(player1StartPos[0], player1StartPos[1]);
             
             this.computerPlayer = new Player(!this.isHumanFirst,
-                    GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
+                    GlobalSettings.PLAYER_OPTION_COMPUTER,
                     player2,
                     p2Color, player2StartPos);
             
@@ -44,7 +44,7 @@ public class PlayerManager {
             
         } else {
             this.humanPlayer = new Player(this.isHumanFirst,
-                    GlobalSettingsManager.PLAYER_OPTION_HUMAN,
+                    GlobalSettings.PLAYER_OPTION_HUMAN,
                     player2,
                     p2Color, player2StartPos);
             
@@ -52,7 +52,7 @@ public class PlayerManager {
             this.humanPlayer.addOccupiedTile(player2StartPos[0], player2StartPos[1]);
             
             this.computerPlayer = new Player(!this.isHumanFirst,
-                    GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
+                    GlobalSettings.PLAYER_OPTION_COMPUTER,
                     player1,
                     p1Color, player1StartPos);
             
@@ -63,7 +63,7 @@ public class PlayerManager {
     }
 
     private Player filterPlayer(String player) {
-        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+        if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
             return this.humanPlayer;
         } else {
             return this.computerPlayer;
@@ -105,7 +105,7 @@ public class PlayerManager {
     }
 
     public List<Integer[]> getEnemyTiles(String player) {
-        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+        if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
             return this.computerPlayer.getOccupiedTiles();
         } else {
             return this.humanPlayer.getOccupiedTiles();
@@ -113,10 +113,10 @@ public class PlayerManager {
     }
     
     public String getEnemyOf(String player) {
-        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
-            return GlobalSettingsManager.PLAYER_OPTION_COMPUTER;
+        if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
+            return GlobalSettings.PLAYER_OPTION_COMPUTER;
         } else  {
-            return GlobalSettingsManager.PLAYER_OPTION_HUMAN;
+            return GlobalSettings.PLAYER_OPTION_HUMAN;
         }
     }
 
@@ -129,7 +129,7 @@ public class PlayerManager {
     }
 
     public void nextTurn(String player) {
-        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+        if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
             this.humanPlayer.setTurn(false);
             this.computerPlayer.setTurn(true);
 

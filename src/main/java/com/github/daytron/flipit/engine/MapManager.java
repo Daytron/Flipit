@@ -5,9 +5,8 @@
  */
 package com.github.daytron.flipit.engine;
 
-import com.github.daytron.flipit.GlobalSettingsManager;
+import com.github.daytron.flipit.utility.GlobalSettings;
 
-import com.github.daytron.flipit.Map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -93,7 +92,7 @@ public class MapManager {
         if (this.selectedMap.getListOfPlayer1StartPosition()[0] == column + 1
                 && this.selectedMap.getListOfPlayer1StartPosition()[1] == row + 1) {
 
-            if (this.selectedPlayer1Color.equals(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
+            if (this.selectedPlayer1Color.equals(GlobalSettings.PLAYER_COLOR_BLUE)) {
                 tile_type = "player_blue";
             } else {
                 tile_type = "player_red";
@@ -103,7 +102,7 @@ public class MapManager {
         if (this.selectedMap.getListOfPlayer2StartPosition()[0] == column + 1
                 && this.selectedMap.getListOfPlayer2StartPosition()[1] == row + 1) {
 
-            if (this.selectedPlayer2Color.equals(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
+            if (this.selectedPlayer2Color.equals(GlobalSettings.PLAYER_COLOR_BLUE)) {
                 tile_type = "player_blue";
             } else {
                 tile_type = "player_red";
@@ -114,13 +113,13 @@ public class MapManager {
             case "boulder":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettingsManager.TILE_BOULDER_LIGHT_EDGE_COLOR;
+                        tile_color = GlobalSettings.TILE_BOULDER_LIGHT_EDGE_COLOR;
                         break;
                     case 2:
-                        tile_color = GlobalSettingsManager.TILE_BOULDER_MAIN_COLOR;
+                        tile_color = GlobalSettings.TILE_BOULDER_MAIN_COLOR;
                         break;
                     case 3:
-                        tile_color = GlobalSettingsManager.TILE_BOULDER_SHADOW_EDGE_COLOR;
+                        tile_color = GlobalSettings.TILE_BOULDER_SHADOW_EDGE_COLOR;
                         break;
                 }
                 break;
@@ -128,13 +127,13 @@ public class MapManager {
             case "player_blue":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettingsManager.PLAYER_COLOR_BLUE_LIGHT_EDGE;
+                        tile_color = GlobalSettings.PLAYER_COLOR_BLUE_LIGHT_EDGE;
                         break;
                     case 2:
-                        tile_color = GlobalSettingsManager.PLAYER_COLOR_BLUE;
+                        tile_color = GlobalSettings.PLAYER_COLOR_BLUE;
                         break;
                     case 3:
-                        tile_color = GlobalSettingsManager.PLAYER_COLOR_BLUE_SHADOW_EDGE;
+                        tile_color = GlobalSettings.PLAYER_COLOR_BLUE_SHADOW_EDGE;
                         break;
                 }
                 break;
@@ -142,13 +141,13 @@ public class MapManager {
             case "player_red":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettingsManager.PLAYER_COLOR_RED_LIGHT_EDGE;
+                        tile_color = GlobalSettings.PLAYER_COLOR_RED_LIGHT_EDGE;
                         break;
                     case 2:
-                        tile_color = GlobalSettingsManager.PLAYER_COLOR_RED;
+                        tile_color = GlobalSettings.PLAYER_COLOR_RED;
                         break;
                     case 3:
-                        tile_color = GlobalSettingsManager.PLAYER_COLOR_RED_SHADOW_EDGE;
+                        tile_color = GlobalSettings.PLAYER_COLOR_RED_SHADOW_EDGE;
                         break;
                 }
                 break;
@@ -156,13 +155,13 @@ public class MapManager {
             case "neutral":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettingsManager.TILE_NEUTRAL_LIGHT_EDGE_COLOR;
+                        tile_color = GlobalSettings.TILE_NEUTRAL_LIGHT_EDGE_COLOR;
                         break;
                     case 2:
-                        tile_color = GlobalSettingsManager.TILE_NEUTRAL_MAIN_COLOR;
+                        tile_color = GlobalSettings.TILE_NEUTRAL_MAIN_COLOR;
                         break;
                     case 3:
-                        tile_color = GlobalSettingsManager.TILE_NEUTRAL_SHADOW_EDGE_COLOR;
+                        tile_color = GlobalSettings.TILE_NEUTRAL_SHADOW_EDGE_COLOR;
                         break;
                 }
                 break;
@@ -253,22 +252,22 @@ public class MapManager {
     // Make sure isTherePossibleMove method is called first in GameManager 
     // or else possibleMovePos/possibleAttackMove is empty/old value
     public void highlightPossibleHumanMovesUponAvailableTurn(String player) {
-        if (player.equals(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+        if (player.equals(GlobalSettings.PLAYER_OPTION_HUMAN)) {
 
             // For possible occupy move
             for (Integer[] tileMoveToHighlight : this.possibleMovePos) {
-                this.paintTile(GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE_COLOR,
-                        GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR,
-                        GlobalSettingsManager.TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR,
+                this.paintTile(GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE_COLOR,
+                        GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR,
+                        GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR,
                         tileMoveToHighlight[0] - 1,
                         tileMoveToHighlight[1] - 1);
             }
 
             // For possible attack move
             for (Integer[] tileAttackToHighlight : this.possibleAttackPos) {
-                this.paintTile(GlobalSettingsManager.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE_COLOR,
-                        GlobalSettingsManager.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN_COLOR,
-                        GlobalSettingsManager.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE_COLOR,
+                this.paintTile(GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE_COLOR,
+                        GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN_COLOR,
+                        GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE_COLOR,
                         tileAttackToHighlight[0] - 1,
                         tileAttackToHighlight[1] - 1);
             }
@@ -303,9 +302,9 @@ public class MapManager {
         // For possible move highlights
         for (Integer[] tileMoveToHighlight : this.possibleMovePos) {
             System.out.println("tile: [" + tileMoveToHighlight[0] + "," + tileMoveToHighlight[1] + "]" );
-            this.paintTile(GlobalSettingsManager.TILE_NEUTRAL_LIGHT_EDGE_COLOR,
-                    GlobalSettingsManager.TILE_NEUTRAL_MAIN_COLOR,
-                    GlobalSettingsManager.TILE_NEUTRAL_SHADOW_EDGE_COLOR,
+            this.paintTile(GlobalSettings.TILE_NEUTRAL_LIGHT_EDGE_COLOR,
+                    GlobalSettings.TILE_NEUTRAL_MAIN_COLOR,
+                    GlobalSettings.TILE_NEUTRAL_SHADOW_EDGE_COLOR,
                     tileMoveToHighlight[0] - 1,
                     tileMoveToHighlight[1] - 1);
         }
@@ -455,25 +454,25 @@ public class MapManager {
         // for the top left tile neighbor
         if (this.checkGenericDiagonalNeighborTopLeft(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x - 1, y - 1});
-            direction.add(GlobalSettingsManager.DIRECTION_TOP_LEFT);
+            direction.add(GlobalSettings.DIRECTION_TOP_LEFT);
         }
 
         // for the top right tile neighbor
         if (this.checkGenericDiagonalNeighborTopRight(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x + 1, y - 1});
-            direction.add(GlobalSettingsManager.DIRECTION_TOP_RIGHT);
+            direction.add(GlobalSettings.DIRECTION_TOP_RIGHT);
         }
 
         // for the lower left tile neighbor
         if (this.checkGenericDiagonalNeighborLowerLeft(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x - 1, y + 1});
-            direction.add(GlobalSettingsManager.DIRECTION_LOWER_LEFT);
+            direction.add(GlobalSettings.DIRECTION_LOWER_LEFT);
         }
 
         // for the lower right tile neighbor
         if (this.checkGenericDiagonalNeighborLowerRight(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x + 1, y + 1});
-            direction.add(GlobalSettingsManager.DIRECTION_LOWER_RIGHT);
+            direction.add(GlobalSettings.DIRECTION_LOWER_RIGHT);
         }
 
         for (int i = 0; i < nearbytilesToCheck.size(); i++) {
@@ -518,7 +517,7 @@ public class MapManager {
         currentEnemyTileToCheck[1] = this.occupiedTileToAttack[1];
 
         switch (this.attackDirectionFrom) {
-            case GlobalSettingsManager.DIRECTION_TOP_LEFT:
+            case GlobalSettings.DIRECTION_TOP_LEFT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborTopLeft(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] -= 1;
@@ -564,7 +563,7 @@ public class MapManager {
 
                 break;
 
-            case GlobalSettingsManager.DIRECTION_TOP_RIGHT:
+            case GlobalSettings.DIRECTION_TOP_RIGHT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborTopRight(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] += 1;
@@ -609,7 +608,7 @@ public class MapManager {
 
                 break;
 
-            case GlobalSettingsManager.DIRECTION_LOWER_LEFT:
+            case GlobalSettings.DIRECTION_LOWER_LEFT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborLowerLeft(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] -= 1;
@@ -654,7 +653,7 @@ public class MapManager {
 
                 break;
 
-            case GlobalSettingsManager.DIRECTION_LOWER_RIGHT:
+            case GlobalSettings.DIRECTION_LOWER_RIGHT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborLowerRight(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] += 1;

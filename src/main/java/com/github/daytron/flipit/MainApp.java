@@ -1,5 +1,8 @@
 package com.github.daytron.flipit;
 
+import com.github.daytron.flipit.controller.NewGameSetupController;
+import com.github.daytron.flipit.controller.MainMenuController;
+import com.github.daytron.flipit.controller.GameCoreController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -110,6 +113,8 @@ public class MainApp extends Application {
             in.close();
         }
         Scene scene = new Scene(pane);
+        stage.setTitle("Flipit");
+        stage.centerOnScreen();
         stage.setScene(scene);
 
         stage.sizeToScene();

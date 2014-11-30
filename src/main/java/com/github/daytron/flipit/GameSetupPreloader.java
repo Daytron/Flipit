@@ -5,6 +5,7 @@
  */
 package com.github.daytron.flipit;
 
+import com.github.daytron.flipit.engine.Map;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;

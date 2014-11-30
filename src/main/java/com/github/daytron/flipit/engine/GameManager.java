@@ -5,10 +5,9 @@
  */
 package com.github.daytron.flipit.engine;
 
-import com.github.daytron.flipit.GlobalSettingsManager;
-import com.github.daytron.flipit.Map;
-import com.github.daytron.flipit.players.PlayerManager;
-import com.github.daytron.flipit.players.ComputerAI;
+import com.github.daytron.flipit.utility.GlobalSettings;
+import com.github.daytron.flipit.player.PlayerManager;
+import com.github.daytron.flipit.player.ComputerAI;
 import java.util.List;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -46,7 +45,7 @@ public class GameManager {
         // the true value means human start first (turn)
         this.playerManager = new PlayerManager(true);
 
-        this.comAI = new ComputerAI(GlobalSettingsManager.COMPUTER_EASY);
+        this.comAI = new ComputerAI(GlobalSettings.COMPUTER_EASY);
     }
 
     public void play() {
@@ -61,7 +60,7 @@ public class GameManager {
         // this is regularly called/monitored in endTurn() method
         if (this.playerManager.isHumanTurn()) {
             // HUMAN PLAYER
-            String player = GlobalSettingsManager.PLAYER_OPTION_HUMAN;
+            String player = GlobalSettings.PLAYER_OPTION_HUMAN;
             if (!this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(player),
                     this.playerManager.getEnemyTiles(player))) {
                 this.endGame();
@@ -70,7 +69,7 @@ public class GameManager {
 
         } else {
             // COMPUTER PLAYER
-            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER))) {
+            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettings.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettings.PLAYER_OPTION_COMPUTER))) {
                 this.aiChosenPlayTile = this.comAI.play(this.mapManager.getPossibleMovePos(),
                         this.mapManager.getPossibleAttackPos()).clone();
 
@@ -80,7 +79,7 @@ public class GameManager {
                 }
 
                 // Apply move
-                this.analyzeTile(GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
+                this.analyzeTile(GlobalSettings.PLAYER_OPTION_COMPUTER,
                         this.aiChosenPlayTile[0],
                         this.aiChosenPlayTile[1]);
             }
@@ -95,7 +94,7 @@ public class GameManager {
     public void getClick(double x, double y) {
         if (this.isGameRunning) {
             if (this.playerManager.isHumanTurn()) {
-                this.computeMove(x, y, GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+                this.computeMove(x, y, GlobalSettings.PLAYER_OPTION_HUMAN);
 
             }
         }
@@ -143,10 +142,10 @@ public class GameManager {
     }
 
     private String getOpposingPlayer(String player) {
-        if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
-            return GlobalSettingsManager.PLAYER_OPTION_COMPUTER;
+        if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
+            return GlobalSettings.PLAYER_OPTION_COMPUTER;
         } else {
-            return GlobalSettingsManager.PLAYER_OPTION_HUMAN;
+            return GlobalSettings.PLAYER_OPTION_HUMAN;
         }
     }
 
@@ -171,14 +170,14 @@ public class GameManager {
             /*
              // 4. Remove newly occupied tile from higlight list 
              // To stop repainting the said tile when painted back to neutral color
-             if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+             if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
              this.mapManager.removeNewlyFlippedTileFromHighlightList(enemyTile.clone());
              } */
             
             // Ends game if tile flipped is an enemy base
             if (enemyTile[0] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[0]
                     && enemyTile[1] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[1]) {
-                this.updateScore(player, GlobalSettingsManager.SCORE_CHECKMATE);
+                this.updateScore(player, GlobalSettings.SCORE_CHECKMATE);
                 this.endGame();
                 return;
             }
@@ -209,12 +208,12 @@ public class GameManager {
         this.playerManager.addTileToPlayerList(x, y, player);
 
         // 3. add score by 1
-        this.updateScore(player, GlobalSettingsManager.SCORE_ONE_TILE_OCCUPY);
+        this.updateScore(player, GlobalSettings.SCORE_ONE_TILE_OCCUPY);
 
         /*
          // 4. Remove newly occupied tile from higlight list 
          // To stop repainting the said tile when painted back to neutral color
-         if (player.equalsIgnoreCase(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
+         if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
          this.mapManager.removeNewlyOccupiedTileFromHighlightList(new Integer[]{x, y});
          } */
         // 5. End turn
@@ -245,7 +244,7 @@ public class GameManager {
         // For AI
         if (!this.playerManager.isHumanTurn()) {
 
-            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_COMPUTER))) {
+            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettings.PLAYER_OPTION_COMPUTER), this.playerManager.getEnemyTiles(GlobalSettings.PLAYER_OPTION_COMPUTER))) {
                 this.aiChosenPlayTile = this.comAI.play(this.mapManager.getPossibleMovePos(), this.mapManager.getPossibleAttackPos());
 
                 // Extra measure if there is no selected move from AI
@@ -254,7 +253,7 @@ public class GameManager {
                 }
 
                 // Appply move
-                this.analyzeTile(GlobalSettingsManager.PLAYER_OPTION_COMPUTER,
+                this.analyzeTile(GlobalSettings.PLAYER_OPTION_COMPUTER,
                         this.aiChosenPlayTile[0],
                         this.aiChosenPlayTile[1]);
 
@@ -263,8 +262,8 @@ public class GameManager {
             }
 
         } else {
-            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN), this.playerManager.getEnemyTiles(GlobalSettingsManager.PLAYER_OPTION_HUMAN))) {
-                //this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+            if (this.mapManager.isTherePossibleMove(this.playerManager.getOccupiedTiles(GlobalSettings.PLAYER_OPTION_HUMAN), this.playerManager.getEnemyTiles(GlobalSettings.PLAYER_OPTION_HUMAN))) {
+                //this.mapManager.highlightPossibleHumanMovesUponAvailableTurn(GlobalSettings.PLAYER_OPTION_HUMAN);
             } else {
                 this.endGame();
             }
@@ -276,8 +275,8 @@ public class GameManager {
     public void endGame() {
         this.isGameRunning = false;
 
-        int human_score = this.playerManager.getScore(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
-        int computer_score = this.playerManager.getScore(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
+        int human_score = this.playerManager.getScore(GlobalSettings.PLAYER_OPTION_HUMAN);
+        int computer_score = this.playerManager.getScore(GlobalSettings.PLAYER_OPTION_COMPUTER);
 
         System.out.println("Your score: " + human_score);
         System.out.println("Computer score: " + computer_score);

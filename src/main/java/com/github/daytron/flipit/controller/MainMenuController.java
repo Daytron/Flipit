@@ -1,5 +1,6 @@
-package com.github.daytron.flipit;
+package com.github.daytron.flipit.controller;
 
+import com.github.daytron.flipit.MainApp;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;

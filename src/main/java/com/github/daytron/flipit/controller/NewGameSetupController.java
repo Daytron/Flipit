@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.daytron.flipit;
+package com.github.daytron.flipit.controller;
 
+import com.github.daytron.flipit.utility.GlobalSettings;
+import com.github.daytron.flipit.MainApp;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -35,9 +37,9 @@ public class NewGameSetupController implements Initializable {
 
     private MainApp app;
     private final Rectangle blueRectangle = new Rectangle(60, 20,
-            Color.web(GlobalSettingsManager.PLAYER_COLOR_BLUE));
+            Color.web(GlobalSettings.PLAYER_COLOR_BLUE));
     private final Rectangle redRectangle = new Rectangle(60, 20,
-            Color.web(GlobalSettingsManager.PLAYER_COLOR_RED));
+            Color.web(GlobalSettings.PLAYER_COLOR_RED));
 
     @FXML
     private ListView<String> mapList;
@@ -88,8 +90,8 @@ public class NewGameSetupController implements Initializable {
         this.startPositionP2ComboBox.setItems(playerOptions);
 
         // Apply default values
-        this.startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
-        this.startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
+        this.startPositionP1ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
+        this.startPositionP2ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_COMPUTER);
 
         // Add player 1 combobox listener
         this.startPositionP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
@@ -98,12 +100,12 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 app.getGamePreloader().setPlayer1Selected(newValue);
 
-                if (newValue.contains(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
-                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
+                if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
+                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_COMPUTER);
                 } else {
-                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_HUMAN);
                 }
             }
         });
@@ -115,18 +117,18 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 app.getGamePreloader().setPlayer2Selected(newValue);
 
-                if (newValue.contains(GlobalSettingsManager.PLAYER_OPTION_HUMAN)) {
-                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
-                    app.getGamePreloader().setPlayer1Selected(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
+                if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
+                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer1Selected(GlobalSettings.PLAYER_OPTION_COMPUTER);
                 } else {
-                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
+                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_HUMAN);
                 }
             }
         });
 
         // ============== COLOR AREA ================= //
-        ObservableList<String> playerColorOptions = FXCollections.observableArrayList(GlobalSettingsManager.PLAYER_COLOR_BLUE, GlobalSettingsManager.PLAYER_COLOR_RED);
+        ObservableList<String> playerColorOptions = FXCollections.observableArrayList(GlobalSettings.PLAYER_COLOR_BLUE, GlobalSettings.PLAYER_COLOR_RED);
 
         this.colorP1ComboBox.setItems(playerColorOptions);
         this.colorP2ComboBox.setItems(playerColorOptions);
@@ -145,21 +147,21 @@ public class NewGameSetupController implements Initializable {
 
         this.colorP1ComboBox.setCellFactory(factory);
         this.colorP1ComboBox.setButtonCell(factory.call(null));
-        this.colorP1ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_BLUE);
+        this.colorP1ComboBox.setValue(GlobalSettings.PLAYER_COLOR_BLUE);
 
         this.colorP2ComboBox.setCellFactory(factory);
         this.colorP2ComboBox.setButtonCell(factory.call(null));
-        this.colorP2ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_RED);
+        this.colorP2ComboBox.setValue(GlobalSettings.PLAYER_COLOR_RED);
         
         // Player 1 color combobox listener
         this.colorP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 colorP1ComboBox.setValue(newValue);
-                if (newValue.contains(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
-                    colorP2ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_RED);
+                if (newValue.contains(GlobalSettings.PLAYER_COLOR_BLUE)) {
+                    colorP2ComboBox.setValue(GlobalSettings.PLAYER_COLOR_RED);
                 } else {
-                    colorP2ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_BLUE);
+                    colorP2ComboBox.setValue(GlobalSettings.PLAYER_COLOR_BLUE);
                 }
             }
         });
@@ -171,10 +173,10 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 colorP2ComboBox.setValue(newValue);
                 
-                if (newValue.contains(GlobalSettingsManager.PLAYER_COLOR_BLUE)) {
-                    colorP1ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_RED);
+                if (newValue.contains(GlobalSettings.PLAYER_COLOR_BLUE)) {
+                    colorP1ComboBox.setValue(GlobalSettings.PLAYER_COLOR_RED);
                 } else {
-                    colorP1ComboBox.setValue(GlobalSettingsManager.PLAYER_COLOR_BLUE);
+                    colorP1ComboBox.setValue(GlobalSettings.PLAYER_COLOR_BLUE);
                 }
             }
         });
@@ -183,14 +185,12 @@ public class NewGameSetupController implements Initializable {
 
     public void loadDefaultValuesToPreloader() {
         // Set default player start position values to gamePreloader
-        this.app.getGamePreloader().setPlayer1Selected(GlobalSettingsManager.PLAYER_OPTION_HUMAN);
-        this.app.getGamePreloader().setPlayer2Selected(GlobalSettingsManager.PLAYER_OPTION_COMPUTER);
+        this.app.getGamePreloader().setPlayer1Selected(GlobalSettings.PLAYER_OPTION_HUMAN);
+        this.app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_COMPUTER);
 
         // Set default player color values to gamepreloader
-        this.app.getGamePreloader().setPlayer1ColorSelected(
-                GlobalSettingsManager.PLAYER_COLOR_BLUE);
-        this.app.getGamePreloader().setPlayer2ColorSelected(
-                GlobalSettingsManager.PLAYER_COLOR_RED);
+        this.app.getGamePreloader().setPlayer1ColorSelected(GlobalSettings.PLAYER_COLOR_BLUE);
+        this.app.getGamePreloader().setPlayer2ColorSelected(GlobalSettings.PLAYER_COLOR_RED);
     }
 
     public void loadMapNames() {
