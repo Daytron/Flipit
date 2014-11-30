@@ -37,9 +37,9 @@
                   <ListView id="maplist" fx:id="mapList" layoutX="88.0" layoutY="95.0" prefHeight="407.0" prefWidth="405.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="654.0">
+          <AnchorPane fx:id="preview_anchor_pane" minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="654.0">
                <children>
-                  <ImageView fx:id="imagePreview" fitHeight="437.0" fitWidth="630.0" layoutX="215.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ImageView fx:id="imagePreview" fitHeight="400.0" fitWidth="629.0" layoutX="215.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
         </items>

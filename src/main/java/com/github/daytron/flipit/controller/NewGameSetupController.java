@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -24,6 +25,10 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
@@ -65,6 +70,8 @@ public class NewGameSetupController implements Initializable {
     private Label colorP2Label;
     @FXML
     private ComboBox<String> colorP2ComboBox;
+    @FXML
+    private AnchorPane preview_anchor_pane;
 
     public void setApp(MainApp application) {
         this.app = application;
@@ -79,6 +86,9 @@ public class NewGameSetupController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        this.preview_anchor_pane.setBackground(new Background(
+            new BackgroundFill(Color.CRIMSON, CornerRadii.EMPTY, Insets.EMPTY)));
+        
         // Define list items
         ObservableList<String> playerOptions
                 = FXCollections.observableArrayList(
