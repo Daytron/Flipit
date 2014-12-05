@@ -1,12 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * The MIT License
+ *
+ * Copyright 2014 Ryan Gilera ryangilera@gmail.com.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.github.daytron.flipit.controller;
 
 import com.github.daytron.flipit.utility.GlobalSettings;
 import com.github.daytron.flipit.MainApp;
+import com.github.daytron.flipit.data.PlayerType;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -108,14 +127,17 @@ public class NewGameSetupController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                app.getGamePreloader().setPlayer1Selected(newValue);
-
+                
                 if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
-                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_COMPUTER);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer1(PlayerType.HUMAN);
+                    startPositionP2ComboBox.getSelectionModel()
+                            .select(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
                 } else {
-                    startPositionP2ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer1(PlayerType.COMPUTER);
+                    startPositionP2ComboBox.getSelectionModel()
+                            .select(GlobalSettings.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
                 }
             }
         });
@@ -125,14 +147,17 @@ public class NewGameSetupController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                app.getGamePreloader().setPlayer2Selected(newValue);
-
+                
                 if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
-                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_COMPUTER);
-                    app.getGamePreloader().setPlayer1Selected(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
+                    startPositionP1ComboBox.getSelectionModel()
+                            .select(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                    app.getGamePreloader().setPlayer1(PlayerType.COMPUTER);
                 } else {
-                    startPositionP1ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
-                    app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
+                    startPositionP1ComboBox
+                            .getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
+                    app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
                 }
             }
         });
@@ -195,8 +220,8 @@ public class NewGameSetupController implements Initializable {
 
     public void loadDefaultValuesToPreloader() {
         // Set default player start position values to gamePreloader
-        this.app.getGamePreloader().setPlayer1Selected(GlobalSettings.PLAYER_OPTION_HUMAN);
-        this.app.getGamePreloader().setPlayer2Selected(GlobalSettings.PLAYER_OPTION_COMPUTER);
+        this.app.getGamePreloader().setPlayer1(PlayerType.HUMAN);
+        this.app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
 
         // Set default player color values to gamepreloader
         this.app.getGamePreloader().setPlayer1ColorSelected(GlobalSettings.PLAYER_COLOR_BLUE);

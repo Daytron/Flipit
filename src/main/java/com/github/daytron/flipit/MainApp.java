@@ -2,7 +2,7 @@ package com.github.daytron.flipit;
 
 import com.github.daytron.flipit.controller.NewGameSetupController;
 import com.github.daytron.flipit.controller.MainMenuController;
-import com.github.daytron.flipit.controller.GameCoreController;
+import com.github.daytron.flipit.controller.GameController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -22,12 +22,12 @@ public class MainApp extends Application {
     private Stage stage;
     private final String MAIN_MENU_FXML = "MainMenu.fxml";
     private final String NEW_GAME_SETUP_FXML = "NewGameSetup.fxml";
-    private final String GAME_MAIN_FXML = "GameCore.fxml";
-    private GameSetupPreloader preLoader;
+    private final String GAME_MAIN_FXML = "Game.fxml";
+    private GamePreloader preLoader;
 
     @Override
     public void start(Stage primary_stage) throws Exception {
-        this.preLoader = new GameSetupPreloader();
+        this.preLoader = new GamePreloader();
         this.preLoader.init();
 
         this.stage = primary_stage;
@@ -36,7 +36,7 @@ public class MainApp extends Application {
 
     }
 
-    public GameSetupPreloader getGamePreloader() {
+    public GamePreloader getGamePreloader() {
         return this.preLoader;
     }
 
@@ -90,8 +90,8 @@ public class MainApp extends Application {
 
     private void gotoGameMain() {
         try {
-            GameCoreController mainGameCtrl
-                    = (GameCoreController) replaceScene(GAME_MAIN_FXML);
+            GameController mainGameCtrl
+                    = (GameController) replaceScene(GAME_MAIN_FXML);
             mainGameCtrl.setApp(this);
             mainGameCtrl.run();
         } catch (Exception e) {

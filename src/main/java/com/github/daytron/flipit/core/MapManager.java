@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.daytron.flipit.engine;
+package com.github.daytron.flipit.core;
 
+import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.utility.GlobalSettings;
 
 import java.util.ArrayList;
@@ -38,8 +39,8 @@ public class MapManager {
     private final Map selectedMap;
 
     private final int TILE_EDGE_EFFECT_THICKNESS;
-    private final String selectedPlayer1;
-    private final String selectedPlayer2;
+    private final PlayerType selectedPlayer1;
+    private final PlayerType selectedPlayer2;
 
     private final String selectedPlayer1Color;
     private final String selectedPlayer2Color;
@@ -53,7 +54,8 @@ public class MapManager {
     private List<Integer[]> possibleMovePos;
     private List<Integer[]> possibleAttackPos;
 
-    public MapManager(Canvas canvas, Map map, String player1, String player2, String player1Color, String player2Color) {
+    public MapManager(Canvas canvas, Map map, PlayerType player1, 
+            PlayerType player2, String player1Color, String player2Color) {
         this.gc = canvas.getGraphicsContext2D();
 
         this.canvas = canvas;

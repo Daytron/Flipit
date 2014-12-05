@@ -2,7 +2,7 @@
  * *
  * Created by Ryan Gilera <jalapaomaji-github@yahoo.com>
  */
-package com.github.daytron.flipit.engine;
+package com.github.daytron.flipit.core;
 
 import java.util.List;
 

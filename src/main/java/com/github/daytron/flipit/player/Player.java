@@ -5,6 +5,7 @@
  */
 package com.github.daytron.flipit.player;
 
+import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.utility.GlobalSettings;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +16,8 @@ import java.util.List;
  */
 public class Player {
 
-    private final String playerType;
+    private final PlayerType playerType;
     private int score;
-    private boolean turn;
 
     private final List<Integer[]> occupiedTiles;
     
@@ -27,8 +27,6 @@ public class Player {
     private final String main_color;
     private final String shadow_edge_color;
 
-    private final String playerSide;
-
     /**
      *
      * @param turn boolean [true] if human is first, otherwise [false]
@@ -37,14 +35,12 @@ public class Player {
      * @param main_color
      * @param startPos
      */
-    public Player(boolean turn, String playerType, String playerSide, 
+    public Player(PlayerType playerType, 
             String main_color, int[] startPos) {
         this.score = 0;
-        this.turn = turn;
         this.mainBase = startPos.clone();
         
         this.playerType = playerType;
-        this.playerSide = playerSide;
 
         if (main_color.equals(GlobalSettings.PLAYER_COLOR_BLUE)) {
             this.light_edge_color = GlobalSettings.PLAYER_COLOR_BLUE_LIGHT_EDGE;
@@ -82,21 +78,13 @@ public class Player {
     public List<Integer[]> getOccupiedTiles() {
         return occupiedTiles;
     }
-
-    public void setTurn(boolean isTurn) {
-        this.turn = isTurn;
-    }
-
+    
     public int getScore() {
         return score;
     }
 
     public void addScore(int score) {
         this.score += score;
-    }
-
-    public boolean isTurn() {
-        return turn;
     }
 
     public String getMain_color() {
@@ -111,11 +99,7 @@ public class Player {
         return shadow_edge_color;
     }
 
-    public String getPlayerSide() {
-        return playerSide;
-    }
-
-    public String getPlayerType() {
+    public PlayerType getPlayerType() {
         return playerType;
     }
 

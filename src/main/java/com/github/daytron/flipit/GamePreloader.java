@@ -5,7 +5,8 @@
  */
 package com.github.daytron.flipit;
 
-import com.github.daytron.flipit.engine.Map;
+import com.github.daytron.flipit.core.Map;
+import com.github.daytron.flipit.data.PlayerType;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author ryan
  */
-public class GameSetupPreloader {
+public class GamePreloader {
 
     // pre game variables
     private final List<String> listOfMapPath;
@@ -32,12 +33,12 @@ public class GameSetupPreloader {
     private Map mapSelected;
     private int playerSelected;
     private String mapPreviewImageSelected;
-    private String player1Selected;
-    private String player2Selected;
+    private PlayerType player1;
+    private PlayerType player2;
     private String player1ColorSelected;
     private String player2ColorSelected;
 
-    public GameSetupPreloader() {
+    public GamePreloader() {
         this.listOfMapNames = new ArrayList<>();
         this.listOfMapPath = new ArrayList<>();
         this.listOfMapObjects = new ArrayList<>();
@@ -70,20 +71,20 @@ public class GameSetupPreloader {
         
     }
 
-    public void setPlayer1Selected(String player1Selected) {
-        this.player1Selected = player1Selected;
+    public void setPlayer1(PlayerType player1) {
+        this.player1 = player1;
     }
 
-    public void setPlayer2Selected(String player2Selected) {
-        this.player2Selected = player2Selected;
+    public void setPlayer2(PlayerType player2) {
+        this.player2 = player2;
     }
 
-    public String getPlayer1Selected() {
-        return player1Selected;
+    public PlayerType getPlayer1() {
+        return player1;
     }
 
-    public String getPlayer2Selected() {
-        return player2Selected;
+    public PlayerType getPlayer2() {
+        return player2;
     }
 
     public void setPlayer1ColorSelected(String player1ColorSelected) {
@@ -165,7 +166,7 @@ public class GameSetupPreloader {
             this.listOfMapObjects.add(aMap);
             this.listOfMapNames.add(aMap.getName());
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(GameSetupPreloader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GamePreloader.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
