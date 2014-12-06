@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author ryan
  */
-public class Player {
+class Player {
 
     private final PlayerType playerType;
     private int score;
@@ -26,6 +26,9 @@ public class Player {
     private final String light_edge_color;
     private final String main_color;
     private final String shadow_edge_color;
+    
+    private List<Integer[]> possibleMovePos;
+    private List<Integer[]> possibleAttackPos;
 
     /**
      *
@@ -102,5 +105,35 @@ public class Player {
     public PlayerType getPlayerType() {
         return playerType;
     }
+
+    public void resetPossibleAttackPos() {
+        this.possibleAttackPos = new ArrayList<>();
+    }
+
+    public void resetPossibleMovePos() {
+        this.possibleMovePos = new ArrayList<>();
+    }
+    
+    public void addPossibleAttackPos(Integer[] pos) {
+        if (pos != null) {
+            this.possibleAttackPos.add(pos);
+        }
+    }
+    
+    public void addPossibleMovePos(Integer[] pos) {
+        if (pos != null) {
+           this.possibleMovePos.add(pos);
+        }
+    }
+
+    public List<Integer[]> getPossibleAttackPos() {
+        return possibleAttackPos;
+    }
+
+    public List<Integer[]> getPossibleMovePos() {
+        return possibleMovePos;
+    }
+    
+    
 
 }

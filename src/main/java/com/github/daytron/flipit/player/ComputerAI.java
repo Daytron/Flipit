@@ -65,8 +65,8 @@ public class ComputerAI {
                 // occupy
                 if (!this.possibleTileMoves.isEmpty()) {
                     Integer[] temp = this.possibleTileMoves
-                            .get(randomGenerator
-                                    .nextInt(this.possibleTileMoves.size())).clone();
+                        .get(randomGenerator.nextInt(
+                            this.possibleTileMoves.size())).clone();
 
                     this.chosenTilePlay[0] = temp[0];
                     this.chosenTilePlay[1] = temp[1];
@@ -75,7 +75,8 @@ public class ComputerAI {
             } else {
                 // attack
                 Integer[] temp = this.possibleTileAttacks
-                        .get(randomGenerator.nextInt(this.possibleTileAttacks.size())).clone();
+                        .get(randomGenerator.nextInt(
+                            this.possibleTileAttacks.size())).clone();
 
                 this.chosenTilePlay[0] = temp[0];
                 this.chosenTilePlay[1] = temp[1];
@@ -85,7 +86,8 @@ public class ComputerAI {
                 // attack
                 if (!this.possibleTileAttacks.isEmpty()) {
                     Integer[] temp = this.possibleTileAttacks
-                            .get(randomGenerator.nextInt(this.possibleTileAttacks.size())).clone();
+                        .get(randomGenerator.nextInt(
+                            this.possibleTileAttacks.size())).clone();
 
                     this.chosenTilePlay[0] = temp[0];
                     this.chosenTilePlay[1] = temp[1];
@@ -93,8 +95,8 @@ public class ComputerAI {
             } else {
                 // occupy
                 Integer[] temp = this.possibleTileMoves
-                        .get(randomGenerator
-                                .nextInt(this.possibleTileMoves.size())).clone();
+                        .get(randomGenerator.nextInt(
+                            this.possibleTileMoves.size())).clone();
 
                 this.chosenTilePlay[0] = temp[0];
                 this.chosenTilePlay[1] = temp[1];

@@ -6,6 +6,7 @@
 package com.github.daytron.flipit.core;
 
 import com.github.daytron.flipit.data.PlayerType;
+import com.github.daytron.flipit.player.PlayerManager;
 import com.github.daytron.flipit.utility.GlobalSettings;
 
 import java.util.ArrayList;
@@ -13,13 +14,12 @@ import java.util.List;
 import java.util.Objects;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /**
  *
  * @author ryan
  */
-public class MapManager {
+public class TurnEvaluator {
 
     private GraphicsContext gc;
 
@@ -51,10 +51,10 @@ public class MapManager {
     private int attackDirectionFrom;
 
     // For possible moves calculation
-    private List<Integer[]> possibleMovePos;
-    private List<Integer[]> possibleAttackPos;
+    //private List<Integer[]> possibleMovePos;
+    //private List<Integer[]> possibleAttackPos;
 
-    public MapManager(Canvas canvas, Map map, PlayerType player1, 
+    public TurnEvaluator(Canvas canvas, Map map, PlayerType player1, 
             PlayerType player2, String player1Color, String player2Color) {
         this.gc = canvas.getGraphicsContext2D();
 
@@ -215,32 +215,15 @@ public class MapManager {
 
     }
 
-    /**
-     * Method for painting the tile
-     *
-     * @param light_edge_color A string hex color code
-     * @param main_color A string hex color code
-     * @param shadow_edge_color A string hex color code
-     * @param count_column int value of the column (x) position of the tile
-     * (with 0 as index)
-     * @param count_row int value of the row (y) position of the tile (with 0 as
-     * index)
-     */
-    public void paintTile(String light_edge_color, String main_color, String shadow_edge_color,
-            int count_column, int count_row) {
-        // coloring the light top and left edges respectively
-        this.gc.setFill(Color.web(light_edge_color));
-        this.gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), this.gridXSpace, TILE_EDGE_EFFECT_THICKNESS);
-        this.gc.fillRect(this.columnCell.get(count_column), this.rowCell.get(count_row), TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace);
-
-        // coloring main tile body
-        this.gc.setFill(Color.web(main_color));
-        this.gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
-
-        // coloring tile's shadow for bottom and right edges respectively
-        this.gc.setFill(Color.web(shadow_edge_color));
-        this.gc.fillRect(this.columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS, this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS);
-        this.gc.fillRect(this.columnCell.get(count_column) + this.gridXSpace - TILE_EDGE_EFFECT_THICKNESS, this.rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, TILE_EDGE_EFFECT_THICKNESS, this.gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
+    
+    public void paintTile(String light_edge_color, String main_color, 
+            String shadow_edge_color, int count_column, int count_row) {
+        Graphics.paintTile(gc, light_edge_color, 
+                main_color, shadow_edge_color, 
+                count_column, count_row, 
+                TILE_EDGE_EFFECT_THICKNESS, 
+                rowCell, columnCell, 
+                gridXSpace, gridYSpace);
     }
 
     public int[] getPlayer1StartPos() {
@@ -253,11 +236,13 @@ public class MapManager {
 
     // Make sure isTherePossibleMove method is called first in GameManager 
     // or else possibleMovePos/possibleAttackMove is empty/old value
-    public void highlightPossibleHumanMovesUponAvailableTurn(String player) {
+    public void highlightPossibleHumanMovesUponAvailableTurn(PlayerType player,
+            PlayerManager playerManager) {
         if (player.equals(GlobalSettings.PLAYER_OPTION_HUMAN)) {
 
             // For possible occupy move
-            for (Integer[] tileMoveToHighlight : this.possibleMovePos) {
+            for (Integer[] tileMoveToHighlight : playerManager
+                    .getPossibleMovePos(player)) {
                 this.paintTile(GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE_COLOR,
                         GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR,
                         GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR,
@@ -266,7 +251,8 @@ public class MapManager {
             }
 
             // For possible attack move
-            for (Integer[] tileAttackToHighlight : this.possibleAttackPos) {
+            for (Integer[] tileAttackToHighlight : playerManager
+                    .getPossibleMovePos(player)) {
                 this.paintTile(GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE_COLOR,
                         GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN_COLOR,
                         GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE_COLOR,
@@ -276,33 +262,46 @@ public class MapManager {
         }
     }
 
-    public void removeNewlyFlippedTileFromHighlightList(Integer[] tile) {
-        for (int i = 0; i < this.possibleAttackPos.size(); i++) {
-            if (Objects.equals(tile[0], this.possibleAttackPos.get(i)[0])
-                    && Objects.equals(tile[1], this.possibleAttackPos.get(i)[1])) {
-                this.possibleAttackPos.remove(i);
+    public void removeNewlyFlippedTileFromHighlightList(Integer[] tile, 
+            PlayerManager playerManager) {
+        for (int i = 0; i < playerManager.getPossibleAttackPos(PlayerType.HUMAN)
+                .size(); i++) {
+            if (Objects.equals(tile[0], playerManager
+                    .getPossibleAttackPos(PlayerType.HUMAN).get(i)[0])
+                    && Objects.equals(tile[1], 
+                       playerManager.getPossibleAttackPos(PlayerType.HUMAN)
+                               .get(i)[1])) {
+                playerManager.getPossibleAttackPos(PlayerType.HUMAN).remove(i);
                 break;
             }
         }
     }
 
-    public void removeNewlyOccupiedTileFromHighlightList(Integer[] tile) {
-        for (int i = 0; i < this.possibleMovePos.size(); i++) {
-            if (Objects.equals(tile[0], this.possibleMovePos.get(i)[0])
-                    && Objects.equals(tile[1], this.possibleMovePos.get(i)[1])) {
-                this.possibleMovePos.remove(i);
+    public void removeNewlyOccupiedTileFromHighlightList(Integer[] tile,
+            PlayerManager playerManager) {
+        for (int i = 0; i < playerManager.getPossibleMovePos(PlayerType.HUMAN)
+                .size(); i++) {
+            if (Objects.equals(tile[0], 
+                    playerManager.getPossibleMovePos(PlayerType.HUMAN).get(i)[0])
+                    && Objects.equals(tile[1], 
+                       playerManager.getPossibleMovePos(PlayerType.HUMAN)
+                               .get(i)[1])) {
+                playerManager.getPossibleMovePos(PlayerType.HUMAN).remove(i);
                 break;
             }
         }
     }
 
     public void removeHighlight(String enemy_light_color,
-            String enemy_main_color, String enemy_shadow_color) {
+            String enemy_main_color, String enemy_shadow_color,
+            PlayerManager playerManager) {
         
-        System.out.println("is possible moves empty?: " + this.possibleMovePos.isEmpty());
+        System.out.println("is possible moves empty?: " 
+                + playerManager.getPossibleMovePos(PlayerType.HUMAN).isEmpty());
         
         // For possible move highlights
-        for (Integer[] tileMoveToHighlight : this.possibleMovePos) {
+        for (Integer[] tileMoveToHighlight : 
+                playerManager.getPossibleMovePos(PlayerType.HUMAN)) {
             System.out.println("tile: [" + tileMoveToHighlight[0] + "," + tileMoveToHighlight[1] + "]" );
             this.paintTile(GlobalSettings.TILE_NEUTRAL_LIGHT_EDGE_COLOR,
                     GlobalSettings.TILE_NEUTRAL_MAIN_COLOR,
@@ -312,7 +311,8 @@ public class MapManager {
         }
 
         // For possible attack highlights
-        for (Integer[] tileAttackToHighlight : this.possibleAttackPos) {
+        for (Integer[] tileAttackToHighlight : 
+                playerManager.getPossibleAttackPos(PlayerType.HUMAN)) {
             this.paintTile(enemy_light_color, enemy_main_color,
                     enemy_shadow_color,
                     tileAttackToHighlight[0] - 1,
@@ -321,21 +321,14 @@ public class MapManager {
 
     }
 
-    public List<Integer[]> getPossibleAttackPos() {
-        return possibleAttackPos;
-    }
-
-    public List<Integer[]> getPossibleMovePos() {
-        return possibleMovePos;
-    }
 
     public boolean isTherePossibleMove(List<Integer[]> occupiedPlayerTiles,
-            List<Integer[]> enemyPlayerTiles) {
+            List<Integer[]> enemyPlayerTiles, PlayerManager playerManager,
+            PlayerType player) {
         boolean isThereAMove = false;
 
         // Resets values
-        this.possibleMovePos = new ArrayList<>();
-        this.possibleAttackPos = new ArrayList<>();
+        playerManager.resetPossibleAttackAndMovePos(player);
 
         List<Integer[]> neighborOccupyMoveTiles;
         List<Integer[]> neighborAttackMoveTiles;
@@ -395,7 +388,7 @@ public class MapManager {
                 if (!this.isBoulderTile(tile[0], tile[1])) {
                     if (!this.isTilePartOf(tile, occupiedPlayerTiles)) {
                         if (!this.isTilePartOf(tile, enemyPlayerTiles)) {
-                            this.possibleMovePos.add(tile.clone());
+                            playerManager.addPossibleMovePos(player, tile.clone());
                             isThereAMove = true;
                         }
                     }
@@ -405,7 +398,7 @@ public class MapManager {
             // Checks each diagonal neighbor for possible attack move
             for (Integer[] tile : neighborAttackMoveTiles) {
                 if (this.isTilePartOf(tile, enemyPlayerTiles)) {
-                    this.possibleAttackPos.add(tile.clone());
+                    playerManager.addPossibleAttackPos(player, tile.clone());
                     isThereAMove = true;
                 }
             }
@@ -503,7 +496,9 @@ public class MapManager {
         return occupiedTileToAttack;
     }
 
-    public List<Integer[]> getHowManyEnemyTilesToFlip(List<Integer[]> occupiedTiles, List<Integer[]> enemyTiles) {
+    public List<Integer[]> getHowManyEnemyTilesToFlip(
+            List<Integer[]> occupiedTiles, 
+            List<Integer[]> enemyTiles) {
         List<Integer[]> listOfEnemyTilesToFlip = new ArrayList<>();
 
         int occupied_count = 1;
@@ -521,7 +516,9 @@ public class MapManager {
         switch (this.attackDirectionFrom) {
             case GlobalSettings.DIRECTION_TOP_LEFT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
-                while (this.checkGenericDiagonalNeighborTopLeft(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
+                while (this.checkGenericDiagonalNeighborTopLeft(
+                        currentOccupiedTileToCheck[0], 
+                        currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] -= 1;
                     currentOccupiedTileToCheck[1] -= 1;
 
@@ -540,11 +537,15 @@ public class MapManager {
                 currentEnemyTileToCheck[0] += 1;
                 currentEnemyTileToCheck[1] += 1;
 
-                listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]});
+                listOfEnemyTilesToFlip.add(new Integer[]{
+                    currentEnemyTileToCheck[0], 
+                    currentEnemyTileToCheck[1]});
                 enemy_count += 1;
 
                 // Check the link enemy tiles 
-                while (this.checkGenericDiagonalNeighborLowerRight(currentEnemyTileToCheck[0], currentEnemyTileToCheck[1])) {
+                while (this.checkGenericDiagonalNeighborLowerRight(
+                        currentEnemyTileToCheck[0], 
+                        currentEnemyTileToCheck[1])) {
                     if (enemy_count == occupied_count) {
                         break;
                     }
@@ -553,10 +554,13 @@ public class MapManager {
                     currentEnemyTileToCheck[1] += 1;
 
                     if (this.isTilePartOf(
-                            new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]},
+                            new Integer[]{currentEnemyTileToCheck[0], 
+                                currentEnemyTileToCheck[1]},
                             enemyTiles)) {
 
-                        listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]});
+                        listOfEnemyTilesToFlip.add(new Integer[]{
+                            currentEnemyTileToCheck[0], 
+                            currentEnemyTileToCheck[1]});
                         enemy_count += 1;
                     } else {
                         break;
@@ -586,10 +590,14 @@ public class MapManager {
                 currentEnemyTileToCheck[0] -= 1;
                 currentEnemyTileToCheck[1] += 1;
 
-                listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]});
+                listOfEnemyTilesToFlip.add(new Integer[]{
+                    currentEnemyTileToCheck[0], 
+                    currentEnemyTileToCheck[1]});
                 enemy_count += 1;
 
-                while (this.checkGenericDiagonalNeighborLowerLeft(currentEnemyTileToCheck[0], currentEnemyTileToCheck[1])) {
+                while (this.checkGenericDiagonalNeighborLowerLeft(
+                        currentEnemyTileToCheck[0], 
+                        currentEnemyTileToCheck[1])) {
                     if (enemy_count == occupied_count) {
                         break;
                     }
@@ -598,10 +606,13 @@ public class MapManager {
                     currentEnemyTileToCheck[1] += 1;
 
                     if (this.isTilePartOf(
-                            new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]},
+                            new Integer[]{currentEnemyTileToCheck[0], 
+                                currentEnemyTileToCheck[1]},
                             enemyTiles)) {
 
-                        listOfEnemyTilesToFlip.add(new Integer[]{currentEnemyTileToCheck[0], currentEnemyTileToCheck[1]});
+                        listOfEnemyTilesToFlip.add(new Integer[]{
+                            currentEnemyTileToCheck[0], 
+                            currentEnemyTileToCheck[1]});
                         enemy_count += 1;
                     } else {
                         break;
@@ -626,7 +637,8 @@ public class MapManager {
                 }
 
                 // Compute enemy tiles linked together diagonally
-                // Initialise position based on direction (opposite of lower left : top right)
+                // Initialise position based on direction 
+                // (opposite of lower left : top right)
                 // Because default pos is from occupied tile not on enemy tile
                 currentEnemyTileToCheck[0] += 1;
                 currentEnemyTileToCheck[1] -= 1;
@@ -704,7 +716,8 @@ public class MapManager {
         return listOfEnemyTilesToFlip;
     }
 
-    public boolean isValidOccupyMove(List<Integer[]> occupiedTiles, int x, int y) {
+    public boolean isValidOccupyMove(
+            List<Integer[]> occupiedTiles, int x, int y) {
         List<Integer[]> nearbytilesToCheck = new ArrayList<>();
 
         // NOTE FOR ALL SIDE NEIGHBORS: 

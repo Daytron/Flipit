@@ -127,14 +127,14 @@ public class NewGameSetupController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                app.getGamePreloader().setPlayer1(PlayerType.valueOf(
+                    newValue.toUpperCase()));
                 
                 if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
-                    app.getGamePreloader().setPlayer1(PlayerType.HUMAN);
                     startPositionP2ComboBox.getSelectionModel()
                             .select(GlobalSettings.PLAYER_OPTION_COMPUTER);
                     app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
                 } else {
-                    app.getGamePreloader().setPlayer1(PlayerType.COMPUTER);
                     startPositionP2ComboBox.getSelectionModel()
                             .select(GlobalSettings.PLAYER_OPTION_HUMAN);
                     app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
@@ -147,14 +147,14 @@ public class NewGameSetupController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                app.getGamePreloader().setPlayer2(PlayerType.valueOf(
+                    newValue.toUpperCase()));
                 
                 if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
-                    app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
                     startPositionP1ComboBox.getSelectionModel()
                             .select(GlobalSettings.PLAYER_OPTION_COMPUTER);
                     app.getGamePreloader().setPlayer1(PlayerType.COMPUTER);
                 } else {
-                    app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
                     startPositionP1ComboBox
                             .getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
                     app.getGamePreloader().setPlayer2(PlayerType.HUMAN);

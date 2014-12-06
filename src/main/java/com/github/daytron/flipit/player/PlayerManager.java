@@ -66,6 +66,16 @@ public class PlayerManager {
             return this.computerPlayer;
         }
     }
+
+    public Player getPlayer(PlayerType playerType) {
+        if (playerType == PlayerType.HUMAN) {
+            return this.humanPlayer;
+        } else  {
+            return this.computerPlayer;
+        }
+    }
+    
+    
     
     public int[] getPlayerMainBasePos(PlayerType player) {
         return this.filterPlayer(player).getMainBase();
@@ -132,6 +142,48 @@ public class PlayerManager {
             // add something to trigger AI action
         } else {
             this.playerTurn = PlayerType.HUMAN;
+        }
+    }
+    
+    public void addPossibleMovePos(PlayerType player, Integer[] pos) {
+        if (player == PlayerType.HUMAN) {
+            this.humanPlayer.addPossibleMovePos(pos);
+        } else  {
+            this.computerPlayer.addPossibleMovePos(pos);
+        }
+    }
+    
+    public void resetPossibleAttackAndMovePos(PlayerType player) {
+        if (player == PlayerType.HUMAN) {
+            this.humanPlayer.resetPossibleAttackPos();
+            this.humanPlayer.resetPossibleMovePos();
+        } else {
+            this.computerPlayer.resetPossibleAttackPos();
+            this.computerPlayer.resetPossibleMovePos();
+        }
+    }
+    
+    public void addPossibleAttackPos(PlayerType player, Integer[] pos) {
+        if (player == PlayerType.HUMAN) {
+            this.humanPlayer.addPossibleAttackPos(pos);
+        } else  {
+            this.computerPlayer.addPossibleAttackPos(pos);
+        }
+    }
+    
+    public List<Integer[]> getPossibleMovePos(PlayerType player) {
+        if (player == PlayerType.HUMAN) {
+            return this.humanPlayer.getPossibleMovePos();
+        } else {
+            return this.computerPlayer.getPossibleMovePos();
+        }
+    }
+    
+    public List<Integer[]> getPossibleAttackPos(PlayerType player) {
+        if (player == PlayerType.HUMAN) {
+            return this.humanPlayer.getPossibleAttackPos();
+        } else {
+            return this.computerPlayer.getPossibleAttackPos();
         }
     }
 

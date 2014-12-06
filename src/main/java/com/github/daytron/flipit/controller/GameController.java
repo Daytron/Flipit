@@ -24,14 +24,12 @@
 package com.github.daytron.flipit.controller;
 
 import com.github.daytron.flipit.*;
-import com.github.daytron.flipit.core.MapManager;
 import com.github.daytron.flipit.core.Game;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -41,8 +39,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class GameController implements Initializable {
     private MainApp app;
-    private Game gameManager;
-    private MapManager mapManager;
+    private Game game;
     
     @FXML
     private Canvas canvas;
@@ -63,15 +60,19 @@ public class GameController implements Initializable {
     
     public void run() {
         // Create new instance of game
-        this.gameManager = new Game(canvas, this.app.getGamePreloader().getMapSelected(), this.app.getGamePreloader().getPlayer1(), this.app.getGamePreloader().getPlayer2(), this.app.getGamePreloader().getPlayer1ColorSelected(), this.app.getGamePreloader().getPlayer2ColorSelected());
+        this.game = new Game(canvas, 
+                this.app.getGamePreloader().getMapSelected(), 
+                this.app.getGamePreloader().getPlayer1(), 
+                this.app.getGamePreloader().getPlayer2(), 
+                this.app.getGamePreloader().getPlayer1ColorSelected(), 
+                this.app.getGamePreloader().getPlayer2ColorSelected());
         
-        this.gameManager.generateMap();
-        this.gameManager.play();
+        this.game.play();
     }
 
     @FXML
     private void onClick(MouseEvent event) {
-        this.gameManager.getClick(event.getX(), event.getY());
+        this.game.getClick(event.getX(), event.getY());
     }
     
     
