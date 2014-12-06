@@ -5,7 +5,7 @@
  */
 package com.github.daytron.flipit.core;
 
-import com.github.daytron.flipit.data.ComputerAIDifficulty;
+import com.github.daytron.flipit.data.Difficulty;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.Score;
 import com.github.daytron.flipit.player.PlayerManager;
@@ -47,7 +47,7 @@ public class Game {
 
         // the true value means human start first (turn)
         this.playerManager = new PlayerManager(true);
-        this.comAI = new ComputerAI(ComputerAIDifficulty.EASY);
+        this.comAI = new ComputerAI(Difficulty.EASY);
     }
 
     public void play() {

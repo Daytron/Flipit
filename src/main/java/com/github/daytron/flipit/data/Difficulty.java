@@ -27,7 +27,7 @@ package com.github.daytron.flipit.data;
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum ComputerAIDifficulty {
+public enum Difficulty {
     EASY,
     NORMAL,
     HARD

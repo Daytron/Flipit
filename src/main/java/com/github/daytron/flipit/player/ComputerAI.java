@@ -5,7 +5,7 @@
  */
 package com.github.daytron.flipit.player;
 
-import com.github.daytron.flipit.data.ComputerAIDifficulty;
+import com.github.daytron.flipit.data.Difficulty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,13 +16,13 @@ import java.util.Random;
  */
 public class ComputerAI {
 
-    private final ComputerAIDifficulty computerType;
+    private final Difficulty computerType;
     private List<Integer[]> possibleTileMoves;
     private List<Integer[]> possibleTileAttacks;
 
     private int[] chosenTilePlay;
 
-    public ComputerAI(ComputerAIDifficulty type) {
+    public ComputerAI(Difficulty type) {
         this.computerType = type;
     }
 
