@@ -23,9 +23,9 @@
  */
 package com.github.daytron.flipit.controller;
 
-import com.github.daytron.flipit.utility.GlobalSettings;
 import com.github.daytron.flipit.MainApp;
 import com.github.daytron.flipit.data.PlayerType;
+import com.github.daytron.flipit.data.TileColor;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -61,9 +61,9 @@ public class NewGameSetupController implements Initializable {
 
     private MainApp app;
     private final Rectangle blueRectangle = new Rectangle(60, 20,
-            Color.web(GlobalSettings.PLAYER_COLOR_BLUE));
+            Color.web(TileColor.PLAYER_BLUE.getColor()));
     private final Rectangle redRectangle = new Rectangle(60, 20,
-            Color.web(GlobalSettings.PLAYER_COLOR_RED));
+            Color.web(TileColor.PLAYER_RED.getColor()));
 
     @FXML
     private ListView<String> mapList;
@@ -119,8 +119,10 @@ public class NewGameSetupController implements Initializable {
         this.startPositionP2ComboBox.setItems(playerOptions);
 
         // Apply default values
-        this.startPositionP1ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
-        this.startPositionP2ComboBox.getSelectionModel().select(GlobalSettings.PLAYER_OPTION_COMPUTER);
+        this.startPositionP1ComboBox.getSelectionModel().select(
+                PlayerType.HUMAN.getValue());
+        this.startPositionP2ComboBox.getSelectionModel().select(
+                PlayerType.COMPUTER.getValue());
 
         // Add player 1 combobox listener
         this.startPositionP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
@@ -130,13 +132,16 @@ public class NewGameSetupController implements Initializable {
                 app.getGamePreloader().setPlayer1(PlayerType.valueOf(
                     newValue.toUpperCase()));
                 
-                if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
+                if (newValue.contains(
+                        PlayerType.HUMAN.getValue())) {
                     startPositionP2ComboBox.getSelectionModel()
-                            .select(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                            .select(
+                        PlayerType.COMPUTER.getValue());
                     app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
                 } else {
                     startPositionP2ComboBox.getSelectionModel()
-                            .select(GlobalSettings.PLAYER_OPTION_HUMAN);
+                            .select(
+                        PlayerType.HUMAN.getValue());
                     app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
                 }
             }
@@ -150,20 +155,26 @@ public class NewGameSetupController implements Initializable {
                 app.getGamePreloader().setPlayer2(PlayerType.valueOf(
                     newValue.toUpperCase()));
                 
-                if (newValue.contains(GlobalSettings.PLAYER_OPTION_HUMAN)) {
+                if (newValue.contains(
+                    PlayerType.HUMAN.getValue())) {
                     startPositionP1ComboBox.getSelectionModel()
-                            .select(GlobalSettings.PLAYER_OPTION_COMPUTER);
+                            .select(
+                        PlayerType.COMPUTER.getValue());
                     app.getGamePreloader().setPlayer1(PlayerType.COMPUTER);
                 } else {
                     startPositionP1ComboBox
-                            .getSelectionModel().select(GlobalSettings.PLAYER_OPTION_HUMAN);
+                            .getSelectionModel().select(
+                        PlayerType.HUMAN.getValue());
                     app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
                 }
             }
         });
 
         // ============== COLOR AREA ================= //
-        ObservableList<String> playerColorOptions = FXCollections.observableArrayList(GlobalSettings.PLAYER_COLOR_BLUE, GlobalSettings.PLAYER_COLOR_RED);
+        ObservableList<String> playerColorOptions = 
+                FXCollections.observableArrayList(
+                TileColor.PLAYER_BLUE.getColor(), 
+                TileColor.PLAYER_RED.getColor());
 
         this.colorP1ComboBox.setItems(playerColorOptions);
         this.colorP2ComboBox.setItems(playerColorOptions);
@@ -182,21 +193,26 @@ public class NewGameSetupController implements Initializable {
 
         this.colorP1ComboBox.setCellFactory(factory);
         this.colorP1ComboBox.setButtonCell(factory.call(null));
-        this.colorP1ComboBox.setValue(GlobalSettings.PLAYER_COLOR_BLUE);
+        this.colorP1ComboBox.setValue(
+            TileColor.PLAYER_BLUE.getColor());
 
         this.colorP2ComboBox.setCellFactory(factory);
         this.colorP2ComboBox.setButtonCell(factory.call(null));
-        this.colorP2ComboBox.setValue(GlobalSettings.PLAYER_COLOR_RED);
+        this.colorP2ComboBox.setValue(
+            TileColor.PLAYER_RED.getColor());
         
         // Player 1 color combobox listener
         this.colorP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 colorP1ComboBox.setValue(newValue);
-                if (newValue.contains(GlobalSettings.PLAYER_COLOR_BLUE)) {
-                    colorP2ComboBox.setValue(GlobalSettings.PLAYER_COLOR_RED);
+                if (newValue.contains(
+                    TileColor.PLAYER_BLUE.getColor())) {
+                    colorP2ComboBox.setValue(
+                    TileColor.PLAYER_RED.getColor());
                 } else {
-                    colorP2ComboBox.setValue(GlobalSettings.PLAYER_COLOR_BLUE);
+                    colorP2ComboBox.setValue(
+                    TileColor.PLAYER_BLUE.getColor());
                 }
             }
         });
@@ -208,10 +224,13 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 colorP2ComboBox.setValue(newValue);
                 
-                if (newValue.contains(GlobalSettings.PLAYER_COLOR_BLUE)) {
-                    colorP1ComboBox.setValue(GlobalSettings.PLAYER_COLOR_RED);
+                if (newValue.contains(
+                    TileColor.PLAYER_BLUE.getColor())) {
+                    colorP1ComboBox.setValue(
+                    TileColor.PLAYER_RED.getColor());
                 } else {
-                    colorP1ComboBox.setValue(GlobalSettings.PLAYER_COLOR_BLUE);
+                    colorP1ComboBox.setValue(
+                    TileColor.PLAYER_BLUE.getColor());
                 }
             }
         });
@@ -224,8 +243,10 @@ public class NewGameSetupController implements Initializable {
         this.app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
 
         // Set default player color values to gamepreloader
-        this.app.getGamePreloader().setPlayer1ColorSelected(GlobalSettings.PLAYER_COLOR_BLUE);
-        this.app.getGamePreloader().setPlayer2ColorSelected(GlobalSettings.PLAYER_COLOR_RED);
+        this.app.getGamePreloader().setPlayer1ColorSelected(
+                TileColor.PLAYER_BLUE.getColor());
+        this.app.getGamePreloader().setPlayer2ColorSelected(
+                TileColor.PLAYER_RED.getColor());
     }
 
     public void loadMapNames() {

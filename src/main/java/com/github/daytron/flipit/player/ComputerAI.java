@@ -5,7 +5,7 @@
  */
 package com.github.daytron.flipit.player;
 
-import com.github.daytron.flipit.utility.GlobalSettings;
+import com.github.daytron.flipit.data.ComputerAIDifficulty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,13 +16,13 @@ import java.util.Random;
  */
 public class ComputerAI {
 
-    private final int computerType;
+    private final ComputerAIDifficulty computerType;
     private List<Integer[]> possibleTileMoves;
     private List<Integer[]> possibleTileAttacks;
 
     private int[] chosenTilePlay;
 
-    public ComputerAI(int type) {
+    public ComputerAI(ComputerAIDifficulty type) {
         this.computerType = type;
     }
 
@@ -39,15 +39,15 @@ public class ComputerAI {
         this.possibleTileAttacks = new ArrayList<>(possibleAttacks);
 
         switch (this.computerType) {
-            case GlobalSettings.COMPUTER_EASY:
+            case EASY:
                 this.easyPlay();
                 break;
 
-            case GlobalSettings.COMPUTER_NORMAL:
+            case NORMAL:
                 this.normalPlay();
                 break;
 
-            case GlobalSettings.COMPUTER_HARD:
+            case HARD:
                 this.hardPlay();
                 break;
 

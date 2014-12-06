@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2014 Ryan Gilera ryangilera@gmail.com.
+ * Copyright 2014 Your Organisation.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +24,11 @@
 package com.github.daytron.flipit.data;
 
 /**
- * An enum for different types of players
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum PlayerType {
-
-    HUMAN("Human"),
-    COMPUTER("Computer");
-
-    private final String value;
-
-    private PlayerType(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
+public enum ComputerAIDifficulty {
+    EASY,
+    NORMAL,
+    HARD
 }

@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2014 Ryan Gilera ryangilera@gmail.com.
+ * Copyright 2014 Your Organisation.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +24,41 @@
 package com.github.daytron.flipit.data;
 
 /**
- * An enum for different types of players
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum PlayerType {
+public enum TileColor {
+    PLAYER_BLUE("#0073CF"),
+    PLAYER_BLUE_LIGHT_EDGE("#4FB1FF"),
+    PLAYER_BLUE_SHADOW_EDGE("#004881"),
+    
+    PLAYER_RED("#CF0000"),
+    PLAYER_RED_LIGHT_EDGE("#FF4F4F"),
+    PLAYER_RED_SHADOW_EDGE("#810000"),
+    
+    TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE("#EDFFF7"),
+    TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN("#ABFFD8"),
+    TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE("#8BD6B3"),
+    
+    TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE("#FFEDED"),
+    TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN("#FFABAB"),
+    TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE("#D68B8B"),
+    
+    TILE_NEUTRAL_LIGHT_EDGE("#FFFFFF"),
+    TILE_NEUTRAL_MAIN("#C6C6C6"),
+    TILE_NEUTRAL_SHADOW_EDGE("#000000"),
 
-    HUMAN("Human"),
-    COMPUTER("Computer");
+    TILE_BOULDER_LIGHT_EDGE("#FFFFFF"),
+    TILE_BOULDER_MAIN("#4F4F4F"),
+    TILE_BOULDER_SHADOW_EDGE("#000000");
+    
+    private final String color;
 
-    private final String value;
-
-    private PlayerType(String value) {
-        this.value = value;
+    private TileColor(String color) {
+        this.color = color;
     }
 
-    public String getValue() {
-        return value;
+    public String getColor() {
+        return color;
     }
-
 }

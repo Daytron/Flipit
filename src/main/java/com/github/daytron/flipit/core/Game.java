@@ -5,8 +5,9 @@
  */
 package com.github.daytron.flipit.core;
 
+import com.github.daytron.flipit.data.ComputerAIDifficulty;
 import com.github.daytron.flipit.data.PlayerType;
-import com.github.daytron.flipit.utility.GlobalSettings;
+import com.github.daytron.flipit.data.Score;
 import com.github.daytron.flipit.player.PlayerManager;
 import com.github.daytron.flipit.player.ComputerAI;
 import java.util.List;
@@ -19,15 +20,15 @@ import javafx.scene.canvas.Canvas;
 public class Game {
 
     private boolean isGameRunning;
-    private PlayerType player1;
-    private PlayerType player2;
-    private String player1Color;
-    private String player2Color;
+    private final PlayerType player1;
+    private final PlayerType player2;
+    private final String player1Color;
+    private final String player2Color;
 
-    private PlayerManager playerManager;
-    private TurnEvaluator mapManager;
+    private final PlayerManager playerManager;
+    private final TurnEvaluator mapManager;
 
-    private ComputerAI comAI;
+    private final ComputerAI comAI;
     private int[] aiChosenPlayTile;
     
 
@@ -46,7 +47,7 @@ public class Game {
 
         // the true value means human start first (turn)
         this.playerManager = new PlayerManager(true);
-        this.comAI = new ComputerAI(GlobalSettings.COMPUTER_EASY);
+        this.comAI = new ComputerAI(ComputerAIDifficulty.EASY);
     }
 
     public void play() {
@@ -200,7 +201,7 @@ public class Game {
             // Ends game if tile flipped is an enemy base
             if (enemyTile[0] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[0]
                     && enemyTile[1] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[1]) {
-                this.updateScore(player, GlobalSettings.SCORE_CHECKMATE);
+                this.updateScore(player, Score.CHECKMATE.getScore());
                 this.endGame();
                 return;
             }
@@ -232,7 +233,7 @@ public class Game {
         this.playerManager.addTileToPlayerList(x, y, player);
 
         // 3. add score by 1
-        this.updateScore(player, GlobalSettings.SCORE_ONE_TILE_OCCUPY);
+        this.updateScore(player, Score.ONE_TILE_OCCUPY.getScore());
 
         /*
          // 4. Remove newly occupied tile from higlight list 

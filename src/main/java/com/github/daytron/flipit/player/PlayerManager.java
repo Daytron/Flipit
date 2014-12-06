@@ -6,7 +6,6 @@
 package com.github.daytron.flipit.player;
 
 import com.github.daytron.flipit.data.PlayerType;
-import com.github.daytron.flipit.utility.GlobalSettings;
 import java.util.List;
 
 /**
@@ -23,36 +22,36 @@ public class PlayerManager {
     public PlayerManager(boolean isHumanFirst) {
         if (isHumanFirst) {
             this.playerTurn = PlayerType.HUMAN;
-        } else  {
+        } else {
             this.playerTurn = PlayerType.COMPUTER;
         }
     }
 
-    public void createPlayers(String p1Color, String p2Color, PlayerType player1, 
+    public void createPlayers(String p1Color, String p2Color, PlayerType player1,
             PlayerType player2, int[] player1StartPos, int[] player2StartPos) {
         if (player1 == PlayerType.HUMAN) {
             this.humanPlayer = new Player(player1,
                     p1Color, player1StartPos);
-            
+
             // Add the main base position as the first occupied tile list
             this.humanPlayer.addOccupiedTile(player1StartPos[0], player1StartPos[1]);
-            
+
             this.computerPlayer = new Player(player2,
                     p2Color, player2StartPos);
-            
+
             // Add the main base position as the first occupied tile list
             this.computerPlayer.addOccupiedTile(player2StartPos[0], player2StartPos[1]);
-            
+
         } else {
             this.humanPlayer = new Player(player2,
                     p2Color, player2StartPos);
-            
+
             // Add the main base position as the first occupied tile list
             this.humanPlayer.addOccupiedTile(player2StartPos[0], player2StartPos[1]);
-            
+
             this.computerPlayer = new Player(player1,
                     p1Color, player1StartPos);
-            
+
             // Add the main base position as the first occupied tile list
             this.computerPlayer.addOccupiedTile(player1StartPos[0], player1StartPos[1]);
         }
@@ -67,16 +66,6 @@ public class PlayerManager {
         }
     }
 
-    public Player getPlayer(PlayerType playerType) {
-        if (playerType == PlayerType.HUMAN) {
-            return this.humanPlayer;
-        } else  {
-            return this.computerPlayer;
-        }
-    }
-    
-    
-    
     public int[] getPlayerMainBasePos(PlayerType player) {
         return this.filterPlayer(player).getMainBase();
     }
@@ -118,11 +107,11 @@ public class PlayerManager {
             return this.humanPlayer.getOccupiedTiles();
         }
     }
-    
+
     public PlayerType getEnemyOf(PlayerType player) {
         if (player == PlayerType.HUMAN) {
             return PlayerType.COMPUTER;
-        } else  {
+        } else {
             return PlayerType.HUMAN;
         }
     }
@@ -144,15 +133,15 @@ public class PlayerManager {
             this.playerTurn = PlayerType.HUMAN;
         }
     }
-    
+
     public void addPossibleMovePos(PlayerType player, Integer[] pos) {
         if (player == PlayerType.HUMAN) {
             this.humanPlayer.addPossibleMovePos(pos);
-        } else  {
+        } else {
             this.computerPlayer.addPossibleMovePos(pos);
         }
     }
-    
+
     public void resetPossibleAttackAndMovePos(PlayerType player) {
         if (player == PlayerType.HUMAN) {
             this.humanPlayer.resetPossibleAttackPos();
@@ -162,15 +151,15 @@ public class PlayerManager {
             this.computerPlayer.resetPossibleMovePos();
         }
     }
-    
+
     public void addPossibleAttackPos(PlayerType player, Integer[] pos) {
         if (player == PlayerType.HUMAN) {
             this.humanPlayer.addPossibleAttackPos(pos);
-        } else  {
+        } else {
             this.computerPlayer.addPossibleAttackPos(pos);
         }
     }
-    
+
     public List<Integer[]> getPossibleMovePos(PlayerType player) {
         if (player == PlayerType.HUMAN) {
             return this.humanPlayer.getPossibleMovePos();
@@ -178,7 +167,7 @@ public class PlayerManager {
             return this.computerPlayer.getPossibleMovePos();
         }
     }
-    
+
     public List<Integer[]> getPossibleAttackPos(PlayerType player) {
         if (player == PlayerType.HUMAN) {
             return this.humanPlayer.getPossibleAttackPos();

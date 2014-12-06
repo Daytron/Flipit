@@ -6,7 +6,7 @@
 package com.github.daytron.flipit.player;
 
 import com.github.daytron.flipit.data.PlayerType;
-import com.github.daytron.flipit.utility.GlobalSettings;
+import com.github.daytron.flipit.data.TileColor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +45,12 @@ class Player {
         
         this.playerType = playerType;
 
-        if (main_color.equals(GlobalSettings.PLAYER_COLOR_BLUE)) {
-            this.light_edge_color = GlobalSettings.PLAYER_COLOR_BLUE_LIGHT_EDGE;
-            this.shadow_edge_color = GlobalSettings.PLAYER_COLOR_BLUE_SHADOW_EDGE;
+        if (main_color.equals(TileColor.PLAYER_BLUE.getColor())) {
+            this.light_edge_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
+            this.shadow_edge_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
         } else {
-            this.light_edge_color = GlobalSettings.PLAYER_COLOR_RED_LIGHT_EDGE;
-            this.shadow_edge_color = GlobalSettings.PLAYER_COLOR_RED_SHADOW_EDGE;
+            this.light_edge_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
+            this.shadow_edge_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
         }
 
         this.main_color = main_color;

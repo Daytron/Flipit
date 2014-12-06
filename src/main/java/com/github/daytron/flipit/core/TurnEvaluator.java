@@ -5,9 +5,10 @@
  */
 package com.github.daytron.flipit.core;
 
+import com.github.daytron.flipit.data.AttackTileDirection;
 import com.github.daytron.flipit.data.PlayerType;
+import com.github.daytron.flipit.data.TileColor;
 import com.github.daytron.flipit.player.PlayerManager;
-import com.github.daytron.flipit.utility.GlobalSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class TurnEvaluator {
 
-    private GraphicsContext gc;
+    private final GraphicsContext gc;
 
     private final int numberOfRows;
     private final int numberOfColumns;
@@ -48,7 +49,7 @@ public class TurnEvaluator {
     //private int[] current_tile_pos;
     // For occupied to attack reference only
     private Integer[] occupiedTileToAttack;
-    private int attackDirectionFrom;
+    private AttackTileDirection attackDirectionFrom;
 
     // For possible moves calculation
     //private List<Integer[]> possibleMovePos;
@@ -94,7 +95,8 @@ public class TurnEvaluator {
         if (this.selectedMap.getListOfPlayer1StartPosition()[0] == column + 1
                 && this.selectedMap.getListOfPlayer1StartPosition()[1] == row + 1) {
 
-            if (this.selectedPlayer1Color.equals(GlobalSettings.PLAYER_COLOR_BLUE)) {
+            if (this.selectedPlayer1Color.equals(
+                    TileColor.PLAYER_BLUE.getColor())) {
                 tile_type = "player_blue";
             } else {
                 tile_type = "player_red";
@@ -104,7 +106,8 @@ public class TurnEvaluator {
         if (this.selectedMap.getListOfPlayer2StartPosition()[0] == column + 1
                 && this.selectedMap.getListOfPlayer2StartPosition()[1] == row + 1) {
 
-            if (this.selectedPlayer2Color.equals(GlobalSettings.PLAYER_COLOR_BLUE)) {
+            if (this.selectedPlayer2Color.equals(
+                    TileColor.PLAYER_BLUE.getColor())) {
                 tile_type = "player_blue";
             } else {
                 tile_type = "player_red";
@@ -115,13 +118,13 @@ public class TurnEvaluator {
             case "boulder":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettings.TILE_BOULDER_LIGHT_EDGE_COLOR;
+                        tile_color = TileColor.TILE_BOULDER_LIGHT_EDGE.getColor();
                         break;
                     case 2:
-                        tile_color = GlobalSettings.TILE_BOULDER_MAIN_COLOR;
+                        tile_color = TileColor.TILE_BOULDER_MAIN.getColor();
                         break;
                     case 3:
-                        tile_color = GlobalSettings.TILE_BOULDER_SHADOW_EDGE_COLOR;
+                        tile_color = TileColor.TILE_BOULDER_SHADOW_EDGE.getColor();
                         break;
                 }
                 break;
@@ -129,13 +132,13 @@ public class TurnEvaluator {
             case "player_blue":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettings.PLAYER_COLOR_BLUE_LIGHT_EDGE;
+                        tile_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
                         break;
                     case 2:
-                        tile_color = GlobalSettings.PLAYER_COLOR_BLUE;
+                        tile_color = TileColor.PLAYER_BLUE.getColor();
                         break;
                     case 3:
-                        tile_color = GlobalSettings.PLAYER_COLOR_BLUE_SHADOW_EDGE;
+                        tile_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
                         break;
                 }
                 break;
@@ -143,13 +146,13 @@ public class TurnEvaluator {
             case "player_red":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettings.PLAYER_COLOR_RED_LIGHT_EDGE;
+                        tile_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
                         break;
                     case 2:
-                        tile_color = GlobalSettings.PLAYER_COLOR_RED;
+                        tile_color = TileColor.PLAYER_RED.getColor();
                         break;
                     case 3:
-                        tile_color = GlobalSettings.PLAYER_COLOR_RED_SHADOW_EDGE;
+                        tile_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
                         break;
                 }
                 break;
@@ -157,13 +160,13 @@ public class TurnEvaluator {
             case "neutral":
                 switch (type) {
                     case 1:
-                        tile_color = GlobalSettings.TILE_NEUTRAL_LIGHT_EDGE_COLOR;
+                        tile_color = TileColor.TILE_NEUTRAL_LIGHT_EDGE.getColor();
                         break;
                     case 2:
-                        tile_color = GlobalSettings.TILE_NEUTRAL_MAIN_COLOR;
+                        tile_color = TileColor.TILE_NEUTRAL_MAIN.getColor();
                         break;
                     case 3:
-                        tile_color = GlobalSettings.TILE_NEUTRAL_SHADOW_EDGE_COLOR;
+                        tile_color = TileColor.TILE_NEUTRAL_SHADOW_EDGE.getColor();
                         break;
                 }
                 break;
@@ -238,14 +241,15 @@ public class TurnEvaluator {
     // or else possibleMovePos/possibleAttackMove is empty/old value
     public void highlightPossibleHumanMovesUponAvailableTurn(PlayerType player,
             PlayerManager playerManager) {
-        if (player.equals(GlobalSettings.PLAYER_OPTION_HUMAN)) {
+        if (player.equals(PlayerType.HUMAN)) {
 
             // For possible occupy move
             for (Integer[] tileMoveToHighlight : playerManager
                     .getPossibleMovePos(player)) {
-                this.paintTile(GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE_COLOR,
-                        GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN_COLOR,
-                        GlobalSettings.TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE_COLOR,
+                this.paintTile(
+                        TileColor.TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE.getColor(),
+                        TileColor.TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN.getColor(),
+                        TileColor.TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE.getColor(),
                         tileMoveToHighlight[0] - 1,
                         tileMoveToHighlight[1] - 1);
             }
@@ -253,11 +257,12 @@ public class TurnEvaluator {
             // For possible attack move
             for (Integer[] tileAttackToHighlight : playerManager
                     .getPossibleMovePos(player)) {
-                this.paintTile(GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE_COLOR,
-                        GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN_COLOR,
-                        GlobalSettings.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE_COLOR,
-                        tileAttackToHighlight[0] - 1,
-                        tileAttackToHighlight[1] - 1);
+                this.paintTile(
+                    TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE.getColor(),
+                    TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN.getColor(),
+                    TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE.getColor(),
+                    tileAttackToHighlight[0] - 1,
+                    tileAttackToHighlight[1] - 1);
             }
         }
     }
@@ -303,9 +308,9 @@ public class TurnEvaluator {
         for (Integer[] tileMoveToHighlight : 
                 playerManager.getPossibleMovePos(PlayerType.HUMAN)) {
             System.out.println("tile: [" + tileMoveToHighlight[0] + "," + tileMoveToHighlight[1] + "]" );
-            this.paintTile(GlobalSettings.TILE_NEUTRAL_LIGHT_EDGE_COLOR,
-                    GlobalSettings.TILE_NEUTRAL_MAIN_COLOR,
-                    GlobalSettings.TILE_NEUTRAL_SHADOW_EDGE_COLOR,
+            this.paintTile(TileColor.TILE_NEUTRAL_LIGHT_EDGE.getColor(),
+                    TileColor.TILE_NEUTRAL_MAIN.getColor(),
+                    TileColor.TILE_NEUTRAL_SHADOW_EDGE.getColor(),
                     tileMoveToHighlight[0] - 1,
                     tileMoveToHighlight[1] - 1);
         }
@@ -442,32 +447,32 @@ public class TurnEvaluator {
 
     public boolean isValidAttackMove(int x, int y, List<Integer[]> occupiedTiles) {
         List<Integer[]> nearbytilesToCheck = new ArrayList<>();
-        List<Integer> direction = new ArrayList<>();
+        List<AttackTileDirection> direction = new ArrayList<>();
 
         // NOTE FOR ALL SIDE NEIGHBORS: 
         // Greater than 1 because origin index is 1 not 0 (uses grid positions)
         // for the top left tile neighbor
         if (this.checkGenericDiagonalNeighborTopLeft(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x - 1, y - 1});
-            direction.add(GlobalSettings.DIRECTION_TOP_LEFT);
+            direction.add(AttackTileDirection.DIRECTION_TOP_LEFT);
         }
 
         // for the top right tile neighbor
         if (this.checkGenericDiagonalNeighborTopRight(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x + 1, y - 1});
-            direction.add(GlobalSettings.DIRECTION_TOP_RIGHT);
+            direction.add(AttackTileDirection.DIRECTION_TOP_RIGHT);
         }
 
         // for the lower left tile neighbor
         if (this.checkGenericDiagonalNeighborLowerLeft(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x - 1, y + 1});
-            direction.add(GlobalSettings.DIRECTION_LOWER_LEFT);
+            direction.add(AttackTileDirection.DIRECTION_LOWER_LEFT);
         }
 
         // for the lower right tile neighbor
         if (this.checkGenericDiagonalNeighborLowerRight(x, y)) {
             nearbytilesToCheck.add(new Integer[]{x + 1, y + 1});
-            direction.add(GlobalSettings.DIRECTION_LOWER_RIGHT);
+            direction.add(AttackTileDirection.DIRECTION_LOWER_RIGHT);
         }
 
         for (int i = 0; i < nearbytilesToCheck.size(); i++) {
@@ -514,7 +519,7 @@ public class TurnEvaluator {
         currentEnemyTileToCheck[1] = this.occupiedTileToAttack[1];
 
         switch (this.attackDirectionFrom) {
-            case GlobalSettings.DIRECTION_TOP_LEFT:
+            case DIRECTION_TOP_LEFT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborTopLeft(
                         currentOccupiedTileToCheck[0], 
@@ -569,7 +574,7 @@ public class TurnEvaluator {
 
                 break;
 
-            case GlobalSettings.DIRECTION_TOP_RIGHT:
+            case DIRECTION_TOP_RIGHT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborTopRight(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] += 1;
@@ -621,7 +626,7 @@ public class TurnEvaluator {
 
                 break;
 
-            case GlobalSettings.DIRECTION_LOWER_LEFT:
+            case DIRECTION_LOWER_LEFT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborLowerLeft(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] -= 1;
@@ -667,7 +672,7 @@ public class TurnEvaluator {
 
                 break;
 
-            case GlobalSettings.DIRECTION_LOWER_RIGHT:
+            case DIRECTION_LOWER_RIGHT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborLowerRight(currentOccupiedTileToCheck[0], currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] += 1;
