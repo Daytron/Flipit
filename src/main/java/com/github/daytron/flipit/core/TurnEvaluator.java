@@ -22,15 +22,11 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class TurnEvaluator {
 
-    private final GraphicsContext gc;
-
     private final int numberOfRows;
     private final int numberOfColumns;
     private final Canvas canvas;
     private final List<Double> rowCell;
     private final List<Double> columnCell;
-    private double gridXSpace;
-    private double gridYSpace;
 
     double preferredHeight;
     double preferredWidth;
@@ -39,7 +35,7 @@ public class TurnEvaluator {
 
     private final Map selectedMap;
 
-    private final int TILE_EDGE_EFFECT_THICKNESS;
+    
     private final PlayerType selectedPlayer1;
     private final PlayerType selectedPlayer2;
 
@@ -50,6 +46,8 @@ public class TurnEvaluator {
     // For occupied to attack reference only
     private Integer[] occupiedTileToAttack;
     private AttackTileDirection attackDirectionFrom;
+    
+    private Graphics graphics;
 
     // For possible moves calculation
     //private List<Integer[]> possibleMovePos;
@@ -57,7 +55,6 @@ public class TurnEvaluator {
 
     public TurnEvaluator(Canvas canvas, Map map, PlayerType player1, 
             PlayerType player2, String player1Color, String player2Color) {
-        this.gc = canvas.getGraphicsContext2D();
 
         this.canvas = canvas;
         this.rowCell = new ArrayList<>();
@@ -65,11 +62,12 @@ public class TurnEvaluator {
         this.numberOfRows = map.getSize()[1];
         this.numberOfColumns = map.getSize()[0];
 
+        int tile_edge_effect;
         // Tile edge effect size init
         if (map.getSize()[0] < 8 && map.getSize()[1] < 8) {
-            TILE_EDGE_EFFECT_THICKNESS = 2;
+            tile_edge_effect = 2;
         } else {
-            TILE_EDGE_EFFECT_THICKNESS = 1;
+            tile_edge_effect = 1;
         }
 
         this.selectedMap = map;
@@ -77,6 +75,42 @@ public class TurnEvaluator {
         this.selectedPlayer2 = player2;
         this.selectedPlayer1Color = player1Color;
         this.selectedPlayer2Color = player2Color;
+        
+        
+        double x = this.canvas.getWidth();
+        double y = this.canvas.getHeight();
+
+        this.preferredHeight = ((int) y / this.numberOfRows) * (double) this.numberOfRows;
+        this.preferredWidth = ((int) x / this.numberOfColumns) * (double) this.numberOfColumns;
+
+        // Padding space for width and height
+        this.halfPaddingWidth = (x - preferredWidth) / 2;
+        this.halfPaddingHeight = (y - preferredHeight) / 2;
+
+        // space between each cell
+        double gridXSpace = this.preferredWidth / this.numberOfColumns;
+        double gridYSpace = this.preferredHeight / this.numberOfRows;
+
+        // generate rows
+        for (double yi = this.halfPaddingHeight; 
+                yi <= (y - this.halfPaddingHeight); 
+                yi = yi + gridYSpace) {
+            //gc.strokeLine(halfPaddingWidth, yi, x - halfPaddingWidth, yi);
+            this.rowCell.add(yi);
+        }
+
+        // generate columns
+        for (double xi = this.halfPaddingWidth; 
+                xi <= (x - this.halfPaddingWidth); 
+                xi = xi + gridXSpace) {
+            //gc.strokeLine(xi, halfPaddingHeight, xi, y - halfPaddingHeight);
+            this.columnCell.add(xi);
+        }
+        
+        this.graphics = new Graphics(canvas.getGraphicsContext2D(), 
+                gridXSpace, gridYSpace, 
+                rowCell, columnCell, 
+                tile_edge_effect);
     }
 
     // type 1: light edges color
@@ -176,34 +210,6 @@ public class TurnEvaluator {
     }
 
     public void generateMap() {
-        double x = this.canvas.getWidth();
-        double y = this.canvas.getHeight();
-
-        this.preferredHeight = ((int) y / this.numberOfRows) * (double) this.numberOfRows;
-        this.preferredWidth = ((int) x / this.numberOfColumns) * (double) this.numberOfColumns;
-
-        // Padding space for width and height
-        this.halfPaddingWidth = (x - preferredWidth) / 2;
-        this.halfPaddingHeight = (y - preferredHeight) / 2;
-
-        // space between each cell
-        this.gridXSpace = this.preferredWidth / this.numberOfColumns;
-        this.gridYSpace = this.preferredHeight / this.numberOfRows;
-
-        gc.setLineWidth(2);
-
-        // generate rows
-        for (double yi = this.halfPaddingHeight; yi <= (y - this.halfPaddingHeight); yi = yi + this.gridYSpace) {
-            //gc.strokeLine(halfPaddingWidth, yi, x - halfPaddingWidth, yi);
-            this.rowCell.add(yi);
-        }
-
-        // generate columns
-        for (double xi = this.halfPaddingWidth; xi <= (x - this.halfPaddingWidth); xi = xi + this.gridXSpace) {
-            //gc.strokeLine(xi, halfPaddingHeight, xi, y - halfPaddingHeight);
-            this.columnCell.add(xi);
-        }
-
         // Fill grid tiles with neutral color
         for (int count_row = 0; count_row < this.numberOfRows; count_row++) {
             for (int count_column = 0; count_column < this.numberOfColumns; count_column++) {
@@ -221,12 +227,10 @@ public class TurnEvaluator {
     
     public void paintTile(String light_edge_color, String main_color, 
             String shadow_edge_color, int count_column, int count_row) {
-        Graphics.paintTile(gc, light_edge_color, 
+        
+        this.graphics.paintTile(light_edge_color, 
                 main_color, shadow_edge_color, 
-                count_column, count_row, 
-                TILE_EDGE_EFFECT_THICKNESS, 
-                rowCell, columnCell, 
-                gridXSpace, gridYSpace);
+                count_column, count_row);
     }
 
     public int[] getPlayer1StartPos() {
