@@ -8,10 +8,14 @@ package com.github.daytron.flipit.core;
 import com.github.daytron.flipit.data.Difficulty;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.Score;
+import com.github.daytron.flipit.data.TileProperty;
 import com.github.daytron.flipit.player.PlayerManager;
 import com.github.daytron.flipit.player.ComputerAI;
 import java.util.List;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
+import javafx.util.Duration;
 
 /**
  *
@@ -30,19 +34,18 @@ public class Game {
 
     private final ComputerAI comAI;
     private int[] aiChosenPlayTile;
-    
 
-    public Game(Canvas canvas, Map map, 
-            PlayerType player1, PlayerType player2, 
+    public Game(Canvas canvas, Map map,
+            PlayerType player1, PlayerType player2,
             String player1Color, String player2Color) {
-        
+
         this.isGameRunning = false;
         this.player1 = player1;
         this.player2 = player2;
         this.player1Color = player1Color;
         this.player2Color = player2Color;
 
-        this.mapManager = new TurnEvaluator(canvas, map, player1, player2, 
+        this.mapManager = new TurnEvaluator(canvas, map, player1, player2,
                 player1Color, player2Color);
 
         // the true value means human start first (turn)
@@ -58,9 +61,9 @@ public class Game {
 
         // Create players
         this.playerManager.createPlayers(
-                this.player1Color, this.player2Color, 
-                this.player1, this.player2, 
-                this.mapManager.getPlayer1StartPos().clone(), 
+                this.player1Color, this.player2Color,
+                this.player1, this.player2,
+                this.mapManager.getPlayer1StartPos().clone(),
                 this.mapManager.getPlayer2StartPos().clone());
 
         // On first turn only if it goes for human player, it begins highlighting 
@@ -84,13 +87,13 @@ public class Game {
             // COMPUTER PLAYER
             player = PlayerType.COMPUTER;
             if (this.mapManager.isTherePossibleMove(
-                    this.playerManager.getOccupiedTiles(player), 
+                    this.playerManager.getOccupiedTiles(player),
                     this.playerManager.getEnemyTiles(player),
                     this.playerManager,
                     player)) {
                 this.aiChosenPlayTile = this.comAI.play(
-                    this.playerManager.getPossibleMovePos(player),
-                    this.playerManager.getPossibleAttackPos(player))
+                        this.playerManager.getPossibleMovePos(player),
+                        this.playerManager.getPossibleAttackPos(player))
                         .clone();
 
                 // Extra measure if there is no selected move from AI
@@ -134,22 +137,22 @@ public class Game {
         if (!this.mapManager.isBoulderTile(x, y)) {
             // if not self-occupied tile continue analyzing
             if (!this.mapManager.isTilePartOf(
-                    new Integer[]{x, y}, 
+                    new Integer[]{x, y},
                     this.playerManager.getOccupiedTiles(player))) {
 
                 // Check if tile is part of enemy territory
                 if (this.mapManager.isTilePartOf(
-                        new Integer[]{x, y}, 
+                        new Integer[]{x, y},
                         this.playerManager.getOccupiedTiles(
                                 this.getOpposingPlayer(player)))) {
                     // if yes then calculate attack move
                     if (this.isValidAttackMove(player, x, y)) {
 
                         // calculate how many possible tiles to attack
-                        List<Integer[]> tilesToFlip = 
-                                this.mapManager.getHowManyEnemyTilesToFlip(
-                                    this.playerManager.getOccupiedTiles(player), 
-                                    this.playerManager.getEnemyTiles(player));
+                        List<Integer[]> tilesToFlip
+                                = this.mapManager.getHowManyEnemyTilesToFlip(
+                                        this.playerManager.getOccupiedTiles(player),
+                                        this.playerManager.getEnemyTiles(player));
 
                         // Call an attack move
                         this.flipTile(tilesToFlip, player);
@@ -179,11 +182,9 @@ public class Game {
         for (Integer[] enemyTile : tilesToFlip) {
 
             // 1. Paint tiles as your newly occupied tiles
-            this.mapManager.paintTile(this.playerManager.getPlayerLightEdgeColor(player),
-                    this.playerManager.getPlayerMainColor(player),
-                    this.playerManager.getPlayerShadowEdgeColor(player),
-                    enemyTile[0] - 1,
-                    enemyTile[1] - 1);
+            this.mapManager.attackTile(
+                    this.playerManager.getPlayerColor(player),
+                    enemyTile[0] - 1, enemyTile[1] - 1);
 
             // 2. Add tiles to your list
             this.playerManager.addTileToPlayerList(enemyTile[0], enemyTile[1], player);
@@ -197,7 +198,6 @@ public class Game {
              if (player.equalsIgnoreCase(GlobalSettings.PLAYER_OPTION_HUMAN)) {
              this.mapManager.removeNewlyFlippedTileFromHighlightList(enemyTile.clone());
              } */
-            
             // Ends game if tile flipped is an enemy base
             if (enemyTile[0] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[0]
                     && enemyTile[1] == this.playerManager.getPlayerMainBasePos(this.getOpposingPlayer(player))[1]) {
@@ -205,10 +205,10 @@ public class Game {
                 this.endGame();
                 return;
             }
-            
+
         }
 
-    // 5. Update score accordingly
+        // 5. Update score accordingly
         this.updateScore(player, tilesToFlip.size());
 
         // 6. End Turn
@@ -217,7 +217,7 @@ public class Game {
     }
 
     private boolean isValidAttackMove(PlayerType player, int x, int y) {
-        return this.mapManager.isValidAttackMove(x, y, 
+        return this.mapManager.isValidAttackMove(x, y,
                 this.playerManager.getOccupiedTiles(player));
     }
 
@@ -271,34 +271,14 @@ public class Game {
 
         // For AI
         if (this.playerManager.getTurn() == PlayerType.COMPUTER) {
-
-            if (this.mapManager.isTherePossibleMove(
-                    this.playerManager.getOccupiedTiles(PlayerType.COMPUTER), 
-                    this.playerManager.getEnemyTiles(PlayerType.COMPUTER),
-                    this.playerManager,
-                    player)) {
-                
-                this.aiChosenPlayTile = this.comAI.play(
-                    this.playerManager.getPossibleMovePos(player), 
-                    this.playerManager.getPossibleAttackPos(player));
-
-                // Extra measure if there is no selected move from AI
-                if (this.aiChosenPlayTile.length == 0 || this.aiChosenPlayTile == null) {
-                    this.endGame();
-                }
-
-                // Appply move
-                this.analyzeTile(PlayerType.COMPUTER,
-                        this.aiChosenPlayTile[0],
-                        this.aiChosenPlayTile[1]);
-
-            } else {
-                this.endGame();
-            }
-
+            // Add a delay before computer play
+            Timeline timeline = new Timeline(new KeyFrame(
+                    Duration.millis(TileProperty.COM_PLAY_DELAY.getValue()),
+                    ae -> playComputerTurn(player)));
+            timeline.play();
         } else {
             if (this.mapManager.isTherePossibleMove(
-                    this.playerManager.getOccupiedTiles(PlayerType.HUMAN), 
+                    this.playerManager.getOccupiedTiles(PlayerType.HUMAN),
                     this.playerManager.getEnemyTiles(PlayerType.HUMAN),
                     this.playerManager,
                     player)) {
@@ -308,6 +288,32 @@ public class Game {
             }
         }
 
+    }
+
+    private void playComputerTurn(PlayerType player) {
+        if (this.mapManager.isTherePossibleMove(
+                this.playerManager.getOccupiedTiles(PlayerType.COMPUTER),
+                this.playerManager.getEnemyTiles(PlayerType.COMPUTER),
+                this.playerManager,
+                player)) {
+
+            this.aiChosenPlayTile = this.comAI.play(
+                    this.playerManager.getPossibleMovePos(player),
+                    this.playerManager.getPossibleAttackPos(player));
+
+            // Extra measure if there is no selected move from AI
+            if (this.aiChosenPlayTile.length == 0 || this.aiChosenPlayTile == null) {
+                this.endGame();
+            }
+
+            // Appply move
+            this.analyzeTile(PlayerType.COMPUTER,
+                    this.aiChosenPlayTile[0],
+                    this.aiChosenPlayTile[1]);
+
+        } else {
+            this.endGame();
+        }
     }
 
     // TODO

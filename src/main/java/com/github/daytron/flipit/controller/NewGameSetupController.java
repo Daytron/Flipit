@@ -60,10 +60,6 @@ import javafx.util.Callback;
 public class NewGameSetupController implements Initializable {
 
     private MainApp app;
-    private final Rectangle blueRectangle = new Rectangle(60, 20,
-            Color.web(TileColor.PLAYER_BLUE.getColor()));
-    private final Rectangle redRectangle = new Rectangle(60, 20,
-            Color.web(TileColor.PLAYER_RED.getColor()));
 
     @FXML
     private ListView<String> mapList;

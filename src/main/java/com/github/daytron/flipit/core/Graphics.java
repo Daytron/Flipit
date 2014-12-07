@@ -25,44 +25,40 @@ package com.github.daytron.flipit.core;
 
 import com.github.daytron.flipit.data.TileColor;
 import java.util.List;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-class Graphics {
+final class Graphics {
+
     private final GraphicsContext gc;
-    
+
     private final double gridXSpace;
     private final double gridYSpace;
-    
+
     private final List<Double> rowCell;
     private final List<Double> columnCell;
-    
+
     private final int TILE_EDGE_EFFECT_THICKNESS;
 
-    public Graphics(GraphicsContext gc, double gridX, double gridY,
+    private int frameCount;
+
+    protected Graphics(GraphicsContext gc, double gridX, double gridY,
             List<Double> rowCell, List<Double> columnCell,
             int tile_edge) {
         this.gc = gc;
         this.gc.setLineWidth(2);
-        
+
         this.gridXSpace = gridX;
         this.gridYSpace = gridY;
         this.rowCell = rowCell;
         this.columnCell = columnCell;
         this.TILE_EDGE_EFFECT_THICKNESS = tile_edge;
     }
-    
-    
-    
+
     /**
      * Method for painting the tile
      *
@@ -74,35 +70,42 @@ class Graphics {
      * @param count_row int value of the row (y) position of the tile (with 0 as
      * index)
      */
-    protected void paintTile(String light_edge_color, 
-            String main_color, String shadow_edge_color, 
+    protected void paintTile(String light_edge_color,
+            String main_color, String shadow_edge_color,
             int count_column, int count_row) {
         // coloring the light top and left edges respectively
         gc.setFill(Color.web(light_edge_color));
-        gc.fillRect(columnCell.get(count_column), rowCell.get(count_row), 
+        gc.fillRect(columnCell.get(count_column), rowCell.get(count_row),
                 gridXSpace, TILE_EDGE_EFFECT_THICKNESS);
-        gc.fillRect(columnCell.get(count_column), rowCell.get(count_row), 
+        gc.fillRect(columnCell.get(count_column), rowCell.get(count_row),
                 TILE_EDGE_EFFECT_THICKNESS, gridYSpace);
 
         // coloring main tile body
         gc.setFill(Color.web(main_color));
-        gc.fillRect(columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, 
-                rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, 
-                gridXSpace - TILE_EDGE_EFFECT_THICKNESS, 
+        gc.fillRect(columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS,
+                rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS,
+                gridXSpace - TILE_EDGE_EFFECT_THICKNESS,
                 gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
 
         // coloring tile's shadow for bottom and right edges respectively
         gc.setFill(Color.web(shadow_edge_color));
-        gc.fillRect(columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS, 
-                rowCell.get(count_row) + gridYSpace - TILE_EDGE_EFFECT_THICKNESS, 
-                gridXSpace - TILE_EDGE_EFFECT_THICKNESS, 
+        gc.fillRect(columnCell.get(count_column) + TILE_EDGE_EFFECT_THICKNESS,
+                rowCell.get(count_row) + gridYSpace - TILE_EDGE_EFFECT_THICKNESS,
+                gridXSpace - TILE_EDGE_EFFECT_THICKNESS,
                 TILE_EDGE_EFFECT_THICKNESS);
-        gc.fillRect(columnCell.get(count_column) 
-                + gridXSpace - TILE_EDGE_EFFECT_THICKNESS, 
-                rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS, 
-                TILE_EDGE_EFFECT_THICKNESS, 
+        gc.fillRect(columnCell.get(count_column)
+                + gridXSpace - TILE_EDGE_EFFECT_THICKNESS,
+                rowCell.get(count_row) + TILE_EDGE_EFFECT_THICKNESS,
+                TILE_EDGE_EFFECT_THICKNESS,
                 gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
     }
-    
-   
+
+    protected void flipTile(final TileColor playerColor,
+            final int count_column, final int count_row) {
+
+        FlipAnimation flipAnimation = new FlipAnimation(frameCount,
+                gridXSpace, gridYSpace, rowCell, columnCell,
+                TILE_EDGE_EFFECT_THICKNESS, gc, this);
+        flipAnimation.flipTile(playerColor, count_column, count_row);
+    }
 }

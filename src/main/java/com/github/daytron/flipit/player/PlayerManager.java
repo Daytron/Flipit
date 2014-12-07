@@ -6,6 +6,7 @@
 package com.github.daytron.flipit.player;
 
 import com.github.daytron.flipit.data.PlayerType;
+import com.github.daytron.flipit.data.TileColor;
 import java.util.List;
 
 /**
@@ -58,7 +59,7 @@ public class PlayerManager {
 
     }
 
-    private Player filterPlayer(PlayerType player) {
+    private Player getPlayer(PlayerType player) {
         if (player == PlayerType.HUMAN) {
             return this.humanPlayer;
         } else {
@@ -67,45 +68,42 @@ public class PlayerManager {
     }
 
     public int[] getPlayerMainBasePos(PlayerType player) {
-        return this.filterPlayer(player).getMainBase();
+        return this.getPlayer(player).getMainBase();
     }
 
     public int getScore(PlayerType player) {
-        return this.filterPlayer(player).getScore();
+        return this.getPlayer(player).getScore();
     }
 
     public String getPlayerLightEdgeColor(PlayerType player) {
-        return this.filterPlayer(player).getLight_edge_color();
+        return this.getPlayer(player).getLight_edge_color();
     }
 
     public String getPlayerShadowEdgeColor(PlayerType player) {
-        return this.filterPlayer(player).getShadow_edge_color();
+        return this.getPlayer(player).getShadow_edge_color();
     }
 
     public String getPlayerMainColor(PlayerType player) {
-        return this.filterPlayer(player).getMain_color();
+        return this.getPlayer(player).getMain_color();
     }
 
     public void addTileToPlayerList(int x, int y, PlayerType player) {
-        this.filterPlayer(player).addOccupiedTile(x, y);
+        this.getPlayer(player).addOccupiedTile(x, y);
     }
 
     public void removeTileFromPlayerList(int x, int y, PlayerType player) {
-        if (!this.filterPlayer(player).removeOccupiedTile(x, y)) {
+        if (!this.getPlayer(player).removeOccupiedTile(x, y)) {
             System.out.println("ERROR BUG: Cannot remove tile " + "[" + x + "," + y + "] for player: " + player);
         }
     }
 
     public List<Integer[]> getOccupiedTiles(PlayerType player) {
-        return this.filterPlayer(player).getOccupiedTiles();
+        return this.getPlayer(player).getOccupiedTiles();
     }
 
     public List<Integer[]> getEnemyTiles(PlayerType player) {
-        if (player == PlayerType.HUMAN) {
-            return this.computerPlayer.getOccupiedTiles();
-        } else {
-            return this.humanPlayer.getOccupiedTiles();
-        }
+        return this.getPlayer(this.getEnemyOf(player))
+                .getOccupiedTiles();
     }
 
     public PlayerType getEnemyOf(PlayerType player) {
@@ -121,7 +119,7 @@ public class PlayerManager {
     }
 
     public void updateScore(PlayerType player, int score) {
-        this.filterPlayer(player).addScore(score);
+        this.getPlayer(player).addScore(score);
     }
 
     public void nextTurn(PlayerType player) {
@@ -135,45 +133,28 @@ public class PlayerManager {
     }
 
     public void addPossibleMovePos(PlayerType player, Integer[] pos) {
-        if (player == PlayerType.HUMAN) {
-            this.humanPlayer.addPossibleMovePos(pos);
-        } else {
-            this.computerPlayer.addPossibleMovePos(pos);
-        }
+        this.getPlayer(player).addPossibleMovePos(pos);
     }
 
     public void resetPossibleAttackAndMovePos(PlayerType player) {
-        if (player == PlayerType.HUMAN) {
-            this.humanPlayer.resetPossibleAttackPos();
-            this.humanPlayer.resetPossibleMovePos();
-        } else {
-            this.computerPlayer.resetPossibleAttackPos();
-            this.computerPlayer.resetPossibleMovePos();
-        }
+        this.getPlayer(player).resetPossibleAttackPos();
+        this.getPlayer(player).resetPossibleMovePos();
     }
 
     public void addPossibleAttackPos(PlayerType player, Integer[] pos) {
-        if (player == PlayerType.HUMAN) {
-            this.humanPlayer.addPossibleAttackPos(pos);
-        } else {
-            this.computerPlayer.addPossibleAttackPos(pos);
-        }
+        this.getPlayer(player).addPossibleAttackPos(pos);
     }
 
     public List<Integer[]> getPossibleMovePos(PlayerType player) {
-        if (player == PlayerType.HUMAN) {
-            return this.humanPlayer.getPossibleMovePos();
-        } else {
-            return this.computerPlayer.getPossibleMovePos();
-        }
+        return this.getPlayer(player).getPossibleMovePos();
     }
 
     public List<Integer[]> getPossibleAttackPos(PlayerType player) {
-        if (player == PlayerType.HUMAN) {
-            return this.humanPlayer.getPossibleAttackPos();
-        } else {
-            return this.computerPlayer.getPossibleAttackPos();
-        }
+        return this.getPlayer(player).getPossibleAttackPos();
+    }
+    
+    public TileColor getPlayerColor(PlayerType player) {
+        return this.getPlayer(player).getPlayerColor();
     }
 
 }

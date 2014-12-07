@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 
 /**
  *
@@ -35,7 +34,6 @@ public class TurnEvaluator {
 
     private final Map selectedMap;
 
-    
     private final PlayerType selectedPlayer1;
     private final PlayerType selectedPlayer2;
 
@@ -46,14 +44,13 @@ public class TurnEvaluator {
     // For occupied to attack reference only
     private Integer[] occupiedTileToAttack;
     private AttackTileDirection attackDirectionFrom;
-    
+
     private Graphics graphics;
 
     // For possible moves calculation
     //private List<Integer[]> possibleMovePos;
     //private List<Integer[]> possibleAttackPos;
-
-    public TurnEvaluator(Canvas canvas, Map map, PlayerType player1, 
+    public TurnEvaluator(Canvas canvas, Map map, PlayerType player1,
             PlayerType player2, String player1Color, String player2Color) {
 
         this.canvas = canvas;
@@ -75,8 +72,7 @@ public class TurnEvaluator {
         this.selectedPlayer2 = player2;
         this.selectedPlayer1Color = player1Color;
         this.selectedPlayer2Color = player2Color;
-        
-        
+
         double x = this.canvas.getWidth();
         double y = this.canvas.getHeight();
 
@@ -92,24 +88,24 @@ public class TurnEvaluator {
         double gridYSpace = this.preferredHeight / this.numberOfRows;
 
         // generate rows
-        for (double yi = this.halfPaddingHeight; 
-                yi <= (y - this.halfPaddingHeight); 
+        for (double yi = this.halfPaddingHeight;
+                yi <= (y - this.halfPaddingHeight);
                 yi = yi + gridYSpace) {
             //gc.strokeLine(halfPaddingWidth, yi, x - halfPaddingWidth, yi);
             this.rowCell.add(yi);
         }
 
         // generate columns
-        for (double xi = this.halfPaddingWidth; 
-                xi <= (x - this.halfPaddingWidth); 
+        for (double xi = this.halfPaddingWidth;
+                xi <= (x - this.halfPaddingWidth);
                 xi = xi + gridXSpace) {
             //gc.strokeLine(xi, halfPaddingHeight, xi, y - halfPaddingHeight);
             this.columnCell.add(xi);
         }
-        
-        this.graphics = new Graphics(canvas.getGraphicsContext2D(), 
-                gridXSpace, gridYSpace, 
-                rowCell, columnCell, 
+
+        this.graphics = new Graphics(canvas.getGraphicsContext2D(),
+                gridXSpace, gridYSpace,
+                rowCell, columnCell,
                 tile_edge_effect);
     }
 
@@ -224,12 +220,11 @@ public class TurnEvaluator {
 
     }
 
-    
-    public void paintTile(String light_edge_color, String main_color, 
+    public void paintTile(String light_edge_color, String main_color,
             String shadow_edge_color, int count_column, int count_row) {
-        
-        this.graphics.paintTile(light_edge_color, 
-                main_color, shadow_edge_color, 
+
+        this.graphics.paintTile(light_edge_color,
+                main_color, shadow_edge_color,
                 count_column, count_row);
     }
 
@@ -262,24 +257,24 @@ public class TurnEvaluator {
             for (Integer[] tileAttackToHighlight : playerManager
                     .getPossibleMovePos(player)) {
                 this.paintTile(
-                    TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE.getColor(),
-                    TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN.getColor(),
-                    TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE.getColor(),
-                    tileAttackToHighlight[0] - 1,
-                    tileAttackToHighlight[1] - 1);
+                        TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE.getColor(),
+                        TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN.getColor(),
+                        TileColor.TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE.getColor(),
+                        tileAttackToHighlight[0] - 1,
+                        tileAttackToHighlight[1] - 1);
             }
         }
     }
 
-    public void removeNewlyFlippedTileFromHighlightList(Integer[] tile, 
+    public void removeNewlyFlippedTileFromHighlightList(Integer[] tile,
             PlayerManager playerManager) {
         for (int i = 0; i < playerManager.getPossibleAttackPos(PlayerType.HUMAN)
                 .size(); i++) {
             if (Objects.equals(tile[0], playerManager
                     .getPossibleAttackPos(PlayerType.HUMAN).get(i)[0])
-                    && Objects.equals(tile[1], 
-                       playerManager.getPossibleAttackPos(PlayerType.HUMAN)
-                               .get(i)[1])) {
+                    && Objects.equals(tile[1],
+                            playerManager.getPossibleAttackPos(PlayerType.HUMAN)
+                            .get(i)[1])) {
                 playerManager.getPossibleAttackPos(PlayerType.HUMAN).remove(i);
                 break;
             }
@@ -290,11 +285,11 @@ public class TurnEvaluator {
             PlayerManager playerManager) {
         for (int i = 0; i < playerManager.getPossibleMovePos(PlayerType.HUMAN)
                 .size(); i++) {
-            if (Objects.equals(tile[0], 
+            if (Objects.equals(tile[0],
                     playerManager.getPossibleMovePos(PlayerType.HUMAN).get(i)[0])
-                    && Objects.equals(tile[1], 
-                       playerManager.getPossibleMovePos(PlayerType.HUMAN)
-                               .get(i)[1])) {
+                    && Objects.equals(tile[1],
+                            playerManager.getPossibleMovePos(PlayerType.HUMAN)
+                            .get(i)[1])) {
                 playerManager.getPossibleMovePos(PlayerType.HUMAN).remove(i);
                 break;
             }
@@ -304,14 +299,14 @@ public class TurnEvaluator {
     public void removeHighlight(String enemy_light_color,
             String enemy_main_color, String enemy_shadow_color,
             PlayerManager playerManager) {
-        
-        System.out.println("is possible moves empty?: " 
+
+        System.out.println("is possible moves empty?: "
                 + playerManager.getPossibleMovePos(PlayerType.HUMAN).isEmpty());
-        
+
         // For possible move highlights
-        for (Integer[] tileMoveToHighlight : 
-                playerManager.getPossibleMovePos(PlayerType.HUMAN)) {
-            System.out.println("tile: [" + tileMoveToHighlight[0] + "," + tileMoveToHighlight[1] + "]" );
+        for (Integer[] tileMoveToHighlight
+                : playerManager.getPossibleMovePos(PlayerType.HUMAN)) {
+            System.out.println("tile: [" + tileMoveToHighlight[0] + "," + tileMoveToHighlight[1] + "]");
             this.paintTile(TileColor.TILE_NEUTRAL_LIGHT_EDGE.getColor(),
                     TileColor.TILE_NEUTRAL_MAIN.getColor(),
                     TileColor.TILE_NEUTRAL_SHADOW_EDGE.getColor(),
@@ -320,8 +315,8 @@ public class TurnEvaluator {
         }
 
         // For possible attack highlights
-        for (Integer[] tileAttackToHighlight : 
-                playerManager.getPossibleAttackPos(PlayerType.HUMAN)) {
+        for (Integer[] tileAttackToHighlight
+                : playerManager.getPossibleAttackPos(PlayerType.HUMAN)) {
             this.paintTile(enemy_light_color, enemy_main_color,
                     enemy_shadow_color,
                     tileAttackToHighlight[0] - 1,
@@ -329,7 +324,6 @@ public class TurnEvaluator {
         }
 
     }
-
 
     public boolean isTherePossibleMove(List<Integer[]> occupiedPlayerTiles,
             List<Integer[]> enemyPlayerTiles, PlayerManager playerManager,
@@ -506,7 +500,7 @@ public class TurnEvaluator {
     }
 
     public List<Integer[]> getHowManyEnemyTilesToFlip(
-            List<Integer[]> occupiedTiles, 
+            List<Integer[]> occupiedTiles,
             List<Integer[]> enemyTiles) {
         List<Integer[]> listOfEnemyTilesToFlip = new ArrayList<>();
 
@@ -526,7 +520,7 @@ public class TurnEvaluator {
             case DIRECTION_TOP_LEFT:
                 // Compute possible tile attack based on "linked diagonally" occupied tiles
                 while (this.checkGenericDiagonalNeighborTopLeft(
-                        currentOccupiedTileToCheck[0], 
+                        currentOccupiedTileToCheck[0],
                         currentOccupiedTileToCheck[1])) {
                     currentOccupiedTileToCheck[0] -= 1;
                     currentOccupiedTileToCheck[1] -= 1;
@@ -547,13 +541,13 @@ public class TurnEvaluator {
                 currentEnemyTileToCheck[1] += 1;
 
                 listOfEnemyTilesToFlip.add(new Integer[]{
-                    currentEnemyTileToCheck[0], 
+                    currentEnemyTileToCheck[0],
                     currentEnemyTileToCheck[1]});
                 enemy_count += 1;
 
                 // Check the link enemy tiles 
                 while (this.checkGenericDiagonalNeighborLowerRight(
-                        currentEnemyTileToCheck[0], 
+                        currentEnemyTileToCheck[0],
                         currentEnemyTileToCheck[1])) {
                     if (enemy_count == occupied_count) {
                         break;
@@ -563,12 +557,12 @@ public class TurnEvaluator {
                     currentEnemyTileToCheck[1] += 1;
 
                     if (this.isTilePartOf(
-                            new Integer[]{currentEnemyTileToCheck[0], 
+                            new Integer[]{currentEnemyTileToCheck[0],
                                 currentEnemyTileToCheck[1]},
                             enemyTiles)) {
 
                         listOfEnemyTilesToFlip.add(new Integer[]{
-                            currentEnemyTileToCheck[0], 
+                            currentEnemyTileToCheck[0],
                             currentEnemyTileToCheck[1]});
                         enemy_count += 1;
                     } else {
@@ -600,12 +594,12 @@ public class TurnEvaluator {
                 currentEnemyTileToCheck[1] += 1;
 
                 listOfEnemyTilesToFlip.add(new Integer[]{
-                    currentEnemyTileToCheck[0], 
+                    currentEnemyTileToCheck[0],
                     currentEnemyTileToCheck[1]});
                 enemy_count += 1;
 
                 while (this.checkGenericDiagonalNeighborLowerLeft(
-                        currentEnemyTileToCheck[0], 
+                        currentEnemyTileToCheck[0],
                         currentEnemyTileToCheck[1])) {
                     if (enemy_count == occupied_count) {
                         break;
@@ -615,12 +609,12 @@ public class TurnEvaluator {
                     currentEnemyTileToCheck[1] += 1;
 
                     if (this.isTilePartOf(
-                            new Integer[]{currentEnemyTileToCheck[0], 
+                            new Integer[]{currentEnemyTileToCheck[0],
                                 currentEnemyTileToCheck[1]},
                             enemyTiles)) {
 
                         listOfEnemyTilesToFlip.add(new Integer[]{
-                            currentEnemyTileToCheck[0], 
+                            currentEnemyTileToCheck[0],
                             currentEnemyTileToCheck[1]});
                         enemy_count += 1;
                     } else {
@@ -873,6 +867,13 @@ public class TurnEvaluator {
 
     public List<Double> getRowCell() {
         return this.rowCell;
+    }
+
+    public void attackTile(TileColor playerColor,
+            final int count_column, final int count_row) {
+
+        this.graphics.flipTile(playerColor,
+                count_column, count_row);
     }
 
 }

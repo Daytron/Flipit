@@ -27,6 +27,8 @@ class Player {
     private final String main_color;
     private final String shadow_edge_color;
     
+    private final TileColor playerColor;
+    
     private List<Integer[]> possibleMovePos;
     private List<Integer[]> possibleAttackPos;
 
@@ -48,9 +50,11 @@ class Player {
         if (main_color.equals(TileColor.PLAYER_BLUE.getColor())) {
             this.light_edge_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
             this.shadow_edge_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
+            this.playerColor = TileColor.PLAYER_BLUE;
         } else {
             this.light_edge_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
             this.shadow_edge_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
+            this.playerColor = TileColor.PLAYER_RED;
         }
 
         this.main_color = main_color;
@@ -132,6 +136,10 @@ class Player {
 
     public List<Integer[]> getPossibleMovePos() {
         return possibleMovePos;
+    }
+
+    public TileColor getPlayerColor() {
+        return playerColor;
     }
     
     

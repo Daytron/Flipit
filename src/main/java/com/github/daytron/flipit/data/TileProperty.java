@@ -27,42 +27,20 @@ package com.github.daytron.flipit.data;
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum TileColor {
-    PLAYER_BLUE("#0073CF"),
-    PLAYER_BLUE_LIGHT_EDGE("#4FB1FF"),
-    PLAYER_BLUE_LIGHT_EDGE_AT_45_DEG("#278FE3"),
-    PLAYER_BLUE_SHADOW_EDGE("#004881"),
-    
-    PLAYER_RED("#CF0000"),
-    PLAYER_RED_LIGHT_EDGE("#FF4F4F"),
-    PLAYER_RED_LIGHT_EDGE_AT_45_DEG("#E62222"),
-    PLAYER_RED_SHADOW_EDGE("#810000"),
-    
-    TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE("#EDFFF7"),
-    TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN("#ABFFD8"),
-    TILE_POSSIBLE_MOVE_HIGHLIGHT_SHADOW_EDGE("#8BD6B3"),
-    
-    TILE_POSSIBLE_ATTACK_HIGHLIGHT_LiGHT_EDGE("#FFEDED"),
-    TILE_POSSIBLE_ATTACK_HIGHLIGHT_MAIN("#FFABAB"),
-    TILE_POSSIBLE_ATTACK_HIGHLIGHT_SHADOW_EDGE("#D68B8B"),
-    
-    TILE_NEUTRAL_LIGHT_EDGE("#FFFFFF"),
-    TILE_NEUTRAL_MAIN("#C6C6C6"),
-    TILE_NEUTRAL_SHADOW_EDGE("#000000"),
+public enum TileProperty {
 
-    TILE_BOULDER_LIGHT_EDGE("#FFFFFF"),
-    TILE_BOULDER_MAIN("#4F4F4F"),
-    TILE_BOULDER_SHADOW_EDGE("#000000"),
-    
-    TILE_WHITE("#FFFFFF");
-    
-    private final String color;
+    TILE_EDGE_WIDTH_AT_45_DEG_FOR_EACH_PLAYER_COLOR_AREA(1),
+    FLIP_FRAME_DURATION(50),
+    COM_PLAY_DELAY(500);
 
-    private TileColor(String color) {
-        this.color = color;
+    private final int value;
+
+    private TileProperty(int value) {
+        this.value = value;
     }
 
-    public String getColor() {
-        return color;
+    public int getValue() {
+        return value;
     }
+
 }
