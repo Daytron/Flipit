@@ -8,6 +8,7 @@ package com.github.daytron.flipit.core;
 import com.github.daytron.flipit.data.AttackTileDirection;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.TileColor;
+import com.github.daytron.flipit.data.TileProperty;
 import com.github.daytron.flipit.player.PlayerManager;
 
 import java.util.ArrayList;
@@ -62,9 +63,9 @@ public class TurnEvaluator {
         int tile_edge_effect;
         // Tile edge effect size init
         if (map.getSize()[0] < 8 && map.getSize()[1] < 8) {
-            tile_edge_effect = 2;
+            tile_edge_effect = TileProperty.TILE_EDGE_EFFECT_LARGE.getValue();
         } else {
-            tile_edge_effect = 1;
+            tile_edge_effect = TileProperty.TILE_EDGE_EFFECT_SMALL.getValue();
         }
 
         this.selectedMap = map;

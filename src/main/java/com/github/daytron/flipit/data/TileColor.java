@@ -28,15 +28,28 @@ package com.github.daytron.flipit.data;
  * @author Ryan Gilera ryangilera@gmail.com
  */
 public enum TileColor {
+    // http://www.hexcolortool.com
+    // HSL (207, 100, 41)
     PLAYER_BLUE("#0073CF"),
+    // HSL (207, 100, 49)
+    PLAYER_BLUE_LIGHT_EDGE_AT_30_DEG("#0089FA"),
+    // HSL (207, 100, 57)
+    PLAYER_BLUE_LIGHT_EDGE_AT_60_DEG("#249CFF"),
+    // HSL (207, 100, 65)
     PLAYER_BLUE_LIGHT_EDGE("#4FB1FF"),
-    PLAYER_BLUE_LIGHT_EDGE_AT_45_DEG("#278FE3"),
+    // HSL (207, 100, 25)
     PLAYER_BLUE_SHADOW_EDGE("#004881"),
     
+    // HSL (0, 100, 41)
     PLAYER_RED("#CF0000"),
-    PLAYER_RED_LIGHT_EDGE("#FF4F4F"),
-    PLAYER_RED_LIGHT_EDGE_AT_45_DEG("#E62222"),
-    PLAYER_RED_SHADOW_EDGE("#810000"),
+    // HSL (0, 100, 49)
+    PLAYER_RED_LIGHT_EDGE_AT_30_DEG("#FA0000"),
+    // HSL (0, 100, 57)
+    PLAYER_RED_LIGHT_EDGE_AT_60_DEG("#FF2424"),
+    // HSL (0, 100, 65)
+    PLAYER_RED_LIGHT_EDGE("#FF4D4D"),
+    // HSL (0, 100, 25)
+    PLAYER_RED_SHADOW_EDGE("#800000"),
     
     TILE_POSSIBLE_MOVE_HIGHLIGHT_LiGHT_EDGE("#EDFFF7"),
     TILE_POSSIBLE_MOVE_HIGHLIGHT_MAIN("#ABFFD8"),

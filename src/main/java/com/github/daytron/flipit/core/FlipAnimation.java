@@ -70,7 +70,7 @@ final class FlipAnimation {
     protected void flipTile(final TileColor playerColor,
             final int count_column, final int count_row) {
         // Reset frameCount
-        this.frameCount = 4;
+        this.frameCount = TileProperty.NUMBER_OF_TILE_ANIMATION_FRAMES.getValue();
 
         final Timeline timeline = new Timeline();
 
@@ -86,7 +86,8 @@ final class FlipAnimation {
                             timeline.stop();
                         }
                     }
-                }), new KeyFrame(Duration.millis(TileProperty.FLIP_FRAME_DURATION.getValue())));
+                }), new KeyFrame(Duration.millis(
+                                TileProperty.FLIP_FRAME_DURATION.getValue())));
 
         timeline.setCycleCount(Timeline.INDEFINITE);
 
@@ -96,42 +97,62 @@ final class FlipAnimation {
     private int displayFrame(int frame, TileColor playerColor,
             int count_column, int count_row) {
         String light_edge_color;
-        String light_edge_color_at_45_deg;
+        String light_edge_color_at_30_deg;
+        String light_edge_color_at_60_deg;
         String main_color;
         String shadow_edge_color;
 
         String enemy_light_edge_color;
-        String enemy_light_edge_color_at_45_deg;
+        String enemy_light_edge_color_at_30_deg;
+        String enemy_light_edge_color_at_60_deg;
         String enemy_main_color;
         String enemy_shadow_edge_color;
 
-        int tile_edge_width_at_45 = 
-                TileProperty.TILE_EDGE_WIDTH_AT_45_DEG_FOR_EACH_PLAYER_COLOR_AREA
+        double tile_edge_width_at_30_half
+                = TileProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                .getValue() / 2;
+        double tile_edge_width_at_30
+                = TileProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                .getValue();
+
+        double tile_edge_width_at_60_half
+                = TileProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                .getValue() / 2;
+        double tile_edge_width_at_60
+                = TileProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue();
 
         // Detect and set the colors
         if (playerColor == TileColor.PLAYER_BLUE) {
             light_edge_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
-            light_edge_color_at_45_deg
-                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_45_DEG.getColor();
+            light_edge_color_at_30_deg
+                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_30_DEG.getColor();
+            light_edge_color_at_60_deg
+                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_60_DEG.getColor();
             main_color = TileColor.PLAYER_BLUE.getColor();
             shadow_edge_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
 
             enemy_light_edge_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
-            enemy_light_edge_color_at_45_deg
-                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_45_DEG.getColor();
+            enemy_light_edge_color_at_30_deg
+                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_30_DEG.getColor();
+            enemy_light_edge_color_at_60_deg
+                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_60_DEG.getColor();
             enemy_main_color = TileColor.PLAYER_RED.getColor();
             enemy_shadow_edge_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
         } else if (playerColor == TileColor.PLAYER_RED) {
             light_edge_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
-            light_edge_color_at_45_deg
-                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_45_DEG.getColor();
+            light_edge_color_at_30_deg
+                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_30_DEG.getColor();
+            light_edge_color_at_60_deg
+                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_60_DEG.getColor();
             main_color = TileColor.PLAYER_RED.getColor();
             shadow_edge_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
 
             enemy_light_edge_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
-            enemy_light_edge_color_at_45_deg
-                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_45_DEG.getColor();
+            enemy_light_edge_color_at_30_deg
+                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_30_DEG.getColor();
+            enemy_light_edge_color_at_60_deg
+                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_60_DEG.getColor();
             enemy_main_color = TileColor.PLAYER_BLUE.getColor();
             enemy_shadow_edge_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
         } else {
@@ -139,16 +160,26 @@ final class FlipAnimation {
         }
 
         // Declare and initialize draw origin corner
-        double topLeftCornerXForEnemyColorEdge;
-        double topLeftCornerYForEnemyColorEdge = rowCell.get(count_row);
+        double topLeftCornerXForOtherPlayerColorEdge;
+        double topLeftCornerYForOtherPlayerColorEdge = rowCell.get(count_row);
 
-        double topLeftCornerXForHumanColorEdge;
-        double topLeftCornerYForHumanColorEdge = rowCell.get(count_row);
+        double topLeftCornerXForCurrentPlayerColorEdge;
+        double topLeftCornerYForCurrentPlayerColorEdge = rowCell.get(count_row);
+
+        // Calculate the x padding space for 30 degrees tile turn
+        double adjacentLengthAt30 = (gridXSpace / 2)
+                * Math.cos(Math.toRadians(30));
+        double paddingAt30Deg = (gridXSpace / 2) - adjacentLengthAt30;
+
+        // Calculate the x padding space for 60 degrees tile turn
+        double adjacentLengthAt60 = (gridXSpace / 2)
+                * Math.cos(Math.toRadians(60));
+        double paddingAt60Deg = (gridXSpace / 2) - adjacentLengthAt60;
 
         switch (frame) {
-            case 4:
+            case 6:
                 /**
-                 * A frame where the left tile edge is 45 degrees above the
+                 * A frame where the left tile edge is 30 degrees above the
                  * ground.
                  */
 
@@ -156,138 +187,267 @@ final class FlipAnimation {
                 resetTileColor(count_column, count_row);
 
                 // Calculate the origin corner to draw for computer color edge
-                topLeftCornerXForEnemyColorEdge
-                        = columnCell.get(count_column) + (gridXSpace / 4);
+                topLeftCornerXForOtherPlayerColorEdge
+                        = columnCell.get(count_column) + paddingAt30Deg;
 
                 // Calculate the origin corner to draw for human color edge
-                topLeftCornerXForHumanColorEdge
-                        = topLeftCornerXForEnemyColorEdge + tile_edge_width_at_45;
+                topLeftCornerXForCurrentPlayerColorEdge
+                        = topLeftCornerXForOtherPlayerColorEdge
+                        + tile_edge_width_at_30_half;
 
                 // Draw the left side of the edge (computer)
-                gc.setFill(Color.web(light_edge_color_at_45_deg));
-                gc.fillRect(topLeftCornerXForEnemyColorEdge,
-                        topLeftCornerYForEnemyColorEdge,
-                        tile_edge_width_at_45, gridYSpace);
+                gc.setFill(Color.web(light_edge_color_at_30_deg));
+                gc.fillRect(topLeftCornerXForOtherPlayerColorEdge,
+                        topLeftCornerYForOtherPlayerColorEdge,
+                        tile_edge_width_at_30_half, gridYSpace);
 
                 // Draw the right side of the edge (human)
-                gc.setFill(Color.web(enemy_light_edge_color_at_45_deg));
-                gc.fillRect(topLeftCornerXForHumanColorEdge,
-                        topLeftCornerYForHumanColorEdge,
-                        tile_edge_width_at_45, gridYSpace);
+                gc.setFill(Color.web(enemy_light_edge_color_at_30_deg));
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        tile_edge_width_at_30_half, gridYSpace);
 
                 // Draw the top edge (human)
                 gc.setFill(Color.web(enemy_light_edge_color));
-                gc.fillRect(topLeftCornerXForHumanColorEdge + tile_edge_width_at_45,
-                        topLeftCornerYForHumanColorEdge,
-                        (gridXSpace / 2) - (tile_edge_width_at_45 * 2),
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge
+                        + tile_edge_width_at_30_half,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        (adjacentLengthAt30 * 2) - tile_edge_width_at_30,
                         TILE_EDGE_EFFECT_THICKNESS);
 
                 // Draw the body of the tile (computer)
                 gc.setFill(Color.web(enemy_main_color));
-                gc.fillRect(topLeftCornerXForHumanColorEdge + tile_edge_width_at_45,
-                        topLeftCornerYForHumanColorEdge + TILE_EDGE_EFFECT_THICKNESS,
-                        (gridXSpace / 2) - (tile_edge_width_at_45 * 2),
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge
+                        + tile_edge_width_at_30_half,
+                        topLeftCornerYForCurrentPlayerColorEdge
+                        + TILE_EDGE_EFFECT_THICKNESS,
+                        (adjacentLengthAt30 * 2) - tile_edge_width_at_30,
                         gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
 
                 // Draw the shadow edge of the tile (human)
                 gc.setFill(Color.web(enemy_shadow_edge_color));
-                gc.fillRect(topLeftCornerXForHumanColorEdge + tile_edge_width_at_45,
-                        topLeftCornerYForHumanColorEdge
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge
+                        + tile_edge_width_at_30_half,
+                        topLeftCornerYForCurrentPlayerColorEdge
                         + (gridYSpace - TILE_EDGE_EFFECT_THICKNESS),
-                        (gridXSpace / 2) - (tile_edge_width_at_45 * 2),
+                        (adjacentLengthAt30 * 2) - tile_edge_width_at_30,
                         TILE_EDGE_EFFECT_THICKNESS);
 
                 break;
 
-            case 3:
+            case 5:
                 /**
-                 * A frame where the left tile edge is now perpendicular in
-                 * respect with the ground (90 degrees), only showing the width
-                 * of the left edge. The actual width of the edge is twice the
-                 * tile edge effect width, where each half belongs to a player
-                 * color edge.
+                 * A frame where the left tile edge is 60 degrees above the
+                 * ground.
                  */
 
                 // Clear tile first to remove previous paint
                 resetTileColor(count_column, count_row);
 
                 // Calculate the origin corner to draw for computer color edge
-                topLeftCornerXForEnemyColorEdge = columnCell.get(count_column)
-                        + ((gridXSpace / 2) - TILE_EDGE_EFFECT_THICKNESS);
+                topLeftCornerXForOtherPlayerColorEdge
+                        = columnCell.get(count_column) + paddingAt60Deg;
 
                 // Calculate the origin corner to draw for human color edge
-                topLeftCornerXForHumanColorEdge
-                        = topLeftCornerXForEnemyColorEdge
-                        + TILE_EDGE_EFFECT_THICKNESS;
+                topLeftCornerXForCurrentPlayerColorEdge
+                        = topLeftCornerXForOtherPlayerColorEdge
+                        + tile_edge_width_at_60_half;
 
                 // Draw the left side of the edge (computer)
-                gc.setFill(Color.web(main_color));
-                gc.fillRect(topLeftCornerXForEnemyColorEdge,
-                        topLeftCornerYForEnemyColorEdge,
-                        TILE_EDGE_EFFECT_THICKNESS, gridYSpace);
+                gc.setFill(Color.web(light_edge_color_at_60_deg));
+                gc.fillRect(topLeftCornerXForOtherPlayerColorEdge,
+                        topLeftCornerYForOtherPlayerColorEdge,
+                        tile_edge_width_at_60_half, gridYSpace);
 
                 // Draw the right side of the edge (human)
+                gc.setFill(Color.web(enemy_light_edge_color_at_60_deg));
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        tile_edge_width_at_60_half, gridYSpace);
+
+                // Draw the top edge (human)
+                gc.setFill(Color.web(enemy_light_edge_color));
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge
+                        + tile_edge_width_at_60_half,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        (adjacentLengthAt60 * 2) - tile_edge_width_at_60,
+                        TILE_EDGE_EFFECT_THICKNESS);
+
+                // Draw the body of the tile (computer)
                 gc.setFill(Color.web(enemy_main_color));
-                gc.fillRect(topLeftCornerXForHumanColorEdge,
-                        topLeftCornerYForHumanColorEdge,
-                        TILE_EDGE_EFFECT_THICKNESS, gridYSpace);
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge
+                        + tile_edge_width_at_60_half,
+                        topLeftCornerYForCurrentPlayerColorEdge
+                        + TILE_EDGE_EFFECT_THICKNESS,
+                        (adjacentLengthAt60 * 2) - tile_edge_width_at_60,
+                        gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
+
+                // Draw the shadow edge of the tile (human)
+                gc.setFill(Color.web(enemy_shadow_edge_color));
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge
+                        + tile_edge_width_at_60_half,
+                        topLeftCornerYForCurrentPlayerColorEdge
+                        + (gridYSpace - TILE_EDGE_EFFECT_THICKNESS),
+                        (adjacentLengthAt60 * 2) - tile_edge_width_at_60,
+                        TILE_EDGE_EFFECT_THICKNESS);
 
                 break;
 
-            case 2:
+            case 4:
+                /**
+                 * A frame where the left tile edge is now perpendicular in
+                 * respect with the ground (90 degrees), only showing the width
+                 * of the left edge. The actual width of the edge is 6, where
+                 * each half belongs to a player color edge.
+                 */
 
                 // Clear tile first to remove previous paint
                 resetTileColor(count_column, count_row);
 
                 // Calculate the origin corner to draw for computer color edge
-                topLeftCornerXForEnemyColorEdge
-                        = columnCell.get(count_column)
-                        + ((gridXSpace * 0.75) - (tile_edge_width_at_45 * 2));
+                topLeftCornerXForOtherPlayerColorEdge = columnCell.get(count_column)
+                        + ((gridXSpace / 2)
+                        - TileProperty.TILE_EDGE_HALF_WIDTH.getValue());
 
                 // Calculate the origin corner to draw for human color edge
-                topLeftCornerXForHumanColorEdge
-                        = topLeftCornerXForEnemyColorEdge + tile_edge_width_at_45;
+                topLeftCornerXForCurrentPlayerColorEdge
+                        = topLeftCornerXForOtherPlayerColorEdge
+                        + TileProperty.TILE_EDGE_HALF_WIDTH.getValue();
+
+                // Draw the left side of the edge (computer)
+                gc.setFill(Color.web(main_color));
+                gc.fillRect(topLeftCornerXForOtherPlayerColorEdge,
+                        topLeftCornerYForOtherPlayerColorEdge,
+                        TileProperty.TILE_EDGE_HALF_WIDTH.getValue(),
+                        gridYSpace);
+
+                // Draw the right side of the edge (human)
+                gc.setFill(Color.web(enemy_main_color));
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        TileProperty.TILE_EDGE_HALF_WIDTH.getValue(),
+                        gridYSpace);
+
+                break;
+
+            case 3:
+                /**
+                 * A frame where the right tile edge is 60 degrees above the
+                 * ground.
+                 */
+
+                // Clear tile first to remove previous paint
+                resetTileColor(count_column, count_row);
+
+                // Calculate the origin corner to draw for computer color edge
+                topLeftCornerXForOtherPlayerColorEdge
+                        = columnCell.get(count_column)
+                        + (gridXSpace - paddingAt60Deg
+                        - (tile_edge_width_at_60_half * 2));
+
+                // Calculate the origin corner to draw for human color edge
+                topLeftCornerXForCurrentPlayerColorEdge
+                        = topLeftCornerXForOtherPlayerColorEdge
+                        + tile_edge_width_at_60_half;
 
                 // Draw the body of the tile (human)
                 gc.setFill(Color.web(main_color));
-                gc.fillRect(columnCell.get(count_column) + (gridXSpace / 4),
-                        topLeftCornerYForHumanColorEdge + TILE_EDGE_EFFECT_THICKNESS,
-                        (gridXSpace / 2) - (tile_edge_width_at_45 * 2),
+                gc.fillRect(columnCell.get(count_column) + paddingAt60Deg,
+                        topLeftCornerYForCurrentPlayerColorEdge
+                        + TILE_EDGE_EFFECT_THICKNESS,
+                        adjacentLengthAt60 * 2,
                         gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
 
                 // Draw the top edge (human)
                 gc.setFill(Color.web(light_edge_color));
-                gc.fillRect(columnCell.get(count_column) + (gridXSpace / 4),
-                        topLeftCornerYForHumanColorEdge,
-                        (gridXSpace / 2) - (tile_edge_width_at_45 * 2),
+                gc.fillRect(columnCell.get(count_column) + paddingAt60Deg,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        adjacentLengthAt60 * 2,
                         TILE_EDGE_EFFECT_THICKNESS);
 
                 // Draw the shadow edge of the tile (human)
                 gc.setFill(Color.web(shadow_edge_color));
-                gc.fillRect(columnCell.get(count_column) + (gridXSpace / 4),
-                        topLeftCornerYForHumanColorEdge
+                gc.fillRect(columnCell.get(count_column) + paddingAt60Deg,
+                        topLeftCornerYForCurrentPlayerColorEdge
                         + (gridYSpace - TILE_EDGE_EFFECT_THICKNESS),
-                        (gridXSpace / 2) - (tile_edge_width_at_45 * 2),
+                        adjacentLengthAt60 * 2,
                         TILE_EDGE_EFFECT_THICKNESS);
 
                 // Draw the left side of the edge (computer)
-                gc.setFill(Color.web(light_edge_color_at_45_deg));
-                gc.fillRect(topLeftCornerXForEnemyColorEdge,
-                        topLeftCornerYForEnemyColorEdge,
-                        tile_edge_width_at_45, gridYSpace);
+                gc.setFill(Color.web(light_edge_color_at_60_deg));
+                gc.fillRect(topLeftCornerXForOtherPlayerColorEdge,
+                        topLeftCornerYForOtherPlayerColorEdge,
+                        tile_edge_width_at_60_half, gridYSpace);
 
                 // Draw the right side of the edge (human)
-                gc.setFill(Color.web(enemy_light_edge_color_at_45_deg));
-                gc.fillRect(topLeftCornerXForHumanColorEdge,
-                        topLeftCornerYForHumanColorEdge,
-                        tile_edge_width_at_45, gridYSpace);
+                gc.setFill(Color.web(enemy_light_edge_color_at_60_deg));
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        tile_edge_width_at_60_half, gridYSpace);
+
+                break;
+
+            case 2:
+                /**
+                 * A frame where the right tile edge is 30 degrees above the
+                 * ground.
+                 */
+
+                // Clear tile first to remove previous paint
+                resetTileColor(count_column, count_row);
+
+                // Calculate the origin corner to draw for computer color edge
+                topLeftCornerXForOtherPlayerColorEdge
+                        = columnCell.get(count_column)
+                        + (gridXSpace - paddingAt30Deg
+                        - (tile_edge_width_at_30_half * 2));
+
+                // Calculate the origin corner to draw for human color edge
+                topLeftCornerXForCurrentPlayerColorEdge
+                        = topLeftCornerXForOtherPlayerColorEdge
+                        + tile_edge_width_at_30_half;
+
+                // Draw the body of the tile (human)
+                gc.setFill(Color.web(main_color));
+                gc.fillRect(columnCell.get(count_column) + paddingAt30Deg,
+                        topLeftCornerYForCurrentPlayerColorEdge
+                        + TILE_EDGE_EFFECT_THICKNESS,
+                        adjacentLengthAt30 * 2,
+                        gridYSpace - TILE_EDGE_EFFECT_THICKNESS);
+
+                // Draw the top edge (human)
+                gc.setFill(Color.web(light_edge_color));
+                gc.fillRect(columnCell.get(count_column) + paddingAt30Deg,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        adjacentLengthAt30 * 2,
+                        TILE_EDGE_EFFECT_THICKNESS);
+
+                // Draw the shadow edge of the tile (human)
+                gc.setFill(Color.web(shadow_edge_color));
+                gc.fillRect(columnCell.get(count_column) + paddingAt30Deg,
+                        topLeftCornerYForCurrentPlayerColorEdge
+                        + (gridYSpace - TILE_EDGE_EFFECT_THICKNESS),
+                        adjacentLengthAt30 * 2,
+                        TILE_EDGE_EFFECT_THICKNESS);
+
+                // Draw the left side of the edge (computer)
+                gc.setFill(Color.web(light_edge_color_at_30_deg));
+                gc.fillRect(topLeftCornerXForOtherPlayerColorEdge,
+                        topLeftCornerYForOtherPlayerColorEdge,
+                        tile_edge_width_at_30_half, gridYSpace);
+
+                // Draw the right side of the edge (human)
+                gc.setFill(Color.web(enemy_light_edge_color_at_30_deg));
+                gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge,
+                        topLeftCornerYForCurrentPlayerColorEdge,
+                        tile_edge_width_at_30_half, gridYSpace);
 
                 break;
 
             case 1:
                 /**
-                 * The final frame in which only shows the enemy side of the
-                 * tile
+                 * The final frame in which only shows the current player side 
+                 * of the tile, thus completing the flip animation.
                  */
 
                 // Clear tile first to remove previous paint
@@ -300,7 +460,9 @@ final class FlipAnimation {
                 break;
         }
 
+        // Reduce frame by 1
         frame -= 1;
+        
         return frame;
     }
 
