@@ -12,6 +12,7 @@ import com.github.daytron.flipit.data.MapProperty;
 import com.github.daytron.flipit.player.PlayerManager;
 import com.github.daytron.flipit.player.ComputerAI;
 import java.util.List;
+import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
@@ -48,8 +49,12 @@ public class Game {
         this.turnEvaluator = new TurnEvaluator(canvas, map, player1, player2,
                 player1Color, player2Color);
 
-        // the true value means human start first (turn)
-        this.playerManager = new PlayerManager(true);
+        // Randomly choose player for first turn
+        Random r = new Random();
+        boolean isHumanFirst;
+        isHumanFirst = r.nextInt(2) == 1;
+        this.playerManager = new PlayerManager(isHumanFirst);
+        
         this.comAI = new ComputerAI(Difficulty.EASY);
     }
 
