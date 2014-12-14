@@ -111,8 +111,7 @@ public class TurnEvaluator {
             this.columnCell.add(xi);
         }
 
-        this.graphics = new Graphics(canvas.getGraphicsContext2D(),
-                gridXSpace, gridYSpace,
+        this.graphics = new Graphics(canvas, gridXSpace, gridYSpace,
                 rowCell, columnCell,
                 tile_edge_effect);
     }
@@ -882,6 +881,14 @@ public class TurnEvaluator {
 
         this.graphics.flipTile(playerColor,
                 count_column, count_row);
+    }
+    
+    public void displayTurnStatus(PlayerType player) {
+        this.graphics.displayTurnStatus(player);
+    }
+    
+    public void clearTurnStatus() {
+        this.graphics.clearTurnStatus();
     }
 
 }

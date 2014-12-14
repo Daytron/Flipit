@@ -23,17 +23,21 @@
  */
 package com.github.daytron.flipit.core;
 
+import com.github.daytron.flipit.data.MapProperty;
+import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.TileColor;
 import java.util.List;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
 final class Graphics {
-
+    private final Canvas canvas;
     private final GraphicsContext gc;
 
     private final double gridXSpace;
@@ -45,11 +49,15 @@ final class Graphics {
     private final int TILE_EDGE_EFFECT_THICKNESS;
 
     private int frameCount;
+    
+    private double turnStatusPosX;
+    private double turnStatusPosY;
 
-    protected Graphics(GraphicsContext gc, double gridX, double gridY,
+    protected Graphics(Canvas canvas, double gridX, double gridY,
             List<Double> rowCell, List<Double> columnCell,
             int tile_edge) {
-        this.gc = gc;
+        this.canvas = canvas;
+        this.gc = canvas.getGraphicsContext2D();
         this.gc.setLineWidth(2);
 
         this.gridXSpace = gridX;
@@ -57,6 +65,12 @@ final class Graphics {
         this.rowCell = rowCell;
         this.columnCell = columnCell;
         this.TILE_EDGE_EFFECT_THICKNESS = tile_edge;
+        
+        // Calculate position
+        this.turnStatusPosX = this.canvas.getWidth() - 
+                MapProperty.TURN_STATUS_LABEL_POSX.getValue();
+        this.turnStatusPosY = this.canvas.getHeight() -
+                MapProperty.TURN_STATUS_LABEL_POSY.getValue();
     }
 
     /**
@@ -108,4 +122,43 @@ final class Graphics {
                 TILE_EDGE_EFFECT_THICKNESS, gc, this);
         flipAnimation.flipTile(playerColor, count_column, count_row);
     }
+    
+    protected void displayTurnStatus(PlayerType player) {
+        // Clear any previous status label
+        clearTurnStatus();
+        
+        // Get previous line width
+        double oldLineWidth = this.gc.getLineWidth();
+        // Get a reference to the current font, to be retained later 
+        Font oldFont = this.gc.getFont();
+        
+        //Set new line width
+        this.gc.setLineWidth(0.8);
+        // Set a new font
+        this.gc.setFont(Font.font("Helvetica", 
+                MapProperty.TURN_STATUS_LABEL_FONT_SIZE.getValue()));
+        
+        String textLabel;
+        if (player == PlayerType.HUMAN) {
+            textLabel = "Your turn";
+        } else  {
+            textLabel = "Enemy turn";
+        }
+        
+        // Draw the label text
+        this.gc.strokeText(textLabel, this.turnStatusPosX, this.turnStatusPosY);
+        
+        // Return previous line width
+        this.gc.setLineWidth(oldLineWidth);
+        // Return previous font
+        this.gc.setFont(oldFont);
+    }
+    
+    protected void clearTurnStatus() {
+        // Clears the previous text
+        this.gc.clearRect(this.turnStatusPosX, this.turnStatusPosY - 
+                    MapProperty.TURN_STATUS_LABEL_FONT_SIZE.getValue(), 
+                MapProperty.TURN_STATUS_LABEL_POSX.getValue(), 
+                MapProperty.TURN_STATUS_LABEL_POSY.getValue() * 3);
+    } 
 }

@@ -87,6 +87,8 @@ public class Game {
                 this.endGame();
                 return;
             }
+            
+            this.turnEvaluator.displayTurnStatus(player);
 
         } else {
             // COMPUTER PLAYER
@@ -96,6 +98,9 @@ public class Game {
                     this.playerManager.getEnemyTiles(player),
                     this.playerManager,
                     player)) {
+                
+                this.turnEvaluator.displayTurnStatus(player);
+                
                 this.aiChosenPlayTile = this.comAI.play(
                         this.playerManager.getPossibleMovePos(player),
                         this.playerManager.getPossibleAttackPos(player))
@@ -274,6 +279,9 @@ public class Game {
             this.playerManager.nextTurn(player);
         }
 
+        // Display turn
+        this.turnEvaluator.displayTurnStatus(this.playerManager.getTurn());
+        
         // For AI
         if (this.playerManager.getTurn() == PlayerType.COMPUTER) {
             // Add a delay before computer play
@@ -324,6 +332,9 @@ public class Game {
     // TODO
     public void endGame() {
         this.isGameRunning = false;
+        
+        // Clear turn status label
+        this.turnEvaluator.clearTurnStatus();
 
         int human_score = this.playerManager.getScore(PlayerType.HUMAN);
         int computer_score = this.playerManager.getScore(PlayerType.COMPUTER);
