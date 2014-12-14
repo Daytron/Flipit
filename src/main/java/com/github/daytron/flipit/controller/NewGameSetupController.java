@@ -101,8 +101,8 @@ public class NewGameSetupController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        this.preview_anchor_pane.setBackground(new Background(
-            new BackgroundFill(Color.CRIMSON, CornerRadii.EMPTY, Insets.EMPTY)));
+        //this.preview_anchor_pane.setBackground(new Background(
+        //    new BackgroundFill(Color.CRIMSON, CornerRadii.EMPTY, Insets.EMPTY)));
         
         // Define list items
         ObservableList<String> playerOptions

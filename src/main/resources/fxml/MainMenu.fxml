@@ -11,34 +11,43 @@
 <?import javafx.scene.text.*?>
 <?scenebuilder-stylesheet StyleMainMenu.css?>
 
-<GridPane id="bg" alignment="center" hgap="10" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.controller.MainMenuController">
+<GridPane id="bg" alignment="center" hgap="10" prefHeight="686.0" prefWidth="1023.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.controller.MainMenuController">
     <padding>
         <Insets bottom="10" left="25" right="25" top="25" />
     </padding>
     
     <children>
        
-        <Button fx:id="newGameButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickNewGameButton" text="New Game" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Button fx:id="newGameButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickNewGameButton" text="New Game" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets bottom="15.0" />
+         </GridPane.margin></Button>
       
-        <Button fx:id="rulesButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Rules" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Button fx:id="rulesButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Rules" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets bottom="18.0" />
+         </GridPane.margin></Button>
       
-        <Button fx:id="exitButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickExitButton" text="Exit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <Label id="title" fx:id="title" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Flipit" textAlignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowSpan="2" />
+        <Button fx:id="exitButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickExitButton" text="Exit" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label id="title" fx:id="title" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Flipit" textAlignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowSpan="2">
+         <padding>
+            <Insets bottom="100.0" />
+         </padding></Label>
       
       
     </children>
    <columnConstraints>
       <ColumnConstraints maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
-      <ColumnConstraints maxWidth="110.0" minWidth="90.0" prefWidth="110.0" />
+      <ColumnConstraints maxWidth="170.0" minWidth="110.0" prefWidth="170.0" />
       <ColumnConstraints maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" />
       <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+      <RowConstraints minHeight="10.0" prefHeight="70.0" valignment="CENTER" vgrow="NEVER" />
+      <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="NEVER" />
+      <RowConstraints minHeight="10.0" prefHeight="40.0" valignment="CENTER" vgrow="NEVER" />
    </rowConstraints>
    
    

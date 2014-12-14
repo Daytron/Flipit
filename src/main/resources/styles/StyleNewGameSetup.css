@@ -7,19 +7,52 @@ and open the template in the editor.
     Created on : 23-Oct-2014, 21:29:23
     Author     : ryan
 */
+#bg {
+    -light-black: rgb(74, 75, 78);
+    -dark-highlight: rgb(87, 89, 92);
+    -dark-black: rgb(39, 40, 40);
+    -darkest-black: rgb(5, 5, 5);
+    -mid-gray: rgb(216, 222, 227);
+    -fx-background-color: -mid-gray;
+}
+
 
 #title {
     -fx-font-weight: bold;
-    -fx-font-size: 15px;
+    -fx-font-size: 20px;
     -fx-font-family: Helvetica;
 }
 
-#imagepreview {
-    -fx-padding: 10;
-    -fx-background-color: firebrick;
+.instruction {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-font-family: Helvetica;
+}
+
+#image-viewer {
+    -fx-border-width: 1px;
+    -fx-border-color:black;
 }
 
 #maplist {
-     -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-color:black;
+}
+
+.button {
+    -fx-background-color:
+        -darkest-black,
+        -dark-highlight,
+        linear-gradient(to bottom, -light-black 2%, -dark-black 98%);
+    -fx-background-insets: 0, 1 1 1 0, 2 1 1 1;
+    -fx-background-radius: 3 3 3 3, 2 2 2 2, 2 2 2 2;
+    -fx-padding: 0.4em 1.833333em 0.4em 1.833333em;
+}
+
+.button:hover {
+    -fx-background-color:
+        -darkest-black,
+        -dark-highlight,
+        linear-gradient(to bottom, -light-black 20%, -dark-black 60%);
+    -fx-cursor: hand;
 }
