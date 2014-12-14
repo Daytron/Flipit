@@ -27,6 +27,7 @@ import com.github.daytron.flipit.*;
 import com.github.daytron.flipit.core.Game;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -72,20 +73,32 @@ public class GameController implements Initializable {
     }
 
     @FXML
-    private void onClick(MouseEvent event) {
+    private void canvas_on_click(MouseEvent event) {
         this.game.getClick(event.getX(), event.getY());
     }
 
     @FXML
     private void restart_btn_on_click(ActionEvent event) {
+        // Create new instance of game
+        this.game = new Game(canvas, 
+                this.app.getGamePreloader().getMapSelected(), 
+                this.app.getGamePreloader().getPlayer1(), 
+                this.app.getGamePreloader().getPlayer2(), 
+                this.app.getGamePreloader().getPlayer1ColorSelected(), 
+                this.app.getGamePreloader().getPlayer2ColorSelected());
+        
+        this.game.play();
     }
 
     @FXML
     private void new_game_btn_on_click(ActionEvent event) {
+        this.game = null;
+        this.app.viewNewGameSetup();
     }
 
     @FXML
     private void quit_btn_on_click(ActionEvent event) {
+        Platform.exit();
     }
     
     

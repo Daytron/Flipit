@@ -26,6 +26,6 @@
             <Insets left="30.0" />
          </padding>
       </ToolBar>
-      <Canvas id="canvas" fx:id="canvas" height="630.0" onMouseClicked="#onClick" width="1023.0" />
+      <Canvas id="canvas" fx:id="canvas" height="630.0" onMouseClicked="#canvas_on_click" width="1023.0" />
    </children>
 </VBox>

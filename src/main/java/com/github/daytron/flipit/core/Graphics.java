@@ -160,5 +160,11 @@ final class Graphics {
                     MapProperty.TURN_STATUS_LABEL_FONT_SIZE.getValue(), 
                 MapProperty.TURN_STATUS_LABEL_POSX.getValue(), 
                 MapProperty.TURN_STATUS_LABEL_POSY.getValue() * 3);
-    } 
+    }
+    
+    protected void clearCanvas() {
+        this.gc.clearRect(0, 0, 
+                this.canvas.getWidth(), 
+                this.canvas.getHeight());
+    }
 }

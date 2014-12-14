@@ -40,11 +40,6 @@ public class MainApp extends Application {
         return this.preLoader;
     }
 
-    public void viewNewGameSetup() {
-        
-        gotoNewGameSetup();
-    }
-    
     public void showNoMapFoundDialog() {
         Dialogs.create()
         .owner(stage)
@@ -56,6 +51,10 @@ public class MainApp extends Application {
         .showWarning();
     }
 
+    public void viewNewGameSetup() {
+        gotoNewGameSetup();
+    }
+    
     public void viewMainMenu() {
         gotoMainMenu();
     }

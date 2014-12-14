@@ -213,6 +213,9 @@ public class TurnEvaluator {
     }
 
     public void generateMap() {
+        // Resets and clear canvas (If player restart game)
+        this.graphics.clearCanvas();
+        
         // Fill grid tiles with neutral color
         for (int count_row = 0; count_row < this.numberOfRows; count_row++) {
             for (int count_column = 0; count_column < this.numberOfColumns; count_column++) {

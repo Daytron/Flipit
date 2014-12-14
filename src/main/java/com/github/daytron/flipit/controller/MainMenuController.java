@@ -26,6 +26,7 @@ package com.github.daytron.flipit.controller;
 import com.github.daytron.flipit.MainApp;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -70,6 +71,6 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void clickExitButton(ActionEvent event) {
-        System.exit(0);
+        Platform.exit();
     }
 }
