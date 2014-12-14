@@ -27,8 +27,9 @@ package com.github.daytron.flipit.data;
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum TileProperty {
-
+public enum MapProperty {
+    MAP_PADDING(20),
+    MAP_TOP_PADDING(80),
     TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA(3),
     TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA(5),
     TILE_EDGE_WIDTH(6),
@@ -41,7 +42,7 @@ public enum TileProperty {
 
     private final int value;
 
-    private TileProperty(int value) {
+    private MapProperty(int value) {
         this.value = value;
     }
 

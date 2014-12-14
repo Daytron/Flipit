@@ -27,6 +27,7 @@ import com.github.daytron.flipit.*;
 import com.github.daytron.flipit.core.Game;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -73,6 +74,18 @@ public class GameController implements Initializable {
     @FXML
     private void onClick(MouseEvent event) {
         this.game.getClick(event.getX(), event.getY());
+    }
+
+    @FXML
+    private void restart_btn_on_click(ActionEvent event) {
+    }
+
+    @FXML
+    private void new_game_btn_on_click(ActionEvent event) {
+    }
+
+    @FXML
+    private void quit_btn_on_click(ActionEvent event) {
     }
     
     

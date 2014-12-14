@@ -11,7 +11,7 @@
 <?import javafx.scene.text.*?>
 <?scenebuilder-stylesheet StyleMainMenu.css?>
 
-<GridPane alignment="center" hgap="10" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.controller.MainMenuController">
+<GridPane id="bg" alignment="center" hgap="10" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/StyleMainMenu.css" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.controller.MainMenuController">
     <padding>
         <Insets bottom="10" left="25" right="25" top="25" />
     </padding>
@@ -23,7 +23,7 @@
         <Button fx:id="rulesButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Rules" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       
         <Button fx:id="exitButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickExitButton" text="Exit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Flip-It" textAlignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowSpan="2" />
+      <Label id="title" fx:id="title" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Flipit" textAlignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowSpan="2" />
       
       
     </children>

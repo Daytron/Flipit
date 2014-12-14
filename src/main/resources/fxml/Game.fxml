@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import java.net.*?>
 <?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" stylesheets="@../styles/StyleGameCore.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.controller.GameController">
+<VBox id="background" stylesheets="@../styles/StyleGameCore.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.daytron.flipit.controller.GameController">
    <children>
-      <GridPane id="header">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-      </GridPane>
-      <Canvas id="canvas" fx:id="canvas" height="539.0" onMouseClicked="#onClick" width="1023.0" />
-      <GridPane id="footer">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-      </GridPane>
+      <ToolBar id="toolbar" prefHeight="40.0" prefWidth="200.0">
+        <items>
+            <HBox id="segment-bar" alignment="CENTER" prefHeight="32.0" prefWidth="335.0">
+               <children>
+                <Button id="first-btn" mnemonicParsing="false" onAction="#restart_btn_on_click" text="Restart" />
+                  <Button mnemonicParsing="false" onAction="#new_game_btn_on_click" text="New Game" />
+                  <Button id="last-btn" mnemonicParsing="false" onAction="#quit_btn_on_click" text="Quit" />
+               </children>
+            </HBox>
+        </items>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets left="30.0" />
+         </padding>
+      </ToolBar>
+      <Canvas id="canvas" fx:id="canvas" height="630.0" onMouseClicked="#onClick" width="1023.0" />
    </children>
 </VBox>

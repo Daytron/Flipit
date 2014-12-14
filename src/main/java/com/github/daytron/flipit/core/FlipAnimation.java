@@ -23,7 +23,7 @@
  */
 package com.github.daytron.flipit.core;
 
-import com.github.daytron.flipit.data.TileProperty;
+import com.github.daytron.flipit.data.MapProperty;
 import com.github.daytron.flipit.data.TileColor;
 import java.util.List;
 import javafx.animation.KeyFrame;
@@ -70,7 +70,7 @@ final class FlipAnimation {
     protected void flipTile(final TileColor playerColor,
             final int count_column, final int count_row) {
         // Reset frameCount
-        this.frameCount = TileProperty.NUMBER_OF_TILE_ANIMATION_FRAMES.getValue();
+        this.frameCount = MapProperty.NUMBER_OF_TILE_ANIMATION_FRAMES.getValue();
 
         final Timeline timeline = new Timeline();
 
@@ -86,8 +86,7 @@ final class FlipAnimation {
                             timeline.stop();
                         }
                     }
-                }), new KeyFrame(Duration.millis(
-                                TileProperty.FLIP_FRAME_DURATION.getValue())));
+                }), new KeyFrame(Duration.millis(MapProperty.FLIP_FRAME_DURATION.getValue())));
 
         timeline.setCycleCount(Timeline.INDEFINITE);
 
@@ -109,17 +108,17 @@ final class FlipAnimation {
         String enemy_shadow_edge_color;
 
         double tile_edge_width_at_30_half
-                = TileProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = MapProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue() / 2;
         double tile_edge_width_at_30
-                = TileProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = MapProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue();
 
         double tile_edge_width_at_60_half
-                = TileProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = MapProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue() / 2;
         double tile_edge_width_at_60
-                = TileProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = MapProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue();
 
         // Detect and set the colors
@@ -307,25 +306,25 @@ final class FlipAnimation {
                 // Calculate the origin corner to draw for computer color edge
                 topLeftCornerXForOtherPlayerColorEdge = columnCell.get(count_column)
                         + ((gridXSpace / 2)
-                        - TileProperty.TILE_EDGE_HALF_WIDTH.getValue());
+                        - MapProperty.TILE_EDGE_HALF_WIDTH.getValue());
 
                 // Calculate the origin corner to draw for human color edge
                 topLeftCornerXForCurrentPlayerColorEdge
                         = topLeftCornerXForOtherPlayerColorEdge
-                        + TileProperty.TILE_EDGE_HALF_WIDTH.getValue();
+                        + MapProperty.TILE_EDGE_HALF_WIDTH.getValue();
 
                 // Draw the left side of the edge (computer)
                 gc.setFill(Color.web(main_color));
                 gc.fillRect(topLeftCornerXForOtherPlayerColorEdge,
                         topLeftCornerYForOtherPlayerColorEdge,
-                        TileProperty.TILE_EDGE_HALF_WIDTH.getValue(),
+                        MapProperty.TILE_EDGE_HALF_WIDTH.getValue(),
                         gridYSpace);
 
                 // Draw the right side of the edge (human)
                 gc.setFill(Color.web(enemy_main_color));
                 gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge,
                         topLeftCornerYForCurrentPlayerColorEdge,
-                        TileProperty.TILE_EDGE_HALF_WIDTH.getValue(),
+                        MapProperty.TILE_EDGE_HALF_WIDTH.getValue(),
                         gridYSpace);
 
                 break;
@@ -460,15 +459,14 @@ final class FlipAnimation {
                 break;
         }
 
-        // Reduce frame by 1
+        // switches to the next frame
         frame -= 1;
         
         return frame;
     }
 
     private void resetTileColor(int count_column, int count_row) {
-        gc.setFill(Color.web(TileColor.TILE_WHITE.getColor()));
-        gc.fillRect(columnCell.get(count_column), rowCell.get(count_row),
+        gc.clearRect(columnCell.get(count_column), rowCell.get(count_row),
                 gridXSpace, gridYSpace);
     }
 

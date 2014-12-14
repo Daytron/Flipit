@@ -8,7 +8,7 @@ package com.github.daytron.flipit.core;
 import com.github.daytron.flipit.data.AttackTileDirection;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.TileColor;
-import com.github.daytron.flipit.data.TileProperty;
+import com.github.daytron.flipit.data.MapProperty;
 import com.github.daytron.flipit.player.PlayerManager;
 
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ public class TurnEvaluator {
 
     double preferredHeight;
     double preferredWidth;
-    private double halfPaddingWidth;
-    private double halfPaddingHeight;
+    private double leftPadding;
+    private double topPadding;
 
     private final Map selectedMap;
 
@@ -63,9 +63,9 @@ public class TurnEvaluator {
         int tile_edge_effect;
         // Tile edge effect size init
         if (map.getSize()[0] < 8 && map.getSize()[1] < 8) {
-            tile_edge_effect = TileProperty.TILE_EDGE_EFFECT_LARGE.getValue();
+            tile_edge_effect = MapProperty.TILE_EDGE_EFFECT_LARGE.getValue();
         } else {
-            tile_edge_effect = TileProperty.TILE_EDGE_EFFECT_SMALL.getValue();
+            tile_edge_effect = MapProperty.TILE_EDGE_EFFECT_SMALL.getValue();
         }
 
         this.selectedMap = map;
@@ -74,31 +74,38 @@ public class TurnEvaluator {
         this.selectedPlayer1Color = player1Color;
         this.selectedPlayer2Color = player2Color;
 
-        double x = this.canvas.getWidth();
-        double y = this.canvas.getHeight();
+        // Retrieve map padding
+        int mapPadding = MapProperty.MAP_PADDING.getValue();
+        int mapTopPadding = MapProperty.MAP_TOP_PADDING.getValue();
+        
+        double canvasWidth = this.canvas.getWidth();
+        double canvasHeight = this.canvas.getHeight();
+        
+        double mapWidth = canvasWidth - (mapPadding * 2);
+        double mapHeight = canvasHeight - mapTopPadding - mapPadding;
 
-        this.preferredHeight = ((int) y / this.numberOfRows) * (double) this.numberOfRows;
-        this.preferredWidth = ((int) x / this.numberOfColumns) * (double) this.numberOfColumns;
+        this.preferredHeight = ((int) mapHeight / this.numberOfRows) * (double) this.numberOfRows;
+        this.preferredWidth = ((int) mapWidth / this.numberOfColumns) * (double) this.numberOfColumns;
 
         // Padding space for width and height
-        this.halfPaddingWidth = (x - preferredWidth) / 2;
-        this.halfPaddingHeight = (y - preferredHeight) / 2;
+        this.leftPadding = (canvasWidth - preferredWidth) / 2;
+        this.topPadding = mapTopPadding;
 
         // space between each cell
         double gridXSpace = this.preferredWidth / this.numberOfColumns;
         double gridYSpace = this.preferredHeight / this.numberOfRows;
 
         // generate rows
-        for (double yi = this.halfPaddingHeight;
-                yi <= (y - this.halfPaddingHeight);
+        for (double yi = this.topPadding;
+                yi <= (canvasHeight - mapPadding);
                 yi = yi + gridYSpace) {
             //gc.strokeLine(halfPaddingWidth, yi, x - halfPaddingWidth, yi);
             this.rowCell.add(yi);
         }
 
         // generate columns
-        for (double xi = this.halfPaddingWidth;
-                xi <= (x - this.halfPaddingWidth);
+        for (double xi = this.leftPadding;
+                xi <= (canvasWidth - this.leftPadding);
                 xi = xi + gridXSpace) {
             //gc.strokeLine(xi, halfPaddingHeight, xi, y - halfPaddingHeight);
             this.columnCell.add(xi);
@@ -839,8 +846,8 @@ public class TurnEvaluator {
      * @return a boolean value true if it's inside, otherwise it returns false
      */
     public boolean isInsideTheGrid(double x_pos, double y_pos) {
-        return (x_pos >= this.halfPaddingWidth && x_pos <= (this.canvas.getWidth() - this.halfPaddingWidth))
-                && (y_pos >= this.halfPaddingHeight && y_pos <= (this.canvas.getWidth() - this.halfPaddingHeight));
+        return (x_pos >= this.leftPadding && x_pos <= (this.canvas.getWidth() - this.leftPadding))
+                && (y_pos >= this.topPadding && y_pos <= (this.canvas.getWidth() - this.topPadding));
     }
 
     /**
