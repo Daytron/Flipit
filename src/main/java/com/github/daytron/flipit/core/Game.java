@@ -8,7 +8,7 @@ package com.github.daytron.flipit.core;
 import com.github.daytron.flipit.data.Difficulty;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.Score;
-import com.github.daytron.flipit.data.MapProperty;
+import com.github.daytron.flipit.data.GameProperty;
 import com.github.daytron.flipit.player.PlayerManager;
 import com.github.daytron.flipit.player.ComputerAI;
 import java.util.List;
@@ -59,7 +59,7 @@ public class Game {
 
         this.comAI = new ComputerAI(Difficulty.EASY);
 
-        this.maxPlayerTurn = map.getSize()[0] * map.getSize()[1];
+        this.maxPlayerTurn = GameProperty.MAX_TURNS.getValue();
     }
 
     public void play() {
@@ -312,7 +312,7 @@ public class Game {
         if (this.playerManager.getTurn() == PlayerType.COMPUTER) {
             // Add a delay before computer play
             Timeline timeline = new Timeline(new KeyFrame(
-                    Duration.millis(MapProperty.COM_PLAY_DELAY.getValue()),
+                    Duration.millis(GameProperty.COM_PLAY_DELAY.getValue()),
                     ae -> playComputerTurn(player)));
             timeline.play();
         } else {

@@ -23,7 +23,7 @@
  */
 package com.github.daytron.flipit.core;
 
-import com.github.daytron.flipit.data.MapProperty;
+import com.github.daytron.flipit.data.GameProperty;
 import com.github.daytron.flipit.data.ColorProperty;
 import java.util.List;
 import javafx.animation.KeyFrame;
@@ -70,7 +70,7 @@ final class FlipAnimation {
     protected void flipTile(final ColorProperty playerColor,
             final int count_column, final int count_row) {
         // Reset frameCount
-        this.frameCount = MapProperty.NUMBER_OF_TILE_ANIMATION_FRAMES.getValue();
+        this.frameCount = GameProperty.NUMBER_OF_TILE_ANIMATION_FRAMES.getValue();
 
         final Timeline timeline = new Timeline();
 
@@ -86,7 +86,7 @@ final class FlipAnimation {
                             timeline.stop();
                         }
                     }
-                }), new KeyFrame(Duration.millis(MapProperty.FLIP_FRAME_DURATION.getValue())));
+                }), new KeyFrame(Duration.millis(GameProperty.FLIP_FRAME_DURATION.getValue())));
 
         timeline.setCycleCount(Timeline.INDEFINITE);
 
@@ -108,17 +108,17 @@ final class FlipAnimation {
         String enemy_shadow_edge_color;
 
         double tile_edge_width_at_30_half
-                = MapProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = GameProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue() / 2;
         double tile_edge_width_at_30
-                = MapProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = GameProperty.TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue();
 
         double tile_edge_width_at_60_half
-                = MapProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = GameProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue() / 2;
         double tile_edge_width_at_60
-                = MapProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
+                = GameProperty.TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA
                 .getValue();
 
         // Detect and set the colors
@@ -306,25 +306,25 @@ final class FlipAnimation {
                 // Calculate the origin corner to draw for computer color edge
                 topLeftCornerXForOtherPlayerColorEdge = columnCell.get(count_column)
                         + ((gridXSpace / 2)
-                        - MapProperty.TILE_EDGE_HALF_WIDTH.getValue());
+                        - GameProperty.TILE_EDGE_HALF_WIDTH.getValue());
 
                 // Calculate the origin corner to draw for human color edge
                 topLeftCornerXForCurrentPlayerColorEdge
                         = topLeftCornerXForOtherPlayerColorEdge
-                        + MapProperty.TILE_EDGE_HALF_WIDTH.getValue();
+                        + GameProperty.TILE_EDGE_HALF_WIDTH.getValue();
 
                 // Draw the left side of the edge (computer)
                 gc.setFill(Color.web(main_color));
                 gc.fillRect(topLeftCornerXForOtherPlayerColorEdge,
                         topLeftCornerYForOtherPlayerColorEdge,
-                        MapProperty.TILE_EDGE_HALF_WIDTH.getValue(),
+                        GameProperty.TILE_EDGE_HALF_WIDTH.getValue(),
                         gridYSpace);
 
                 // Draw the right side of the edge (human)
                 gc.setFill(Color.web(enemy_main_color));
                 gc.fillRect(topLeftCornerXForCurrentPlayerColorEdge,
                         topLeftCornerYForCurrentPlayerColorEdge,
-                        MapProperty.TILE_EDGE_HALF_WIDTH.getValue(),
+                        GameProperty.TILE_EDGE_HALF_WIDTH.getValue(),
                         gridYSpace);
 
                 break;

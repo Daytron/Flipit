@@ -23,7 +23,7 @@
  */
 package com.github.daytron.flipit.core;
 
-import com.github.daytron.flipit.data.MapProperty;
+import com.github.daytron.flipit.data.GameProperty;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.ColorProperty;
 import java.util.List;
@@ -94,13 +94,13 @@ final class Graphics {
 
         // Calculate position
         this.turnStatusPosX = this.canvas.getWidth()
-                - MapProperty.TURN_STATUS_LABEL_POSX.getValue();
+                - GameProperty.TURN_STATUS_LABEL_POSX.getValue();
         this.turnStatusPosY = this.canvas.getHeight()
-                - MapProperty.TURN_STATUS_LABEL_POSY.getValue();
+                - GameProperty.TURN_STATUS_LABEL_POSY.getValue();
 
         // For score labels
-        this.scoreLabelHeight = MapProperty.MAP_TOP_PADDING.getValue() * 0.6;
-        double topPadding = MapProperty.MAP_TOP_PADDING.getValue() * 0.2;
+        this.scoreLabelHeight = GameProperty.MAP_TOP_PADDING.getValue() * 0.6;
+        double topPadding = GameProperty.MAP_TOP_PADDING.getValue() * 0.2;
 
         // Calculate computer player score label positions
         this.rightScoreLabelPosX = this.canvas.getWidth() - 114;
@@ -113,7 +113,7 @@ final class Graphics {
         this.rightPlayerLabelPosY = topPadding + 48;
 
         // Calculate human player score label positions
-        this.leftScoreLabelPosX = MapProperty.MAP_PADDING.getValue();
+        this.leftScoreLabelPosX = GameProperty.MAP_PADDING.getValue();
         this.leftScoreLabelPosY = this.rightScoreLabelPosY;
         this.leftScoreLabelPosYForClear = topPadding;
         this.leftTurnLeftLabelPosX = this.leftScoreLabelPosX + 97;
@@ -186,7 +186,7 @@ final class Graphics {
         this.gc.setLineWidth(0.8);
         // Set a new font
         this.gc.setFont(Font.font("Helvetica",
-                MapProperty.TURN_STATUS_LABEL_FONT_SIZE.getValue()));
+                GameProperty.TURN_STATUS_LABEL_FONT_SIZE.getValue()));
 
         String textLabel;
         if (player == PlayerType.HUMAN) {
@@ -207,9 +207,9 @@ final class Graphics {
     protected void clearTurnStatus() {
         // Clears the previous text
         this.gc.clearRect(this.turnStatusPosX, this.turnStatusPosY
-                - MapProperty.TURN_STATUS_LABEL_FONT_SIZE.getValue(),
-                MapProperty.TURN_STATUS_LABEL_POSX.getValue(),
-                MapProperty.TURN_STATUS_LABEL_POSY.getValue() * 3);
+                - GameProperty.TURN_STATUS_LABEL_FONT_SIZE.getValue(),
+                GameProperty.TURN_STATUS_LABEL_POSX.getValue(),
+                GameProperty.TURN_STATUS_LABEL_POSY.getValue() * 3);
     }
 
     protected void clearCanvas() {

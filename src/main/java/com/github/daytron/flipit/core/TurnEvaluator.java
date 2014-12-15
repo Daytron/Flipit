@@ -8,7 +8,7 @@ package com.github.daytron.flipit.core;
 import com.github.daytron.flipit.data.AttackTileDirection;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.ColorProperty;
-import com.github.daytron.flipit.data.MapProperty;
+import com.github.daytron.flipit.data.GameProperty;
 import com.github.daytron.flipit.player.PlayerManager;
 
 import java.util.ArrayList;
@@ -63,9 +63,9 @@ public class TurnEvaluator {
         int tile_edge_effect;
         // Tile edge effect size init
         if (map.getSize()[0] < 8 && map.getSize()[1] < 8) {
-            tile_edge_effect = MapProperty.TILE_EDGE_EFFECT_LARGE.getValue();
+            tile_edge_effect = GameProperty.TILE_EDGE_EFFECT_LARGE.getValue();
         } else {
-            tile_edge_effect = MapProperty.TILE_EDGE_EFFECT_SMALL.getValue();
+            tile_edge_effect = GameProperty.TILE_EDGE_EFFECT_SMALL.getValue();
         }
 
         this.selectedMap = map;
@@ -75,8 +75,8 @@ public class TurnEvaluator {
         this.selectedPlayer2Color = player2Color;
 
         // Retrieve map padding
-        int mapPadding = MapProperty.MAP_PADDING.getValue();
-        int mapTopPadding = MapProperty.MAP_TOP_PADDING.getValue();
+        int mapPadding = GameProperty.MAP_PADDING.getValue();
+        int mapTopPadding = GameProperty.MAP_TOP_PADDING.getValue();
         
         double canvasWidth = this.canvas.getWidth();
         double canvasHeight = this.canvas.getHeight();

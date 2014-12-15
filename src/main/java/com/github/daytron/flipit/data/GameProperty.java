@@ -27,25 +27,30 @@ package com.github.daytron.flipit.data;
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum MapProperty {
+public enum GameProperty {
     MAP_PADDING(20),
     MAP_TOP_PADDING(80),
+    
     TILE_EDGE_WIDTH_AT_30_DEG_FOR_EACH_PLAYER_COLOR_AREA(3),
     TILE_EDGE_WIDTH_AT_60_DEG_FOR_EACH_PLAYER_COLOR_AREA(5),
     TILE_EDGE_WIDTH(6),
     TILE_EDGE_HALF_WIDTH(3),
     TILE_EDGE_EFFECT_SMALL(1),
     TILE_EDGE_EFFECT_LARGE(2),
+    
     NUMBER_OF_TILE_ANIMATION_FRAMES(6),
     FLIP_FRAME_DURATION(50),
+    
     COM_PLAY_DELAY(400),
+    
     TURN_STATUS_LABEL_POSX(90),
     TURN_STATUS_LABEL_POSY(5),
-    TURN_STATUS_LABEL_FONT_SIZE(12);
+    TURN_STATUS_LABEL_FONT_SIZE(12),
+    MAX_TURNS(100);
 
     private final int value;
 
-    private MapProperty(int value) {
+    private GameProperty(int value) {
         this.value = value;
     }
 
