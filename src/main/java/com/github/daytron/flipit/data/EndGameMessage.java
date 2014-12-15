@@ -30,8 +30,7 @@ package com.github.daytron.flipit.data;
 public enum EndGameMessage {
     WIN("You Win!"),
     LOSE("You Lose!"),
-    TIE("It's A Tie!")
-    ;
+    TIE("It's A Tie!");
     
     private final String msg;
 

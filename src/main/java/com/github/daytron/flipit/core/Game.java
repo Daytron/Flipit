@@ -39,6 +39,8 @@ public class Game {
     private int[] aiChosenPlayTile;
 
     private final int maxPlayerTurn;
+    
+    private Timeline comTimelineDelay;
 
     public Game(Canvas canvas, Map map,
             PlayerType player1, PlayerType player2,
@@ -298,7 +300,7 @@ public class Game {
             // Update turn left
             this.playerManager.reducePlayerTurnByOne(player);
             int newScore = this.playerManager.getScore(player);
-            int enemyScore = this.playerManager.getScore(
+            int enemyTurnLeft = this.playerManager.getPlayerTurnsLeft(
                 this.playerManager.getEnemyOf(player));
             int turnLeft = this.playerManager.getPlayerTurnsLeft(player);
 
@@ -306,7 +308,7 @@ public class Game {
             this.turnEvaluator.updateScore(newScore, turnLeft, player);
 
             // If both players used all up all their turns, end the game
-            if (turnLeft < 1 && enemyScore < 1) {
+            if (turnLeft < 1 && enemyTurnLeft < 1) {
                 this.endGame();
                 return;
             }
@@ -321,10 +323,10 @@ public class Game {
         // For AI
         if (this.playerManager.getTurn() == PlayerType.COMPUTER) {
             // Add a delay before computer play
-            Timeline timeline = new Timeline(new KeyFrame(
+            this.comTimelineDelay = new Timeline(new KeyFrame(
                     Duration.millis(GameProperty.COM_PLAY_DELAY.getValue()),
                     ae -> playComputerTurn(player)));
-            timeline.play();
+            this.comTimelineDelay.play();
         } else {
             if (this.turnEvaluator.isTherePossibleMove(
                     this.playerManager.getOccupiedTiles(PlayerType.HUMAN),
@@ -367,6 +369,10 @@ public class Game {
 
     // TODO
     public void endGame() {
+        if (this.comTimelineDelay != null) {
+            this.comTimelineDelay.stop();
+        }
+        
         this.isGameRunning = false;
 
         // Clear turn status label
@@ -387,7 +393,7 @@ public class Game {
         
         EndGameDialog dialog = new EndGameDialog(endGameMessage, 
             this.playerManager.getPlayerMainColor(PlayerType.HUMAN));
-        dialog.showAndWait();
+        dialog.show();
     }
 
 }

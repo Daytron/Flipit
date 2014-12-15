@@ -12,10 +12,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  *
@@ -28,7 +34,7 @@ public class GamePreloader {
     private final List<String> listOfMapNames;
     private final List<Map> listOfMapObjects;
     private final List<String> listOfMapPreviewImage;
-    
+
     // new game variables
     private Map mapSelected;
     private int playerSelected;
@@ -37,6 +43,7 @@ public class GamePreloader {
     private PlayerType player2;
     private String player1ColorSelected;
     private String player2ColorSelected;
+    private boolean isRunningInJar;
 
     public GamePreloader() {
         this.listOfMapNames = new ArrayList<>();
@@ -45,10 +52,15 @@ public class GamePreloader {
         this.listOfMapPreviewImage = new ArrayList<>();
     }
 
-    
-    
-    public void init() {
+    public void init() throws URISyntaxException {
+        this.isRunningInJar = false;
         File file = new File(System.getProperty("user.dir") + "/src/main/resources/maps");
+        
+        if (!file.exists()) {
+            this.isRunningInJar = true;
+            file = new File("./maps");
+        }
+
         File[] files = file.listFiles();
 
         if (files != null) {
@@ -58,7 +70,7 @@ public class GamePreloader {
                 if (aFile.isFile() && "json".equals(ext)) {
                     listOfMapPath.add(aFile.getPath());
                 }
-                
+
                 if (aFile.isFile() && "png".equals(ext)) {
                     listOfMapPreviewImage.add(aFile.getPath());
                 }
@@ -68,7 +80,7 @@ public class GamePreloader {
         for (String jsonFilePath : listOfMapPath) {
             extractMapNames(jsonFilePath);
         }
-        
+
     }
 
     public void setPlayer1(PlayerType player1) {
@@ -102,25 +114,27 @@ public class GamePreloader {
     public String getPlayer2ColorSelected() {
         return player2ColorSelected;
     }
-    
-    
 
     public void setMapSelected(String mapSelected) {
-        for (Map map: this.listOfMapObjects) {
+        for (Map map : this.listOfMapObjects) {
             if (map.getName().contains(mapSelected)) {
                 this.mapSelected = map;
-                
-                this.mapPreviewImageSelected = "file:src/main/resources/maps/" + map.getMapID() + ".png";
+
+                if (isRunningInJar) {
+                    this.mapPreviewImageSelected = 
+                            "file:./maps/" + map.getMapID() + ".png";
+                } else {
+                this.mapPreviewImageSelected = 
+                        "file:src/main/resources/maps/" + map.getMapID() + ".png";
+                }
             }
         }
-    
+
     }
 
     public String getMapPreviewImageSelected() {
         return mapPreviewImageSelected;
     }
-    
-    
 
     public Map getMapSelected() {
         return this.mapSelected;
@@ -130,13 +144,11 @@ public class GamePreloader {
     public int getPlayerSelected() {
         return 1;
     }
-    
-    
-    
+
     public List<String> getMapNames() {
         return listOfMapNames;
     }
-    
+
     public List<Map> getMapObjects() {
         return listOfMapObjects;
     }
@@ -144,16 +156,14 @@ public class GamePreloader {
     public List<String> getListOfMapPreviewImage() {
         return listOfMapPreviewImage;
     }
-    
-    
-    
+
     public boolean isMapEmpty() {
         return this.listOfMapPath.isEmpty();
     }
 
     private void extractMapNames(String file_location) {
         Gson gson = new Gson();
-        
+
         try {
             BufferedReader br;
 
@@ -162,7 +172,7 @@ public class GamePreloader {
 
             // Convert the Json file back to object
             Map aMap = gson.fromJson(br, Map.class);
-            
+
             this.listOfMapObjects.add(aMap);
             this.listOfMapNames.add(aMap.getName());
         } catch (FileNotFoundException ex) {
@@ -170,6 +180,5 @@ public class GamePreloader {
         }
 
     }
-    
-    
+
 }
