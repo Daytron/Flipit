@@ -5,7 +5,9 @@
  */
 package com.github.daytron.flipit.core;
 
+import com.github.daytron.flipit.controller.EndGameDialog;
 import com.github.daytron.flipit.data.Difficulty;
+import com.github.daytron.flipit.data.EndGameMessage;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.Score;
 import com.github.daytron.flipit.data.GameProperty;
@@ -373,16 +375,19 @@ public class Game {
         int human_score = this.playerManager.getScore(PlayerType.HUMAN);
         int computer_score = this.playerManager.getScore(PlayerType.COMPUTER);
 
-        System.out.println("Your score: " + human_score);
-        System.out.println("Computer score: " + computer_score);
-
+        String endGameMessage;
+        
         if (human_score > computer_score) {
-            System.out.println("You win!");
+            endGameMessage = EndGameMessage.WIN.getMessage();
         } else if (human_score < computer_score) {
-            System.out.println("You lose!");
+            endGameMessage = EndGameMessage.LOSE.getMessage();
         } else {
-            System.out.println("It's a tie!");
+            endGameMessage = EndGameMessage.TIE.getMessage();
         }
+        
+        EndGameDialog dialog = new EndGameDialog(endGameMessage, 
+            this.playerManager.getPlayerMainColor(PlayerType.HUMAN));
+        dialog.showAndWait();
     }
 
 }
