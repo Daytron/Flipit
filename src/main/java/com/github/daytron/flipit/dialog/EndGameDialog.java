@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.daytron.flipit.controller;
+package com.github.daytron.flipit.dialog;
 
 import com.github.daytron.flipit.data.Fxml;
 import java.io.IOException;

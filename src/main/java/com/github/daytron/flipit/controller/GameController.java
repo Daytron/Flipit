@@ -25,6 +25,9 @@ package com.github.daytron.flipit.controller;
 
 import com.github.daytron.flipit.*;
 import com.github.daytron.flipit.core.Game;
+import com.github.daytron.flipit.data.DialogMessage;
+import com.github.daytron.flipit.data.DialogResponse;
+import com.github.daytron.flipit.dialog.ConfirmationDialog;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -40,35 +43,37 @@ import javafx.scene.input.MouseEvent;
  * @author ryan
  */
 public class GameController implements Initializable {
+
     private MainApp app;
     private Game game;
-    
+
     @FXML
     private Canvas canvas;
 
     public void setApp(MainApp application) {
         this.app = application;
     }
-    
+
     /**
      * Initialises the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
-    
+
     public void run() {
         // Create new instance of game
-        this.game = new Game(canvas, 
-                this.app.getGamePreloader().getMapSelected(), 
-                this.app.getGamePreloader().getPlayer1(), 
-                this.app.getGamePreloader().getPlayer2(), 
-                this.app.getGamePreloader().getPlayer1ColorSelected(), 
+        this.game = new Game(canvas,
+                this.app.getGamePreloader().getMapSelected(),
+                this.app.getGamePreloader().getPlayer1(),
+                this.app.getGamePreloader().getPlayer2(),
+                this.app.getGamePreloader().getPlayer1ColorSelected(),
                 this.app.getGamePreloader().getPlayer2ColorSelected());
-        
+
         this.game.play();
     }
 
@@ -79,27 +84,56 @@ public class GameController implements Initializable {
 
     @FXML
     private void restart_btn_on_click(ActionEvent event) {
-        // Create new instance of game
-        this.game = new Game(canvas, 
-                this.app.getGamePreloader().getMapSelected(), 
-                this.app.getGamePreloader().getPlayer1(), 
-                this.app.getGamePreloader().getPlayer2(), 
-                this.app.getGamePreloader().getPlayer1ColorSelected(), 
-                this.app.getGamePreloader().getPlayer2ColorSelected());
+        ConfirmationDialog dialog = new ConfirmationDialog(
+                DialogMessage.CONFIRMATION_TITLE.getText(),
+                DialogMessage.CONFIRM_RESTART.getText());
         
-        this.game.play();
+        dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
+        dialog.showAndWait();
+
+        if (dialog.getResponse() == DialogResponse.YES) {
+            // Create new instance of game
+            this.game = new Game(canvas,
+                    this.app.getGamePreloader().getMapSelected(),
+                    this.app.getGamePreloader().getPlayer1(),
+                    this.app.getGamePreloader().getPlayer2(),
+                    this.app.getGamePreloader().getPlayer1ColorSelected(),
+                    this.app.getGamePreloader().getPlayer2ColorSelected());
+
+            this.game.play();
+        }
+
     }
 
     @FXML
     private void new_game_btn_on_click(ActionEvent event) {
-        this.game = null;
-        this.app.viewNewGameSetup();
+        ConfirmationDialog dialog = new ConfirmationDialog(
+                DialogMessage.CONFIRMATION_TITLE.getText(),
+                DialogMessage.CONFIRM_NEW_GAME.getText());
+       
+        dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
+        dialog.showAndWait();
+
+        if (dialog.getResponse() == DialogResponse.YES) {
+            this.game = null;
+            this.app.viewNewGameSetup();
+        }
+
     }
 
     @FXML
     private void quit_btn_on_click(ActionEvent event) {
-        Platform.exit();
+        ConfirmationDialog dialog = new ConfirmationDialog(
+                DialogMessage.CONFIRMATION_TITLE.getText(),
+                DialogMessage.CONFIRM_EXIT.getText());
+        
+        dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
+        dialog.showAndWait();
+
+        if (dialog.getResponse() == DialogResponse.YES) {
+            Platform.exit();
+        }
+
     }
-    
-    
+
 }

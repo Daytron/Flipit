@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Ryan Gilera.
@@ -21,28 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.daytron.flipit.data;
+package com.github.daytron.flipit.dialog;
+
+import com.github.daytron.flipit.data.DialogResponse;
+import javafx.stage.Stage;
 
 /**
- *
- * @author Ryan Gilera ryangilera@gmail.com
+ * The parent class for any derivatives of Dialog
+ * @author Ryan Gilera
  */
-public enum Fxml {
-    MAIN_MENU("/fxml/MainMenu.fxml"),
-    NEW_GAME_SETUP("/fxml/NewGameSetup.fxml"),
-    GAME_MAIN("/fxml/Game.fxml"),
-    
-    END_GAME_DIALOG("/fxml/EndGameDialog.fxml"),
-    CONFIRMATION_DIALOG("/fxml/ConfirmationDialog.fxml"),
-    ERROR_DIALOG("/fxml/ErrorDialog.fxml");
+public class Dialog extends Stage {
+    // Top head label
+    private final String header;
+    // Details label
+    private final String details;
+    // Response chosen by the user
+    private DialogResponse response;
+
+    public Dialog(String header, String details) {
+        this.header = header;
+        this.details = details;
         
-    private final String file;
-
-    private Fxml(String msg) {
-        this.file = msg;
+        // Default response
+        this.response = DialogResponse.CANCEL;
     }
 
-    public String getFxml() {
-        return file;
+    public void setResponse(DialogResponse response) {
+        this.response = response;
     }
+
+    public DialogResponse getResponse() {
+        return response;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
 }

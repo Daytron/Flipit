@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Ryan Gilera.
@@ -25,24 +25,33 @@ package com.github.daytron.flipit.data;
 
 /**
  *
- * @author Ryan Gilera ryangilera@gmail.com
+ * @author Ryan Gilera
  */
-public enum Fxml {
-    MAIN_MENU("/fxml/MainMenu.fxml"),
-    NEW_GAME_SETUP("/fxml/NewGameSetup.fxml"),
-    GAME_MAIN("/fxml/Game.fxml"),
+public enum DialogMessage {
+    CONFIRMATION_HEAD_TITLE("Confirmation Dialog"),    
+    CONFIRMATION_TITLE("Confirm Action"),
+    CONFIRM_EXIT("Are you sure you want to exit?"),
+    CONFIRM_NEW_GAME("You are about to leave this game.\n"
+            + "Are you sure you want a new game?"),
+    CONFIRM_RESTART("You are about to leave this game.\n"
+            + "Are you sure you want to restart the game?"),
     
-    END_GAME_DIALOG("/fxml/EndGameDialog.fxml"),
-    CONFIRMATION_DIALOG("/fxml/ConfirmationDialog.fxml"),
-    ERROR_DIALOG("/fxml/ErrorDialog.fxml");
-        
-    private final String file;
+    ERROR_HEAD_TITLE("Error Dialog"),
+    ERROR_TITLE("Error"),
+    ERROR_NO_MAPS_FOUND("No available maps found."
+            + "Map files are missing in the maps folder.");
+    
+    
+    
+    private String text;
 
-    private Fxml(String msg) {
-        this.file = msg;
+    private DialogMessage(String text) {
+        this.text = text;
     }
 
-    public String getFxml() {
-        return file;
+    public String getText() {
+        return text;
     }
+    
+    
 }

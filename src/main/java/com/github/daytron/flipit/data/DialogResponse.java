@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Ryan Gilera.
@@ -25,24 +25,11 @@ package com.github.daytron.flipit.data;
 
 /**
  *
- * @author Ryan Gilera ryangilera@gmail.com
+ * @author Ryan Gilera
  */
-public enum Fxml {
-    MAIN_MENU("/fxml/MainMenu.fxml"),
-    NEW_GAME_SETUP("/fxml/NewGameSetup.fxml"),
-    GAME_MAIN("/fxml/Game.fxml"),
-    
-    END_GAME_DIALOG("/fxml/EndGameDialog.fxml"),
-    CONFIRMATION_DIALOG("/fxml/ConfirmationDialog.fxml"),
-    ERROR_DIALOG("/fxml/ErrorDialog.fxml");
-        
-    private final String file;
-
-    private Fxml(String msg) {
-        this.file = msg;
-    }
-
-    public String getFxml() {
-        return file;
-    }
+public enum DialogResponse {
+    OK,
+    CANCEL,
+    YES,
+    NO;
 }

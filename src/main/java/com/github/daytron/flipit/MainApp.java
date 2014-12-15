@@ -26,8 +26,10 @@ package com.github.daytron.flipit;
 import com.github.daytron.flipit.controller.NewGameSetupController;
 import com.github.daytron.flipit.controller.MainMenuController;
 import com.github.daytron.flipit.controller.GameController;
+import com.github.daytron.flipit.data.DialogMessage;
 import com.github.daytron.flipit.data.Fxml;
 import com.github.daytron.flipit.data.ImageProperty;
+import com.github.daytron.flipit.dialog.ErrorDialog;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -41,7 +43,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialogs;
 
 public class MainApp extends Application {
 
@@ -72,14 +73,12 @@ public class MainApp extends Application {
     }
 
     public void showNoMapFoundDialog() {
-        Dialogs.create()
-        .owner(stage)
-        .title("Warning")
-        .masthead("No available maps found.")
-        .message("Map files are missing in the maps folder. "
-                + "Please exit the program and save map files into the folder "
-                + "and relaunch the game.")
-        .showWarning();
+        ErrorDialog dialog = new ErrorDialog(
+                DialogMessage.ERROR_TITLE.getText(), 
+                DialogMessage.ERROR_NO_MAPS_FOUND.getText());
+        
+        dialog.setTitle(DialogMessage.ERROR_HEAD_TITLE.getText());
+        dialog.showAndWait();
     }
 
     public void viewNewGameSetup() {

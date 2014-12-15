@@ -23,7 +23,7 @@
  */
 package com.github.daytron.flipit.core;
 
-import com.github.daytron.flipit.controller.EndGameDialog;
+import com.github.daytron.flipit.dialog.EndGameDialog;
 import com.github.daytron.flipit.data.Difficulty;
 import com.github.daytron.flipit.data.EndGameMessage;
 import com.github.daytron.flipit.data.PlayerType;
