@@ -27,7 +27,7 @@ package com.github.daytron.flipit.data;
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum TileColor {
+public enum ColorProperty {
     // http://www.hexcolortool.com
     // HSL (207, 100, 41)
     PLAYER_BLUE("#0073CF"),
@@ -67,11 +67,16 @@ public enum TileColor {
     TILE_BOULDER_MAIN("#4F4F4F"),
     TILE_BOULDER_SHADOW_EDGE("#000000"),
     
-    TILE_WHITE("#FFFFFF");
+    TILE_WHITE("#FFFFFF"),
+    
+    // SCORE
+    SCORE_LABEL_BORDER("#000000"),
+    SCORE_LABEL_FILL("#5C5C5C")
+    ;
     
     private final String color;
 
-    private TileColor(String color) {
+    private ColorProperty(String color) {
         this.color = color;
     }
 

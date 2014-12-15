@@ -25,7 +25,7 @@ package com.github.daytron.flipit.controller;
 
 import com.github.daytron.flipit.MainApp;
 import com.github.daytron.flipit.data.PlayerType;
-import com.github.daytron.flipit.data.TileColor;
+import com.github.daytron.flipit.data.ColorProperty;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -164,9 +164,8 @@ public class NewGameSetupController implements Initializable {
 
         // ============== COLOR AREA ================= //
         ObservableList<String> playerColorOptions = 
-                FXCollections.observableArrayList(
-                TileColor.PLAYER_BLUE.getColor(), 
-                TileColor.PLAYER_RED.getColor());
+                FXCollections.observableArrayList(ColorProperty.PLAYER_BLUE.getColor(), 
+                ColorProperty.PLAYER_RED.getColor());
 
         this.colorP1ComboBox.setItems(playerColorOptions);
         this.colorP2ComboBox.setItems(playerColorOptions);
@@ -185,26 +184,21 @@ public class NewGameSetupController implements Initializable {
 
         this.colorP1ComboBox.setCellFactory(factory);
         this.colorP1ComboBox.setButtonCell(factory.call(null));
-        this.colorP1ComboBox.setValue(
-            TileColor.PLAYER_BLUE.getColor());
+        this.colorP1ComboBox.setValue(ColorProperty.PLAYER_BLUE.getColor());
 
         this.colorP2ComboBox.setCellFactory(factory);
         this.colorP2ComboBox.setButtonCell(factory.call(null));
-        this.colorP2ComboBox.setValue(
-            TileColor.PLAYER_RED.getColor());
+        this.colorP2ComboBox.setValue(ColorProperty.PLAYER_RED.getColor());
         
         // Player 1 color combobox listener
         this.colorP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 colorP1ComboBox.setValue(newValue);
-                if (newValue.contains(
-                    TileColor.PLAYER_BLUE.getColor())) {
-                    colorP2ComboBox.setValue(
-                    TileColor.PLAYER_RED.getColor());
+                if (newValue.contains(ColorProperty.PLAYER_BLUE.getColor())) {
+                    colorP2ComboBox.setValue(ColorProperty.PLAYER_RED.getColor());
                 } else {
-                    colorP2ComboBox.setValue(
-                    TileColor.PLAYER_BLUE.getColor());
+                    colorP2ComboBox.setValue(ColorProperty.PLAYER_BLUE.getColor());
                 }
             }
         });
@@ -216,13 +210,10 @@ public class NewGameSetupController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 colorP2ComboBox.setValue(newValue);
                 
-                if (newValue.contains(
-                    TileColor.PLAYER_BLUE.getColor())) {
-                    colorP1ComboBox.setValue(
-                    TileColor.PLAYER_RED.getColor());
+                if (newValue.contains(ColorProperty.PLAYER_BLUE.getColor())) {
+                    colorP1ComboBox.setValue(ColorProperty.PLAYER_RED.getColor());
                 } else {
-                    colorP1ComboBox.setValue(
-                    TileColor.PLAYER_BLUE.getColor());
+                    colorP1ComboBox.setValue(ColorProperty.PLAYER_BLUE.getColor());
                 }
             }
         });
@@ -235,10 +226,8 @@ public class NewGameSetupController implements Initializable {
         this.app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
 
         // Set default player color values to gamepreloader
-        this.app.getGamePreloader().setPlayer1ColorSelected(
-                TileColor.PLAYER_BLUE.getColor());
-        this.app.getGamePreloader().setPlayer2ColorSelected(
-                TileColor.PLAYER_RED.getColor());
+        this.app.getGamePreloader().setPlayer1ColorSelected(ColorProperty.PLAYER_BLUE.getColor());
+        this.app.getGamePreloader().setPlayer2ColorSelected(ColorProperty.PLAYER_RED.getColor());
     }
 
     public void loadMapNames() {

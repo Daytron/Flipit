@@ -6,7 +6,7 @@
 package com.github.daytron.flipit.player;
 
 import com.github.daytron.flipit.data.PlayerType;
-import com.github.daytron.flipit.data.TileColor;
+import com.github.daytron.flipit.data.ColorProperty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +27,12 @@ class Player {
     private final String main_color;
     private final String shadow_edge_color;
     
-    private final TileColor playerColor;
+    private final ColorProperty playerColor;
     
     private List<Integer[]> possibleMovePos;
     private List<Integer[]> possibleAttackPos;
+    
+    private int turnsLeft;
 
     /**
      *
@@ -41,24 +43,26 @@ class Player {
      * @param startPos
      */
     public Player(PlayerType playerType, 
-            String main_color, int[] startPos) {
+            String main_color, int[] startPos, int maxTurn) {
         this.score = 0;
         this.mainBase = startPos.clone();
         
         this.playerType = playerType;
 
-        if (main_color.equals(TileColor.PLAYER_BLUE.getColor())) {
-            this.light_edge_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
-            this.shadow_edge_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
-            this.playerColor = TileColor.PLAYER_BLUE;
+        if (main_color.equals(ColorProperty.PLAYER_BLUE.getColor())) {
+            this.light_edge_color = ColorProperty.PLAYER_BLUE_LIGHT_EDGE.getColor();
+            this.shadow_edge_color = ColorProperty.PLAYER_BLUE_SHADOW_EDGE.getColor();
+            this.playerColor = ColorProperty.PLAYER_BLUE;
         } else {
-            this.light_edge_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
-            this.shadow_edge_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
-            this.playerColor = TileColor.PLAYER_RED;
+            this.light_edge_color = ColorProperty.PLAYER_RED_LIGHT_EDGE.getColor();
+            this.shadow_edge_color = ColorProperty.PLAYER_RED_SHADOW_EDGE.getColor();
+            this.playerColor = ColorProperty.PLAYER_RED;
         }
 
         this.main_color = main_color;
         this.occupiedTiles = new ArrayList<>();
+        
+        this.turnsLeft = maxTurn;
     }
 
     public int[] getMainBase() {
@@ -138,10 +142,19 @@ class Player {
         return possibleMovePos;
     }
 
-    public TileColor getPlayerColor() {
+    public ColorProperty getPlayerColor() {
         return playerColor;
     }
+
+    public int getTurnsLeft() {
+        return turnsLeft;
+    }
     
-    
+    public void reduceTurnByOne() {
+        if (this.turnsLeft > 1) {
+           this.turnsLeft -= 1;
+        }
+        
+    }
 
 }

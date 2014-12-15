@@ -6,7 +6,7 @@
 package com.github.daytron.flipit.player;
 
 import com.github.daytron.flipit.data.PlayerType;
-import com.github.daytron.flipit.data.TileColor;
+import com.github.daytron.flipit.data.ColorProperty;
 import java.util.List;
 
 /**
@@ -20,6 +20,9 @@ public class PlayerManager {
     private Player humanPlayer;
     private Player computerPlayer;
 
+    private PlayerType playerLeftScoreLabel;
+    private PlayerType playerRightScoreLabel;
+
     public PlayerManager(boolean isHumanFirst) {
         if (isHumanFirst) {
             this.playerTurn = PlayerType.HUMAN;
@@ -29,29 +32,48 @@ public class PlayerManager {
     }
 
     public void createPlayers(String p1Color, String p2Color, PlayerType player1,
-            PlayerType player2, int[] player1StartPos, int[] player2StartPos) {
+            PlayerType player2, int[] player1StartPos, int[] player2StartPos,
+            int maxTurns) {
+
+        // Determine score label position for each player
+        if (player1StartPos[0] > player2StartPos[0]) {
+            this.playerLeftScoreLabel = player2;
+            this.playerRightScoreLabel = player1;
+        } else if (player1StartPos[0] < player2StartPos[0]) {
+            this.playerLeftScoreLabel = player1;
+            this.playerRightScoreLabel = player2;
+        } else {
+            if (player1StartPos[1] > player2StartPos[1]) {
+                this.playerLeftScoreLabel = player2;
+                this.playerRightScoreLabel = player1;
+            } else {
+                this.playerLeftScoreLabel = player1;
+                this.playerRightScoreLabel = player2;
+            }
+        }
+
         if (player1 == PlayerType.HUMAN) {
             this.humanPlayer = new Player(player1,
-                    p1Color, player1StartPos);
+                    p1Color, player1StartPos, maxTurns);
 
             // Add the main base position as the first occupied tile list
             this.humanPlayer.addOccupiedTile(player1StartPos[0], player1StartPos[1]);
 
             this.computerPlayer = new Player(player2,
-                    p2Color, player2StartPos);
+                    p2Color, player2StartPos, maxTurns);
 
             // Add the main base position as the first occupied tile list
             this.computerPlayer.addOccupiedTile(player2StartPos[0], player2StartPos[1]);
 
         } else {
             this.humanPlayer = new Player(player2,
-                    p2Color, player2StartPos);
+                    p2Color, player2StartPos, maxTurns);
 
             // Add the main base position as the first occupied tile list
             this.humanPlayer.addOccupiedTile(player2StartPos[0], player2StartPos[1]);
 
             this.computerPlayer = new Player(player1,
-                    p1Color, player1StartPos);
+                    p1Color, player1StartPos, maxTurns);
 
             // Add the main base position as the first occupied tile list
             this.computerPlayer.addOccupiedTile(player1StartPos[0], player1StartPos[1]);
@@ -152,9 +174,24 @@ public class PlayerManager {
     public List<Integer[]> getPossibleAttackPos(PlayerType player) {
         return this.getPlayer(player).getPossibleAttackPos();
     }
-    
-    public TileColor getPlayerColor(PlayerType player) {
+
+    public ColorProperty getPlayerColor(PlayerType player) {
         return this.getPlayer(player).getPlayerColor();
     }
 
+    public PlayerType getPlayerLeftScoreLabel() {
+        return playerLeftScoreLabel;
+    }
+
+    public PlayerType getPlayerRightScoreLabel() {
+        return playerRightScoreLabel;
+    }
+
+    public int getPlayerTurnsLeft(PlayerType playerType) {
+        return this.getPlayer(playerType).getTurnsLeft();
+    }
+    
+    public void reducePlayerTurnByOne(PlayerType playerType) {
+        this.getPlayer(playerType).reduceTurnByOne();
+    }
 }

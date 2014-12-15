@@ -29,7 +29,8 @@ package com.github.daytron.flipit.data;
  */
 public enum Score {
     ONE_TILE_OCCUPY(1),
-    CHECKMATE(10);
+    ONE_TILE_FLIP(2),
+    CHECKMATE(100);
     
     private final int value;
 

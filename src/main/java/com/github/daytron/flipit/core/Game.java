@@ -36,6 +36,8 @@ public class Game {
     private final ComputerAI comAI;
     private int[] aiChosenPlayTile;
 
+    private final int maxPlayerTurn;
+
     public Game(Canvas canvas, Map map,
             PlayerType player1, PlayerType player2,
             String player1Color, String player2Color) {
@@ -46,30 +48,41 @@ public class Game {
         this.player1Color = player1Color;
         this.player2Color = player2Color;
 
-        this.turnEvaluator = new TurnEvaluator(canvas, map, player1, player2,
-                player1Color, player2Color);
-
         // Randomly choose player for first turn
         Random r = new Random();
         boolean isHumanFirst;
         isHumanFirst = r.nextInt(2) == 1;
         this.playerManager = new PlayerManager(isHumanFirst);
-        
+
+        this.turnEvaluator = new TurnEvaluator(canvas, map, player1, player2,
+                player1Color, player2Color);
+
         this.comAI = new ComputerAI(Difficulty.EASY);
+
+        this.maxPlayerTurn = map.getSize()[0] * map.getSize()[1];
     }
 
     public void play() {
-        // Generate and draw the selected map 
-        this.turnEvaluator.generateMap();
-        // Toggle game running flag to true
-        this.isGameRunning = true;
-
         // Create players
         this.playerManager.createPlayers(
                 this.player1Color, this.player2Color,
                 this.player1, this.player2,
                 this.turnEvaluator.getPlayer1StartPos().clone(),
-                this.turnEvaluator.getPlayer2StartPos().clone());
+                this.turnEvaluator.getPlayer2StartPos().clone(),
+                this.maxPlayerTurn);
+
+        // Clear canvas
+        this.turnEvaluator.clearCanvas();
+
+        // Draw score labels
+        this.turnEvaluator.drawScoreLabel(
+                this.playerManager.getPlayerLeftScoreLabel(),
+                this.playerManager.getPlayerRightScoreLabel());
+
+        // Generate and draw the selected map 
+        this.turnEvaluator.generateMap();
+        // Toggle game running flag to true
+        this.isGameRunning = true;
 
         // On first turn only if it goes for human player, it begins highlighting 
         // possible moves.
@@ -87,7 +100,7 @@ public class Game {
                 this.endGame();
                 return;
             }
-            
+
             this.turnEvaluator.displayTurnStatus(player);
 
         } else {
@@ -98,9 +111,9 @@ public class Game {
                     this.playerManager.getEnemyTiles(player),
                     this.playerManager,
                     player)) {
-                
+
                 this.turnEvaluator.displayTurnStatus(player);
-                
+
                 this.aiChosenPlayTile = this.comAI.play(
                         this.playerManager.getPossibleMovePos(player),
                         this.playerManager.getPossibleAttackPos(player))
@@ -219,7 +232,7 @@ public class Game {
         }
 
         // 5. Update score accordingly
-        this.updateScore(player, tilesToFlip.size());
+        this.updateScore(player, tilesToFlip.size() * Score.ONE_TILE_FLIP.getScore());
 
         // 6. End Turn
         this.endTurn(player);
@@ -262,6 +275,11 @@ public class Game {
 
     private void updateScore(PlayerType player, int score) {
         this.playerManager.updateScore(player, score);
+
+        int newScore = this.playerManager.getScore(player);
+        int turnLeft = this.playerManager.getPlayerTurnsLeft(player);
+
+        this.turnEvaluator.updateScore(newScore, turnLeft, player);
     }
 
     private void endTurn(PlayerType player) {
@@ -275,13 +293,21 @@ public class Game {
             this.endGame();
             return;
         } else {
-            // change turn
+            // Update turn left
+            this.playerManager.reducePlayerTurnByOne(player);
+            int newScore = this.playerManager.getScore(player);
+            int turnLeft = this.playerManager.getPlayerTurnsLeft(player);
+
+            // Display new turn left label
+            this.turnEvaluator.updateScore(newScore, turnLeft, player);
+
+            // End turn
             this.playerManager.nextTurn(player);
         }
 
         // Display turn
         this.turnEvaluator.displayTurnStatus(this.playerManager.getTurn());
-        
+
         // For AI
         if (this.playerManager.getTurn() == PlayerType.COMPUTER) {
             // Add a delay before computer play
@@ -332,7 +358,7 @@ public class Game {
     // TODO
     public void endGame() {
         this.isGameRunning = false;
-        
+
         // Clear turn status label
         this.turnEvaluator.clearTurnStatus();
 

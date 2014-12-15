@@ -24,7 +24,7 @@
 package com.github.daytron.flipit.core;
 
 import com.github.daytron.flipit.data.MapProperty;
-import com.github.daytron.flipit.data.TileColor;
+import com.github.daytron.flipit.data.ColorProperty;
 import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -67,7 +67,7 @@ final class FlipAnimation {
         this.graphics = graphics;
     }
 
-    protected void flipTile(final TileColor playerColor,
+    protected void flipTile(final ColorProperty playerColor,
             final int count_column, final int count_row) {
         // Reset frameCount
         this.frameCount = MapProperty.NUMBER_OF_TILE_ANIMATION_FRAMES.getValue();
@@ -93,7 +93,7 @@ final class FlipAnimation {
         timeline.play();
     }
 
-    private int displayFrame(int frame, TileColor playerColor,
+    private int displayFrame(int frame, ColorProperty playerColor,
             int count_column, int count_row) {
         String light_edge_color;
         String light_edge_color_at_30_deg;
@@ -122,38 +122,38 @@ final class FlipAnimation {
                 .getValue();
 
         // Detect and set the colors
-        if (playerColor == TileColor.PLAYER_BLUE) {
-            light_edge_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
+        if (playerColor == ColorProperty.PLAYER_BLUE) {
+            light_edge_color = ColorProperty.PLAYER_BLUE_LIGHT_EDGE.getColor();
             light_edge_color_at_30_deg
-                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_30_DEG.getColor();
+                    = ColorProperty.PLAYER_BLUE_LIGHT_EDGE_AT_30_DEG.getColor();
             light_edge_color_at_60_deg
-                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_60_DEG.getColor();
-            main_color = TileColor.PLAYER_BLUE.getColor();
-            shadow_edge_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
+                    = ColorProperty.PLAYER_BLUE_LIGHT_EDGE_AT_60_DEG.getColor();
+            main_color = ColorProperty.PLAYER_BLUE.getColor();
+            shadow_edge_color = ColorProperty.PLAYER_BLUE_SHADOW_EDGE.getColor();
 
-            enemy_light_edge_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
+            enemy_light_edge_color = ColorProperty.PLAYER_RED_LIGHT_EDGE.getColor();
             enemy_light_edge_color_at_30_deg
-                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_30_DEG.getColor();
+                    = ColorProperty.PLAYER_RED_LIGHT_EDGE_AT_30_DEG.getColor();
             enemy_light_edge_color_at_60_deg
-                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_60_DEG.getColor();
-            enemy_main_color = TileColor.PLAYER_RED.getColor();
-            enemy_shadow_edge_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
-        } else if (playerColor == TileColor.PLAYER_RED) {
-            light_edge_color = TileColor.PLAYER_RED_LIGHT_EDGE.getColor();
+                    = ColorProperty.PLAYER_RED_LIGHT_EDGE_AT_60_DEG.getColor();
+            enemy_main_color = ColorProperty.PLAYER_RED.getColor();
+            enemy_shadow_edge_color = ColorProperty.PLAYER_RED_SHADOW_EDGE.getColor();
+        } else if (playerColor == ColorProperty.PLAYER_RED) {
+            light_edge_color = ColorProperty.PLAYER_RED_LIGHT_EDGE.getColor();
             light_edge_color_at_30_deg
-                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_30_DEG.getColor();
+                    = ColorProperty.PLAYER_RED_LIGHT_EDGE_AT_30_DEG.getColor();
             light_edge_color_at_60_deg
-                    = TileColor.PLAYER_RED_LIGHT_EDGE_AT_60_DEG.getColor();
-            main_color = TileColor.PLAYER_RED.getColor();
-            shadow_edge_color = TileColor.PLAYER_RED_SHADOW_EDGE.getColor();
+                    = ColorProperty.PLAYER_RED_LIGHT_EDGE_AT_60_DEG.getColor();
+            main_color = ColorProperty.PLAYER_RED.getColor();
+            shadow_edge_color = ColorProperty.PLAYER_RED_SHADOW_EDGE.getColor();
 
-            enemy_light_edge_color = TileColor.PLAYER_BLUE_LIGHT_EDGE.getColor();
+            enemy_light_edge_color = ColorProperty.PLAYER_BLUE_LIGHT_EDGE.getColor();
             enemy_light_edge_color_at_30_deg
-                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_30_DEG.getColor();
+                    = ColorProperty.PLAYER_BLUE_LIGHT_EDGE_AT_30_DEG.getColor();
             enemy_light_edge_color_at_60_deg
-                    = TileColor.PLAYER_BLUE_LIGHT_EDGE_AT_60_DEG.getColor();
-            enemy_main_color = TileColor.PLAYER_BLUE.getColor();
-            enemy_shadow_edge_color = TileColor.PLAYER_BLUE_SHADOW_EDGE.getColor();
+                    = ColorProperty.PLAYER_BLUE_LIGHT_EDGE_AT_60_DEG.getColor();
+            enemy_main_color = ColorProperty.PLAYER_BLUE.getColor();
+            enemy_shadow_edge_color = ColorProperty.PLAYER_BLUE_SHADOW_EDGE.getColor();
         } else {
             return 0;
         }
