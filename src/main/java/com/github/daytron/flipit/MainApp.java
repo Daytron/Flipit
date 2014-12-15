@@ -27,6 +27,7 @@ import com.github.daytron.flipit.controller.NewGameSetupController;
 import com.github.daytron.flipit.controller.MainMenuController;
 import com.github.daytron.flipit.controller.GameController;
 import com.github.daytron.flipit.data.Fxml;
+import com.github.daytron.flipit.data.ImageProperty;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -38,6 +39,7 @@ import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
 
@@ -56,6 +58,11 @@ public class MainApp extends Application {
 
         this.stage = primary_stage;
         gotoMainMenu();
+        
+        stage.getIcons().add(
+                new Image(MainApp.class.getResourceAsStream(
+                                ImageProperty.ICON.getPath())));
+        
         primary_stage.show();
 
     }
