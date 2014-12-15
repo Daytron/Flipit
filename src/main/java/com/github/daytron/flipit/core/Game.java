@@ -296,11 +296,19 @@ public class Game {
             // Update turn left
             this.playerManager.reducePlayerTurnByOne(player);
             int newScore = this.playerManager.getScore(player);
+            int enemyScore = this.playerManager.getScore(
+                this.playerManager.getEnemyOf(player));
             int turnLeft = this.playerManager.getPlayerTurnsLeft(player);
 
             // Display new turn left label
             this.turnEvaluator.updateScore(newScore, turnLeft, player);
 
+            // If both players used all up all their turns, end the game
+            if (turnLeft < 1 && enemyScore < 1) {
+                this.endGame();
+                return;
+            }
+            
             // End turn
             this.playerManager.nextTurn(player);
         }

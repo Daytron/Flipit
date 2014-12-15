@@ -151,7 +151,7 @@ class Player {
     }
     
     public void reduceTurnByOne() {
-        if (this.turnsLeft > 1) {
+        if (this.turnsLeft > 0) {
            this.turnsLeft -= 1;
         }
         
