@@ -27,8 +27,19 @@ package com.github.daytron.flipit.data;
  *
  * @author Ryan Gilera ryangilera@gmail.com
  */
-public enum Difficulty {
-    EASY,
-    NORMAL,
-    HARD
+public enum Fxml {
+    MAIN_MENU("/fxml/MainMenu.fxml"),
+    NEW_GAME_SETUP("/fxml/NewGameSetup.fxml"),
+    GAME_MAIN("/fxml/Game.fxml"),
+    END_GAME_DIALOG("/fxml/EndGameDialog.fxml");
+        
+    private final String file;
+
+    private Fxml(String msg) {
+        this.file = msg;
+    }
+
+    public String getFxml() {
+        return file;
+    }
 }

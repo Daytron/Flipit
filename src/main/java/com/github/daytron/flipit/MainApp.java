@@ -1,8 +1,32 @@
+/* 
+ * The MIT License
+ *
+ * Copyright 2014 Ryan Gilera.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.github.daytron.flipit;
 
 import com.github.daytron.flipit.controller.NewGameSetupController;
 import com.github.daytron.flipit.controller.MainMenuController;
 import com.github.daytron.flipit.controller.GameController;
+import com.github.daytron.flipit.data.Fxml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -20,9 +44,9 @@ import org.controlsfx.dialog.Dialogs;
 public class MainApp extends Application {
 
     private Stage stage;
-    private final String MAIN_MENU_FXML = "MainMenu.fxml";
-    private final String NEW_GAME_SETUP_FXML = "NewGameSetup.fxml";
-    private final String GAME_MAIN_FXML = "Game.fxml";
+    private final String MAIN_MENU_FXML =  Fxml.MAIN_MENU.getFxml();
+    private final String NEW_GAME_SETUP_FXML = Fxml.NEW_GAME_SETUP.getFxml();
+    private final String GAME_MAIN_FXML = Fxml.GAME_MAIN.getFxml();
     private GamePreloader preLoader;
 
     @Override
@@ -100,9 +124,9 @@ public class MainApp extends Application {
 
     private Initializable replaceScene(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        InputStream in = MainApp.class.getResourceAsStream("/fxml/" + fxml);
+        InputStream in = MainApp.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
-        loader.setLocation(MainApp.class.getResource("/fxml/" + fxml));
+        loader.setLocation(MainApp.class.getResource(fxml));
 
         Parent pane;
 
@@ -115,7 +139,7 @@ public class MainApp extends Application {
         stage.setTitle("Flipit");
         stage.centerOnScreen();
         stage.setScene(scene);
-
+        stage.setResizable(false);
         stage.sizeToScene();
 
         return (Initializable) loader.getController();

@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2014 Ryan Gilera ryangilera@gmail.com.
+ * Copyright 2014 Ryan Gilera.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,9 +97,6 @@ public class NewGameSetupController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        //this.preview_anchor_pane.setBackground(new Background(
-        //    new BackgroundFill(Color.CRIMSON, CornerRadii.EMPTY, Insets.EMPTY)));
-        
         // Define list items
         ObservableList<String> playerOptions
                 = FXCollections.observableArrayList(
@@ -117,55 +114,57 @@ public class NewGameSetupController implements Initializable {
                 PlayerType.COMPUTER.getValue());
 
         // Add player 1 combobox listener
-        this.startPositionP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
+        this.startPositionP1ComboBox.valueProperty()
+                .addListener(new ChangeListener<String>() {
 
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                app.getGamePreloader().setPlayer1(PlayerType.valueOf(
-                    newValue.toUpperCase()));
-                
-                if (newValue.contains(
-                        PlayerType.HUMAN.getValue())) {
-                    startPositionP2ComboBox.getSelectionModel()
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        app.getGamePreloader().setPlayer1(PlayerType.valueOf(
+                                        newValue.toUpperCase()));
+
+                        if (newValue.contains(
+                                PlayerType.HUMAN.getValue())) {
+                            startPositionP2ComboBox.getSelectionModel()
                             .select(
-                        PlayerType.COMPUTER.getValue());
-                    app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
-                } else {
-                    startPositionP2ComboBox.getSelectionModel()
+                                    PlayerType.COMPUTER.getValue());
+                            app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
+                        } else {
+                            startPositionP2ComboBox.getSelectionModel()
                             .select(
-                        PlayerType.HUMAN.getValue());
-                    app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
-                }
-            }
-        });
-        
+                                    PlayerType.HUMAN.getValue());
+                            app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
+                        }
+                    }
+                });
+
         // Add player 2 combobox listener
-        this.startPositionP2ComboBox.valueProperty().addListener(new ChangeListener<String>() {
+        this.startPositionP2ComboBox.valueProperty()
+                .addListener(new ChangeListener<String>() {
 
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                app.getGamePreloader().setPlayer2(PlayerType.valueOf(
-                    newValue.toUpperCase()));
-                
-                if (newValue.contains(
-                    PlayerType.HUMAN.getValue())) {
-                    startPositionP1ComboBox.getSelectionModel()
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        app.getGamePreloader().setPlayer2(PlayerType.valueOf(
+                                        newValue.toUpperCase()));
+
+                        if (newValue.contains(
+                                PlayerType.HUMAN.getValue())) {
+                            startPositionP1ComboBox.getSelectionModel()
                             .select(
-                        PlayerType.COMPUTER.getValue());
-                    app.getGamePreloader().setPlayer1(PlayerType.COMPUTER);
-                } else {
-                    startPositionP1ComboBox
+                                    PlayerType.COMPUTER.getValue());
+                            app.getGamePreloader().setPlayer1(PlayerType.COMPUTER);
+                        } else {
+                            startPositionP1ComboBox
                             .getSelectionModel().select(
-                        PlayerType.HUMAN.getValue());
-                    app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
-                }
-            }
-        });
+                                    PlayerType.HUMAN.getValue());
+                            app.getGamePreloader().setPlayer2(PlayerType.HUMAN);
+                        }
+                    }
+                });
 
         // ============== COLOR AREA ================= //
-        ObservableList<String> playerColorOptions = 
-                FXCollections.observableArrayList(ColorProperty.PLAYER_BLUE.getColor(), 
-                ColorProperty.PLAYER_RED.getColor());
+        ObservableList<String> playerColorOptions
+                = FXCollections.observableArrayList(ColorProperty.PLAYER_BLUE.getColor(),
+                        ColorProperty.PLAYER_RED.getColor());
 
         this.colorP1ComboBox.setItems(playerColorOptions);
         this.colorP2ComboBox.setItems(playerColorOptions);
@@ -174,13 +173,14 @@ public class NewGameSetupController implements Initializable {
          this.colorP2ComboBox.getSelectionModel().select(redRectangle);
          */
 
-        Callback<ListView<String>, ListCell<String>> factory = new Callback<ListView<String>, ListCell<String>>() {
-            @Override
-            public ListCell<String> call(ListView<String> list) {
-                return new ColorRectCell();
+        Callback<ListView<String>, ListCell<String>> factory
+                = new Callback<ListView<String>, ListCell<String>>() {
+                    @Override
+                    public ListCell<String> call(ListView<String> list) {
+                        return new ColorRectCell();
 
-            }
-        };
+                    }
+                };
 
         this.colorP1ComboBox.setCellFactory(factory);
         this.colorP1ComboBox.setButtonCell(factory.call(null));
@@ -189,7 +189,7 @@ public class NewGameSetupController implements Initializable {
         this.colorP2ComboBox.setCellFactory(factory);
         this.colorP2ComboBox.setButtonCell(factory.call(null));
         this.colorP2ComboBox.setValue(ColorProperty.PLAYER_RED.getColor());
-        
+
         // Player 1 color combobox listener
         this.colorP1ComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -202,14 +202,14 @@ public class NewGameSetupController implements Initializable {
                 }
             }
         });
-        
+
         // Player 2 color combobox listener
         this.colorP2ComboBox.valueProperty().addListener(new ChangeListener<String>() {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 colorP2ComboBox.setValue(newValue);
-                
+
                 if (newValue.contains(ColorProperty.PLAYER_BLUE.getColor())) {
                     colorP1ComboBox.setValue(ColorProperty.PLAYER_RED.getColor());
                 } else {
@@ -226,8 +226,10 @@ public class NewGameSetupController implements Initializable {
         this.app.getGamePreloader().setPlayer2(PlayerType.COMPUTER);
 
         // Set default player color values to gamepreloader
-        this.app.getGamePreloader().setPlayer1ColorSelected(ColorProperty.PLAYER_BLUE.getColor());
-        this.app.getGamePreloader().setPlayer2ColorSelected(ColorProperty.PLAYER_RED.getColor());
+        this.app.getGamePreloader()
+                .setPlayer1ColorSelected(ColorProperty.PLAYER_BLUE.getColor());
+        this.app.getGamePreloader()
+                .setPlayer2ColorSelected(ColorProperty.PLAYER_RED.getColor());
     }
 
     public void loadMapNames() {
@@ -271,8 +273,7 @@ public class NewGameSetupController implements Initializable {
             // Load the main game frame
             this.app.viewMainGame();
         }
-        
-        
+
     }
 
 }
@@ -286,8 +287,7 @@ class ColorRectCell extends ListCell<String> {
         if (item != null) {
             rect1.setFill(Color.web(item));
             setGraphic(rect1);
-            
-            
+
         }
 
     }

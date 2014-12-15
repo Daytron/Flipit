@@ -1,7 +1,7 @@
-/*
+/* 
  * The MIT License
  *
- * Copyright 2014 Your Organisation.
+ * Copyright 2014 Ryan Gilera.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ public enum GameProperty {
     NUMBER_OF_TILE_ANIMATION_FRAMES(6),
     FLIP_FRAME_DURATION(50),
     
-    COM_PLAY_DELAY(400),
+    COM_PLAY_DELAY(750),
     
     TURN_STATUS_LABEL_POSX(90),
     TURN_STATUS_LABEL_POSY(5),

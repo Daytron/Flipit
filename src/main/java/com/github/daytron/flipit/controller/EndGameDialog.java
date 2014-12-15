@@ -1,7 +1,7 @@
-/*
+/* 
  * The MIT License
  *
- * Copyright 2014 Your Organisation.
+ * Copyright 2014 Ryan Gilera.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  */
 package com.github.daytron.flipit.controller;
 
+import com.github.daytron.flipit.data.Fxml;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,10 +61,11 @@ public class EndGameDialog extends Stage implements Initializable {
         this.textColor = humanPlayerColor;
         
         FXMLLoader fxmlLoader = new FXMLLoader(getClass()
-                .getResource("/fxml/EndGameDialog.fxml"));
+                .getResource(Fxml.END_GAME_DIALOG.getFxml()));
         fxmlLoader.setController(this);
 
-        // Nice to have this in a load() method instead of constructor, but this seems to be the convention.
+        // Nice to have this in a load() method instead of constructor, 
+        // but this seems to be the convention.
         try {
             setScene(new Scene((Parent) fxmlLoader.load()));
 

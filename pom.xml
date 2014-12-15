@@ -16,8 +16,7 @@
     </properties>
 
     <organization>
-        <!-- Used as the 'Vendor' for JNLP generation -->
-        <name>Your Organisation</name>
+        <name>Ryan Gilera</name>
     </organization>
 
     <dependencies>

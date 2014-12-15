@@ -1,7 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * The MIT License
+ *
+ * Copyright 2014 Ryan Gilera.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.github.daytron.flipit;
 
@@ -12,16 +30,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  *
@@ -37,7 +50,6 @@ public class GamePreloader {
 
     // new game variables
     private Map mapSelected;
-    private int playerSelected;
     private String mapPreviewImageSelected;
     private PlayerType player1;
     private PlayerType player2;
@@ -54,7 +66,8 @@ public class GamePreloader {
 
     public void init() throws URISyntaxException {
         this.isRunningInJar = false;
-        File file = new File(System.getProperty("user.dir") + "/src/main/resources/maps");
+        File file = new File(System.getProperty("user.dir") + 
+                "/src/main/resources/maps");
         
         if (!file.exists()) {
             this.isRunningInJar = true;
@@ -65,7 +78,8 @@ public class GamePreloader {
 
         if (files != null) {
             for (File aFile : files) {
-                String ext = aFile.getPath().substring(aFile.getPath().lastIndexOf(".") + 1);
+                String ext = aFile.getPath()
+                        .substring(aFile.getPath().lastIndexOf(".") + 1);
 
                 if (aFile.isFile() && "json".equals(ext)) {
                     listOfMapPath.add(aFile.getPath());
