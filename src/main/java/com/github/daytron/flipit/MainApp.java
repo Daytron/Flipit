@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -78,7 +79,10 @@ public class MainApp extends Application {
                 DialogMessage.ERROR_NO_MAPS_FOUND.getText());
         
         dialog.setTitle(DialogMessage.ERROR_HEAD_TITLE.getText());
+        dialog.centerOnScreen();
         dialog.showAndWait();
+        
+        Platform.exit();
     }
 
     public void viewNewGameSetup() {

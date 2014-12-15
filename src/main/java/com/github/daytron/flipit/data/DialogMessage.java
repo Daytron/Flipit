@@ -28,6 +28,7 @@ package com.github.daytron.flipit.data;
  * @author Ryan Gilera
  */
 public enum DialogMessage {
+    // Confirmation Dialog
     CONFIRMATION_HEAD_TITLE("Confirmation Dialog"),    
     CONFIRMATION_TITLE("Confirm Action"),
     CONFIRM_EXIT("Are you sure you want to exit?"),
@@ -36,10 +37,12 @@ public enum DialogMessage {
     CONFIRM_RESTART("You are about to leave this game.\n"
             + "Are you sure you want to restart the game?"),
     
+    // Error Dialog
     ERROR_HEAD_TITLE("Error Dialog"),
     ERROR_TITLE("Error"),
     ERROR_NO_MAPS_FOUND("No available maps found."
-            + "Map files are missing in the maps folder.");
+            + "Map files are missing in the maps folder.\n"
+            + "Exiting...");
     
     
     

@@ -51,7 +51,7 @@ public class Game {
     private final String player2Color;
 
     private final PlayerManager playerManager;
-    private final TurnEvaluator turnEvaluator;
+    private final Overseer turnEvaluator;
 
     private final ComputerAI comAI;
     private int[] aiChosenPlayTile;
@@ -76,7 +76,7 @@ public class Game {
         isHumanFirst = r.nextInt(2) == 1;
         this.playerManager = new PlayerManager(isHumanFirst);
 
-        this.turnEvaluator = new TurnEvaluator(canvas, map, player1, player2,
+        this.turnEvaluator = new Overseer(canvas, map, player1, player2,
                 player1Color, player2Color);
 
         this.comAI = new ComputerAI(Difficulty.EASY);

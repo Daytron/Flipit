@@ -38,7 +38,7 @@ import javafx.scene.canvas.Canvas;
  *
  * @author ryan
  */
-public class TurnEvaluator {
+public class Overseer {
 
     private final int numberOfRows;
     private final int numberOfColumns;
@@ -69,7 +69,7 @@ public class TurnEvaluator {
     // For possible moves calculation
     //private List<Integer[]> possibleMovePos;
     //private List<Integer[]> possibleAttackPos;
-    public TurnEvaluator(Canvas canvas, Map map, PlayerType player1,
+    public Overseer(Canvas canvas, Map map, PlayerType player1,
             PlayerType player2, String player1Color, String player2Color) {
 
         this.canvas = canvas;

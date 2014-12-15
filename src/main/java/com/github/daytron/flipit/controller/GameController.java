@@ -89,6 +89,7 @@ public class GameController implements Initializable {
                 DialogMessage.CONFIRM_RESTART.getText());
         
         dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
+        dialog.centerOnScreen();
         dialog.showAndWait();
 
         if (dialog.getResponse() == DialogResponse.YES) {
@@ -112,6 +113,7 @@ public class GameController implements Initializable {
                 DialogMessage.CONFIRM_NEW_GAME.getText());
        
         dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
+        dialog.centerOnScreen();
         dialog.showAndWait();
 
         if (dialog.getResponse() == DialogResponse.YES) {
@@ -128,6 +130,7 @@ public class GameController implements Initializable {
                 DialogMessage.CONFIRM_EXIT.getText());
         
         dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
+        dialog.centerOnScreen();
         dialog.showAndWait();
 
         if (dialog.getResponse() == DialogResponse.YES) {
