@@ -26,8 +26,9 @@ package com.github.daytron.flipit.controller;
 import com.github.daytron.flipit.*;
 import com.github.daytron.flipit.core.Game;
 import com.github.daytron.flipit.data.DialogMessage;
-import com.github.daytron.flipit.data.DialogResponse;
-import com.github.daytron.flipit.dialog.ConfirmationDialog;
+import com.github.daytron.simpledialogfx.data.DialogType;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.data.DialogResponse;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -84,12 +85,11 @@ public class GameController implements Initializable {
 
     @FXML
     private void restart_btn_on_click(ActionEvent event) {
-        ConfirmationDialog dialog = new ConfirmationDialog(
+        Dialog dialog = new Dialog(
+                DialogType.CONFIRMATION,
                 DialogMessage.CONFIRMATION_TITLE.getText(),
                 DialogMessage.CONFIRM_RESTART.getText());
-        
-        dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
-        dialog.centerOnScreen();
+
         dialog.showAndWait();
 
         if (dialog.getResponse() == DialogResponse.YES) {
@@ -108,29 +108,28 @@ public class GameController implements Initializable {
 
     @FXML
     private void new_game_btn_on_click(ActionEvent event) {
-        ConfirmationDialog dialog = new ConfirmationDialog(
+        Dialog dialog = new Dialog(
+                DialogType.CONFIRMATION,
+                DialogMessage.CONFIRMATION_HEAD_TITLE.getText(),
                 DialogMessage.CONFIRMATION_TITLE.getText(),
                 DialogMessage.CONFIRM_NEW_GAME.getText());
-       
-        dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
-        dialog.centerOnScreen();
+
         dialog.showAndWait();
 
         if (dialog.getResponse() == DialogResponse.YES) {
             this.game = null;
             this.app.viewNewGameSetup();
         }
-
     }
 
     @FXML
     private void quit_btn_on_click(ActionEvent event) {
-        ConfirmationDialog dialog = new ConfirmationDialog(
+        Dialog dialog = new Dialog(
+                DialogType.CONFIRMATION,
+                DialogMessage.CONFIRMATION_HEAD_TITLE.getText(),
                 DialogMessage.CONFIRMATION_TITLE.getText(),
                 DialogMessage.CONFIRM_EXIT.getText());
-        
-        dialog.setTitle(DialogMessage.CONFIRMATION_HEAD_TITLE.getText());
-        dialog.centerOnScreen();
+
         dialog.showAndWait();
 
         if (dialog.getResponse() == DialogResponse.YES) {

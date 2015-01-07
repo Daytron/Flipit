@@ -23,7 +23,6 @@
  */
 package com.github.daytron.flipit.core;
 
-import com.github.daytron.flipit.dialog.EndGameDialog;
 import com.github.daytron.flipit.data.Difficulty;
 import com.github.daytron.flipit.data.EndGameMessage;
 import com.github.daytron.flipit.data.PlayerType;
@@ -31,6 +30,8 @@ import com.github.daytron.flipit.data.Score;
 import com.github.daytron.flipit.data.GameProperty;
 import com.github.daytron.flipit.player.PlayerManager;
 import com.github.daytron.flipit.player.ComputerAI;
+import com.github.daytron.simpledialogfx.data.DialogType;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
 import java.util.List;
 import java.util.Random;
 import javafx.animation.KeyFrame;
@@ -409,8 +410,10 @@ public class Game {
             endGameMessage = EndGameMessage.TIE.getMessage();
         }
         
-        EndGameDialog dialog = new EndGameDialog(endGameMessage, 
-            this.playerManager.getPlayerMainColor(PlayerType.HUMAN));
+        Dialog dialog = new Dialog(
+                DialogType.GENERIC_OK,
+                endGameMessage, 
+                "You: " + human_score + "\nCom:" + computer_score);
         dialog.show();
     }
 

@@ -24,6 +24,10 @@
 package com.github.daytron.flipit.controller;
 
 import com.github.daytron.flipit.MainApp;
+import com.github.daytron.flipit.data.DialogMessage;
+import com.github.daytron.simpledialogfx.data.DialogResponse;
+import com.github.daytron.simpledialogfx.data.DialogType;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -54,7 +58,7 @@ public class MainMenuController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
         
     }    
 
@@ -71,6 +75,16 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void clickExitButton(ActionEvent event) {
-        Platform.exit();
+        Dialog dialog = new Dialog(
+                DialogType.CONFIRMATION,
+                DialogMessage.CONFIRMATION_HEAD_TITLE.getText(),
+                DialogMessage.CONFIRMATION_TITLE.getText(),
+                DialogMessage.CONFIRM_EXIT.getText());
+
+        dialog.showAndWait();
+
+        if (dialog.getResponse() == DialogResponse.YES) {
+            Platform.exit();
+        }
     }
 }

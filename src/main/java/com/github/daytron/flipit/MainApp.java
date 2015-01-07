@@ -29,7 +29,9 @@ import com.github.daytron.flipit.controller.GameController;
 import com.github.daytron.flipit.data.DialogMessage;
 import com.github.daytron.flipit.data.Fxml;
 import com.github.daytron.flipit.data.ImageProperty;
-import com.github.daytron.flipit.dialog.ErrorDialog;
+import com.github.daytron.simpledialogfx.data.DialogResponse;
+import com.github.daytron.simpledialogfx.data.DialogType;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -37,6 +39,7 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -44,11 +47,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class MainApp extends Application {
 
     private Stage stage;
-    private final String MAIN_MENU_FXML =  Fxml.MAIN_MENU.getFxml();
+    private final String MAIN_MENU_FXML = Fxml.MAIN_MENU.getFxml();
     private final String NEW_GAME_SETUP_FXML = Fxml.NEW_GAME_SETUP.getFxml();
     private final String GAME_MAIN_FXML = Fxml.GAME_MAIN.getFxml();
     private GamePreloader preLoader;
@@ -60,11 +64,11 @@ public class MainApp extends Application {
 
         this.stage = primary_stage;
         gotoMainMenu();
-        
+
         stage.getIcons().add(
                 new Image(MainApp.class.getResourceAsStream(
                                 ImageProperty.ICON.getPath())));
-        
+
         primary_stage.show();
 
     }
@@ -74,21 +78,20 @@ public class MainApp extends Application {
     }
 
     public void showNoMapFoundDialog() {
-        ErrorDialog dialog = new ErrorDialog(
-                DialogMessage.ERROR_TITLE.getText(), 
+        Dialog dialog = new Dialog(
+                DialogType.ERROR,
+                DialogMessage.ERROR_TITLE.getText(),
                 DialogMessage.ERROR_NO_MAPS_FOUND.getText());
-        
-        dialog.setTitle(DialogMessage.ERROR_HEAD_TITLE.getText());
-        dialog.centerOnScreen();
+
         dialog.showAndWait();
-        
+
         Platform.exit();
     }
 
     public void viewNewGameSetup() {
         gotoNewGameSetup();
     }
-    
+
     public void viewMainMenu() {
         gotoMainMenu();
     }
@@ -102,9 +105,14 @@ public class MainApp extends Application {
             MainMenuController menuCtrl
                     = (MainMenuController) replaceScene(MAIN_MENU_FXML);
             menuCtrl.setApp(this);
+            this.setDialogCloseHandler();
 
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            Dialog exceptionDialog = new Dialog(ex);
+            exceptionDialog.showAndWait();
+
+            Platform.exit();
         }
     }
 
@@ -116,8 +124,14 @@ public class MainApp extends Application {
             newGameCtrl.loadMapNames();
             newGameCtrl.loadDefaultValuesToPreloader();
 
+            this.setDialogCloseHandler();
+
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            Dialog exceptionDialog = new Dialog(ex);
+            exceptionDialog.showAndWait();
+
+            Platform.exit();
         }
     }
 
@@ -126,9 +140,16 @@ public class MainApp extends Application {
             GameController mainGameCtrl
                     = (GameController) replaceScene(GAME_MAIN_FXML);
             mainGameCtrl.setApp(this);
+
+            this.setDialogCloseHandler();
+
             mainGameCtrl.run();
-        } catch (Exception e) {
-            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            Dialog exceptionDialog = new Dialog(ex);
+            exceptionDialog.showAndWait();
+
+            Platform.exit();
         }
     }
 
@@ -153,6 +174,29 @@ public class MainApp extends Application {
         stage.sizeToScene();
 
         return (Initializable) loader.getController();
+    }
+
+    private void setDialogCloseHandler() {
+        // Apply CLOSE action upon pressing x button
+        this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                Dialog dialog = new Dialog(
+                        DialogType.CONFIRMATION,
+                        DialogMessage.CONFIRMATION_TITLE.getText(),
+                        DialogMessage.CONFIRM_EXIT.getText());
+
+                dialog.showAndWait();
+
+                    // Cancel the exit event if user press NO or closed the
+                // dialog
+                if (dialog.getResponse() == DialogResponse.NO
+                        || dialog.getResponse() == DialogResponse.CLOSE) {
+                    event.consume();
+                }
+            }
+        });
     }
 
     /**

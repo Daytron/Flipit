@@ -26,6 +26,8 @@ package com.github.daytron.flipit.controller;
 import com.github.daytron.flipit.MainApp;
 import com.github.daytron.flipit.data.PlayerType;
 import com.github.daytron.flipit.data.ColorProperty;
+import com.github.daytron.simpledialogfx.data.DialogType;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -266,10 +268,15 @@ public class NewGameSetupController implements Initializable {
     @FXML
     private void clickStart(ActionEvent event) {
         if (this.colorP1ComboBox.getValue().equals(this.colorP2ComboBox.getValue())) {
-            System.out.println("please use separate colors");
+            Dialog dialog = new Dialog(DialogType.ERROR, "Same player color",
+                    "Each player must have a unique color.");
+            dialog.showAndWait();
+            
         } else {
-            this.app.getGamePreloader().setPlayer1ColorSelected(this.colorP1ComboBox.getValue());
-            this.app.getGamePreloader().setPlayer2ColorSelected(this.colorP2ComboBox.getValue());
+            this.app.getGamePreloader().setPlayer1ColorSelected(
+                    this.colorP1ComboBox.getValue());
+            this.app.getGamePreloader().setPlayer2ColorSelected(
+                    this.colorP2ComboBox.getValue());
             // Load the main game frame
             this.app.viewMainGame();
         }
