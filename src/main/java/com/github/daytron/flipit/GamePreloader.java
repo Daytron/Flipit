@@ -25,6 +25,7 @@ package com.github.daytron.flipit;
 
 import com.github.daytron.flipit.core.Map;
 import com.github.daytron.flipit.data.PlayerType;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -191,6 +193,11 @@ public class GamePreloader {
             this.listOfMapNames.add(aMap.getName());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GamePreloader.class.getName()).log(Level.SEVERE, null, ex);
+            
+            Dialog dialog = new Dialog(ex);
+            dialog.showAndWait();
+            
+            Platform.exit();
         }
 
     }
